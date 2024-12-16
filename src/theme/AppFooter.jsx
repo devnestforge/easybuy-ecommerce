@@ -12,21 +12,6 @@ const AppFooter = () => {
                 <div className="widget widget-about">
                   <img src="assets/images/logo.png" className="footer-logo" alt="Footer Logo" width="105" height="25"/>
                     <div>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. </div>
-
-                    <div className="widget-about-info">
-                      <div className="row">
-                        <div className="col-sm-6 col-md-4">
-                          <span className="widget-about-title">Got Question? Call us 24/7</span>
-                          <a href="tel:123456789">+0123 456 789</a>
-                        </div>
-                        <div className="col-sm-6 col-md-8">
-                          <span className="widget-about-title">Payment Method</span>
-                          <figure className="footer-payments">
-                            <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20"/>
-                          </figure>
-                        </div>
-                      </div>
-                    </div>
                 </div>
               </div>
 
@@ -70,23 +55,6 @@ const AppFooter = () => {
                     <li><a href="!#">Track My Order</a></li>
                     <li><a href="!#">Help</a></li>
                   </ul>
-                </div>
-              </div>
-
-              <div className="col-sm-6 col-lg-2">
-                <div className="widget widget-newsletter">
-                  <h4 className="widget-title">Newsletter</h4>
-
-                  <div>Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan.</div>
-
-                  <form action="#">
-                    <div className="input-group">
-                      <input type="email" className="form-control" placeholder="Enter your Email Address" aria-label="Email Adress" required/>
-                        <div className="input-group-append">
-                          <button className="btn btn-dark" type="submit"><i className="icon-long-arrow-right"></i></button>
-                        </div>
-                    </div>
-                  </form>
                 </div>
               </div>
             </div>
