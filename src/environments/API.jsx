@@ -13,14 +13,18 @@ global.IMGProd = 'http://localhost/'
 global.LOG_ERROR = global.URLBACKENDSECURITY  + "/logError"
 global.GET_IP = "https://api.bigdatacloud.net/data/client-ip"
 
+global.SECRETKEY = 'GABRIEL19892025EASYBUY'
+
 // secutiry
 
 global.LOGIN = global.URLBACKENDSECURITY  + "/login"
 global.REGISTER = global.URLBACKENDSECURITY  + "/register"
 
 // PRODUCTS
+global.PRODUCTS = global.URLBACKENDSECURITY  + "/ecomerce/getProducts"
 global.GET_PROMOTIONS = global.URLBACKENDSECURITY  + "/ecomerce/getPromotions"
-global.GET_RECOMENDED = global.URLBACKENDSECURITY  + "/recomended"
+global.GET_RECOMENDED = global.URLBACKENDSECURITY  + "/ecomerce/getRecomended"
+global.GET_CATEGORIES = global.URLBACKENDSECURITY  + "/ecomerce/getCategories"
 
 
 // URL FRONT END
@@ -31,6 +35,8 @@ global.HOME = "/home"
 // SECTIONS
 global.ABOUT = "/about-us"
 global.CONTACT = "/contact-us"
+global.PRODUCTSEARCH = '/products'
+global.PRODUCTDETAIL = '/products-detail'
 
 
 global.ROUTE_HOME = "*"

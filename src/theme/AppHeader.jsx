@@ -1,10 +1,10 @@
 
-import React, { useState } from 'react'
+import React from 'react'
 
 import LoginRegister from '../components/modals/loginRegister'
 
 const NavBar = () => {
-    const [cartTotalProd, setCartTotalProd] = useState(0)
+    //const [cartTotalProd, setCartTotalProd] = useState(0)
 
     return (
         <>
@@ -23,20 +23,20 @@ const NavBar = () => {
                             <nav className="mobile-nav">
                                 <ul className="mobile-menu">
                                     <li className="active">
-                                        <a href="!#">Departamentos</a>
+                                        <a href="!#" onClick={(e) => e.preventDefault()}>Departamentos</a>
                                         <ul>
-                                            <li><a href="category-list.html">Shop List</a></li>
-                                            <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                            <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                            <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                            <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span className="tip tip-hot">Hot</span></span></a></li>
-                                            <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
-                                            <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                            <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span className="tip tip-new">New</span></span></a></li>
-                                            <li><a href="cart.html">Cart</a></li>
-                                            <li><a href="checkout.html">Checkout</a></li>
-                                            <li><a href="wishlist.html">Wishlist</a></li>
-                                            <li><a href="!#">Lookbook</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop List</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 2 Columns</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 3 Columns</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 4 Columns</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Shop Boxed No Sidebar<span className="tip tip-hot">Hot</span></span></a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Fullwidth No Sidebar</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Product Category Boxed</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Product Category Fullwidth<span className="tip tip-new">New</span></span></a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Cart</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Checkout</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Wishlist</a></li>
+                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Lookbook</a></li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -50,11 +50,11 @@ const NavBar = () => {
                     <div className="container-fluid">
                         <div className="header-left">
                             <div className="header-dropdown">
-                                <a href="!#">Español</a>
-                                <div class="header-menu">
+                                <a href="!#" onClick={(e) => e.preventDefault()}>Español</a>
+                                <div className="header-menu">
                                     <ul>
-                                        <li><a href="!#">Inglés</a></li>
-                                        <li><a href="!#">Español</a></li>
+                                        <li><a href="!#" onClick={(e) => e.preventDefault()}>Inglés</a></li>
+                                        <li><a href="!#" onClick={(e) => e.preventDefault()}>Español</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@ const NavBar = () => {
                         <div className="header-right">
                             <ul className="top-menu">
                                 <li>
-                                    <a href="!#">Links</a>
+                                    <a href="!#" onClick={(e) => e.preventDefault()}>Links</a>
                                     <ul>
                                         <li><i className="icon-phone"></i>Call: +0123 456 789</li>
                                         <li><a href={global.ABOUT}>Nosotros</a></li>
@@ -82,12 +82,12 @@ const NavBar = () => {
                                 <i className="icon-bars"></i>
                             </button>
                             <a href="/home" className="logo">
-                                <img src="assets/images/logo.png" alt="Molla Logo" width="105" height="25" />
+                                <img src="/assets/images/logo.png" alt="Molla Logo" width="105" height="25" />
                             </a>
                             <nav className="main-nav">
                                 <ul className="menu sf-arrows">
-                                    <li class="megamenu-container active">
-                                        <a className="sf-with-ul">Departamentos</a>
+                                    <li className="megamenu-container active">
+                                        <a href="!#" onClick={(e) => e.preventDefault()} className="sf-with-ul">Departamentos</a>
 
                                         <div className="megamenu megamenu-md">
                                             <div className="row no-gutters">
@@ -95,50 +95,38 @@ const NavBar = () => {
                                                     <div className="menu-col">
                                                         <div className="row">
                                                             <div className="col-md-6">
-                                                                <div className="menu-title">Shop with sidebar</div>className="
+                                                                <div className="menu-title">Shop with sidebar</div>
                                                                 <ul>
-                                                                    <li><a href="category-list.html">Shop List</a></li>
-                                                                    <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
-                                                                    <li><a href="category.html">Shop Grid 3 Columns</a></li>
-                                                                    <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
-                                                                    <li><a href="category-market.html"><span>Shop Market<span className="tip tip-new">New</span></span></a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop List</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 2 Columns</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 3 Columns</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 4 Columns</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Shop Market<span className="tip tip-new">New</span></span></a></li>
                                                                 </ul>
 
-                                                                <div className="menu-title">Shop no sidebar</div>className="
+                                                                <div className="menu-title">Shop no sidebar</div>
                                                                 <ul>
-                                                                    <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span className="tip tip-hot">Hot</span></span></a></li>
-                                                                    <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Shop Boxed No Sidebar<span className="tip tip-hot">Hot</span></span></a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Fullwidth No Sidebar</a></li>
                                                                 </ul>
                                                             </div>
 
                                                             <div className="col-md-6">
-                                                                <div className="menu-title">Product Category</div>className="
+                                                                <div className="menu-title">Product Category</div>
                                                                 <ul>
-                                                                    <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
-                                                                    <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span className="tip tip-new">New</span></span></a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Product Category Boxed</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Product Category Fullwidth<span className="tip tip-new">New</span></span></a></li>
                                                                 </ul>
-                                                                <div className="menu-title">Shop Pages</div>className="
+                                                                <div className="menu-title">Shop Pages</div>
                                                                 <ul>
-                                                                    <li><a href="cart.html">Cart</a></li>
-                                                                    <li><a href="checkout.html">Checkout</a></li>
-                                                                    <li><a href="wishlist.html">Wishlist</a></li>
-                                                                    <li><a href="dashboard.html">My Account</a></li>
-                                                                    <li><a href="!#">Lookbook</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Cart</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Checkout</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Wishlist</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>My Account</a></li>
+                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Lookbook</a></li>
                                                                 </ul>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </div>
-
-                                                <div className="col-md-4">
-                                                    <div className="banner banner-overlay">
-                                                        <a href="category.html" className="banner banner-menu">
-                                                            <img src="assets/images/menu/banner-1.jpg" alt="Banner" />
-
-                                                            <div className="banner-content banner-content-top">
-                                                                <div className="banner-title text-white">Last <br />Chance<br /><span><strong>Sale</strong></span></div>
-                                                            </div>
-                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -149,9 +137,9 @@ const NavBar = () => {
                         </div>
                         <div className="header-right">
                             <div className="dropdown cart-dropdown">
-                                <a href="!#" className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <a href="!#" onClick={(e) => e.preventDefault()} className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                     <i className="icon-shopping-cart"></i>
-                                    <span className="cart-count">{cartTotalProd}</span>
+                                    <span className="cart-count">0</span>
                                 </a>
 
                                 <div className="dropdown-menu dropdown-menu-right">
@@ -159,7 +147,7 @@ const NavBar = () => {
                                         <div className="product">
                                             <div className="product-cart-details">
                                                 <h4 className="product-title">
-                                                    <a href="product.html">Beige knitted elastic runner shoes</a>
+                                                    <a href="!#" onClick={(e) => e.preventDefault()}>Beige knitted elastic runner shoes</a>
                                                 </h4>
 
                                                 <span className="cart-product-info">
@@ -169,17 +157,17 @@ const NavBar = () => {
                                             </div>
 
                                             <figure className="product-image-container">
-                                                <a href="product.html" className="product-image">
+                                                <a href="!#" onClick={(e) => e.preventDefault()} className="product-image">
                                                     <img src="assets/images/products/cart/product-1.jpg" alt="product" />
                                                 </a>
                                             </figure>
-                                            <a href="!#" className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
+                                            <a href="!#" onClick={(e) => e.preventDefault()} className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
                                         </div>
 
                                         <div className="product">
                                             <div className="product-cart-details">
                                                 <h4 className="product-title">
-                                                    <a href="product.html">Blue utility pinafore denim dress</a>
+                                                    <a href="!#" onClick={(e) => e.preventDefault()}>Blue utility pinafore denim dress</a>
                                                 </h4>
 
                                                 <span className="cart-product-info">
@@ -189,11 +177,11 @@ const NavBar = () => {
                                             </div>
 
                                             <figure className="product-image-container">
-                                                <a href="product.html" className="product-image">
+                                                <a href="!#" onClick={(e) => e.preventDefault()} className="product-image">
                                                     <img src="assets/images/products/cart/product-2.jpg" alt="product" />
                                                 </a>
                                             </figure>
-                                            <a href="!#" className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
+                                            <a href="!#" onClick={(e) => e.preventDefault()} className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
                                         </div>
                                     </div>
 
@@ -204,8 +192,8 @@ const NavBar = () => {
                                     </div>
 
                                     <div className="dropdown-cart-action">
-                                        <a href="cart.html" className="btn btn-primary">View Cart</a>
-                                        <a href="checkout.html" className="btn btn-outline-primary-2"><span>Checkout</span><i className="icon-long-arrow-right"></i></a>
+                                        <a href="!#" onClick={(e) => e.preventDefault()} className="btn btn-primary">View Cart</a>
+                                        <a href="!#" onClick={(e) => e.preventDefault()} className="btn btn-outline-primary-2"><span>Checkout</span><i className="icon-long-arrow-right"></i></a>
                                     </div>
                                 </div>
                             </div>

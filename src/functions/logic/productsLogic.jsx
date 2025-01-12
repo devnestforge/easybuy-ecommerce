@@ -15,10 +15,16 @@ const getRecomendedLogic = async () => {
     return dataResp
 }
 
+const getCategoriesLogic = async () => {
+    const dataResp = await productsServices.getCategoriesService()
+    return dataResp
+}
+
 const productsLogic = {
     getPromotionsLogic,
     getRecomendedLogic,
-    getProductsLogic
+    getProductsLogic,
+    getCategoriesLogic
 }
 
 export default productsLogic

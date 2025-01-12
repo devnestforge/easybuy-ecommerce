@@ -1,0 +1,151 @@
+
+
+/* Estilos para el overlay del modal */
+.quick-view-overlay {
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro */
+    position: fixed; /* Necesario para que ocupe toda la pantalla */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;  /* Asegura que el overlay esté por debajo del modal */
+  }
+  
+  /* Estilos del modal */
+  .quick-view-modal {
+    position: fixed; /* Se queda fijo en la pantalla */
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Ajuste para que se centre correctamente */
+    margin: 0 auto;
+    max-width: 600px; /* Ancho máximo */
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    z-index: 1060;  /* Modal debe estar sobre el overlay */
+    overflow-y: auto; /* Para manejar el contenido largo */
+  }
+  
+  
+  .quick-view-image {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .close-modal {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #7581f1;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1070;
+  }
+  
+  .close-modal:hover {
+    color: #39f;
+  }
+
+  .product-image-products {
+    width: 100%; /* La imagen ocupará todo el ancho disponible */
+    height: 250px; /* Establecer una altura fija para las imágenes */
+    object-fit: cover; /* Las imágenes se recortarán para llenar el contenedor sin deformarse */
+    border-radius: 8px; /* Si quieres bordes redondeados */
+  }
+  
+  /* Modal */
+  .quickView-content img {
+    max-width: 100%;
+    height: 300px; /* Ajusta este valor según lo que necesites */
+    object-fit: contain;
+    margin-bottom: 20px;
+  }
+  
+  .quick-view-modal {
+    width: 80%; /* Ajuste del modal a un 80% del ancho de la pantalla por defecto */
+    max-width: 1200px; /* Para que no se haga más ancho de 1200px */
+    margin: 0 auto;
+    z-index: 1050; /* Asegura que el modal quede encima de otros elementos */
+  }
+  
+  .quick-view-overlay {
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1040; /* Ajustamos el overlay para que se quede detrás del modal */
+  }
+  
+  .quickView-container .product-left img {
+    width: 100%;
+    max-height: 500px; /* Se puede ajustar según el tamaño de la imagen */
+    object-fit: cover;
+  }
+  
+  .quickView-container .product-right {
+    padding-left: 30px;
+  }
+  
+  .quick-view-container .product-title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .quick-view-container .product-price {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .quick-view-container .ratings-container {
+    margin-bottom: 15px;
+  }
+  
+  .quick-view-container .product-txt {
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  .quick-view-container .product-nav img {
+    max-width: 50px;
+    margin: 5px;
+  }
+  
+  .quick-view-container .details-filter-row {
+    margin-bottom: 15px;
+  }
+  
+  .quick-view-container .btn-product {
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 768px) {
+    .quick-view-modal {
+        width: 90%; /* Para pantallas más pequeñas, ajustamos el ancho */
+    }
+  
+    .quick-view-container .product-left,
+    .quick-view-container .product-right {
+        padding: 15px;
+    }
+  
+    .quick-view-container .product-left img {
+        max-height: 400px;
+    }
+  
+    .quick-view-container .product-right {
+        padding-left: 15px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .quick-view-modal {
+        width: 95%; /* Para pantallas extra pequeñas, ajustamos aún más el ancho */
+    }
+  
+    .quick-view-container .product-left img {
+        max-height: 300px;
+    }
+  }
+  

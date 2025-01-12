@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react'
+import '../scss/_products.scss'
+import t from '../translations/i18n'
 import generalLogic from '../functions/logic/generalLogic'
 import productsLogic from '../functions/logic/productsLogic'
-import Promotions from './home/Promotions'
 import Recomendations from './home/Recomendations'
 import Popular from './home/Popular'
-import Arrivals from './home/Arrivals'
-import Outlet from './home/Outlet'
-import Trendings from './home/Trendings'
-import Details from './home/Details'
+import Spiner from '../components/modals/Spiner'
+
 
 export default function Home() {
 
-    const [promotions, setPromotions] = useState(true)
-    const [promoInfo, setPromoInfo] = useState([])
+    const [cat, setCategories] = useState(false)
+    const [load, setLoad] = useState(false)
+    const [catInfo, setCatInfo] = useState([])
+    const [prod, setProd] = useState(true)
+    const [prodInfo, setProdInfo] = useState([])
 
     useEffect(() => {
+        setLoad(true)
         getIp()
         getProducts()
+        setLoad(false)
     }, [])
 
     const getIp = async () => {
@@ -25,27 +29,32 @@ export default function Home() {
     }
 
     const getProducts = async () => {
-        const promotions = await productsLogic.getPromotionsLogic()
-        if (promotions.success && promotions.data.length > 0) {
-            setPromotions(true)
-            setPromoInfo(promotions.data)
-        } else {
-            setPromotions(false)
+        const categories = await productsLogic.getCategoriesLogic()
+        if (categories.success && categories.data.length > 0) {
+            setCategories(true)
+            setCatInfo(categories.data)
+        }
+
+        const prodcuts = await productsLogic.getProductsLogic(0, '')
+        if (prodcuts.success && prodcuts.data.length > 0) {
+            setProd(true)
+            setProdInfo(prodcuts.data)
         }
     }
 
     return (
         <>
-            {
+            <br/>
+
+            <Spiner opt={load} />
+            
+            {cat && (<Popular t={t} data={catInfo} />)}
+
+            {prod && (<Recomendations t={t} data={prodInfo} />)}
+
+            {/*
                 promotions && ( <Promotions data={promoInfo} /> )
-               
-            }
-
-
-            <Recomendations />
-
-            <Popular />
-
+        
             <Arrivals />
 
             <div className="mb-6"></div>
@@ -63,6 +72,8 @@ export default function Home() {
             </div>
 
             <Details />
+            */}
+            
         </>
     )
 }

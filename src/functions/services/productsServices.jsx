@@ -7,15 +7,25 @@ const getProductsService = async (idProduct, search) => {
     try {
         const token = `Bearer ${localStorage.getItem('token')}`
         const options = requestOptions.headers('GET', token, '')
-        let filters = ''
-        if (search.trim() !== "") {
-          filters += '&nombreBusqueda=' + search;
+        let filters = '/' + idProduct
+        if (search.trim() === "") {
+            filters += '/no';
         }
-        const resp = await fetch(global.GET_PROMOTIONS + filters, options)
+        const resp = await fetch(global.PRODUCTS + filters, options)
         const response = await resp.json()
-        //if (data.success && data.code === global.SUCCESS_CODE) {
-        //}
-        return response
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ?
+                idProduct === 0 ?
+                    generalMappers.successMapper(productsMapper.productMapper(response.data), 1)
+                    :
+                    generalMappers.successMapper(productsMapper.productIdMapper(response.data), 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
     } catch (error) {
         await logError(error.message, 'getPromotionService', 'productsServices.jsx')
         return { error: global.MESSAGE_ERROR_CATCH }
@@ -24,7 +34,7 @@ const getProductsService = async (idProduct, search) => {
 
 const getPromotionService = async () => {
     try {
-        const options = requestOptions.headers('GET','', '')
+        const options = requestOptions.headers('GET', '', '')
         const resp = await fetch(global.GET_PROMOTIONS, options)
         const response = await resp.json()
         let respAnswer = []
@@ -42,14 +52,36 @@ const getPromotionService = async () => {
 
 const getRecomendedService = async () => {
     try {
-        const options = requestOptions.headers('GET','', '')
+        const options = requestOptions.headers('GET', '', '')
         const resp = await fetch(global.GET_RECOMENDED, options)
         const response = await resp.json()
-        //if (data.success && data.code === global.SUCCESS_CODE) {
-        //}
-        return response
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ? generalMappers.successMapper(productsMapper.productMapper(response.data), 1) : generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
     } catch (error) {
-        await logError(error.message, 'getRecomendedService', 'productsServices.jsx')
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
+const getCategoriesService = async () => {
+    try {
+        const options = requestOptions.headers('GET', '', '')
+        const resp = await fetch(global.GET_CATEGORIES, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ? generalMappers.successMapper(productsMapper.categoriMapper(response.data), 1) : generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
         return { error: global.MESSAGE_ERROR_CATCH }
     }
 }
@@ -57,7 +89,8 @@ const getRecomendedService = async () => {
 const productsServices = {
     getPromotionService,
     getRecomendedService,
-    getProductsService
+    getProductsService,
+    getCategoriesService
 }
 
 export default productsServices

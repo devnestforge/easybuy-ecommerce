@@ -1,5 +1,6 @@
 {
     "login_text": "Sign In",
-    "welcome": "Bienvenido",
-    "logout": "Cerrar sesión"
+    "welcome": "Bienvenidos",
+    "logout": "Cerrar sesión",
+    "category": "Categories"
 }

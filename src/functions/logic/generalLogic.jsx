@@ -1,8 +1,8 @@
-import securityValidation from '../validation/security';
+//import securityValidation from '../validation/security';
 let responseData = [];
 
 const catchErrorLogic = async (dataLogin, t) => {
-    const validation = securityValidation.login(dataLogin, t);
+    //const validation = securityValidation.login(dataLogin, t);
     //const dataResp = await General.obtenerPeriodos(opt);
     return responseData;
 }

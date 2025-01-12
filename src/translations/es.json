@@ -25,5 +25,11 @@
   "code_success_message": 200,
   "code_label_error": "error",
   "code_label_warning": "warning",
-  "code_label_success": "success"
+  "code_label_success": "success",
+  "category": "Categorías",
+  "add_to_cart": "Agregar al carrito",
+  "quick_view": "Vista rápida",
+  "products": "Productos",
+  "view_more_products": "Ver más productos",
+  "Qty": "Cantidad"
 }
