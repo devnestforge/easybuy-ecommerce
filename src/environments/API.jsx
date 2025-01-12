@@ -37,7 +37,8 @@ global.ABOUT = "/about-us"
 global.CONTACT = "/contact-us"
 global.PRODUCTSEARCH = '/products'
 global.PRODUCTDETAIL = '/products-detail'
-
+global.VIEWCART = '/viewcart'
+global.CHECKOUT = '/checkout'
 
 global.ROUTE_HOME = "*"
 global.ROUTE_ANY = "/*"

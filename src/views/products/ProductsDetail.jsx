@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import CryptoJS from 'crypto-js'
+import t from '../../translations/i18n'
 import productsLogic from '../../functions/logic/productsLogic'
 import Spiner from '../../components/modals/Spiner'
 import ErrorPage from '../../components/error'
+import { useCart } from '../../functions/context/CartProvider' // Importa el hook de CartContext
 
 const decryptId = (encryptedId) => {
-  const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '=='
+  const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '==' // Decodifica la id
   const bytes = CryptoJS.AES.decrypt(base64, 'secret-key')
   return bytes.toString(CryptoJS.enc.Utf8)
 }
@@ -15,6 +17,7 @@ export default function ProductsDetail() {
   const { id } = useParams()
   const [product, setProduct] = useState(null)
   const [load, setLoad] = useState(false)
+  const { addToCart } = useCart()  // Usa el hook de CartContext para acceder a la función addToCart
 
   useEffect(() => {
     setLoad(true)
@@ -40,6 +43,17 @@ export default function ProductsDetail() {
 
   if (!product) {
     return <ErrorPage />
+  }
+
+  const handleAddToCart = () => {
+    const quantity = parseInt(document.getElementById('qty').value, 10) || 1; // Obtén la cantidad seleccionada, por defecto 1
+    addToCart({
+      id: product.prod_id,
+      name: product.prod_name,
+      price: product.prod_precio,
+      quantity, // Pasamos la cantidad seleccionada
+      imageUrl: product.url_imagen, // Pasamos la URL de la imagen del producto
+    });
   }
 
   return (
@@ -78,7 +92,7 @@ export default function ProductsDetail() {
 
                   <div className="product-content">
                     <p>
-                    {product.prod_descripcion}
+                      {product.prod_descripcion}
                     </p>
                   </div>
 
@@ -93,14 +107,18 @@ export default function ProductsDetail() {
                         min="1"
                         max="10"
                         step="1"
-                        data-decimals="0"
                         required
                       />
                     </div>
                   </div>
 
                   <div className="product-details-action">
-                    <a href="!#" className="btn-product btn-cart"><span>add to cart</span></a>
+                    <button
+                      className="btn-product btn-cart"
+                      onClick={handleAddToCart} // Agrega el producto al carrito al hacer clic
+                    >
+                      <span>add to cart</span>
+                    </button>
                   </div>
 
                   <div className="product-details-footer">
@@ -117,32 +135,62 @@ export default function ProductsDetail() {
           <div className="product-details-tab">
             <ul className="nav nav-pills justify-content-center" role="tablist">
               <li className="nav-item">
-                <a className="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">Description</a>
+                <a className="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">{t('Description')}</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">Additional information</a>
+                <a className="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">{t('Aditgional_info')}</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">Shipping & Returns</a>
+                <a className="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">{t('Shipping_returns_info')}</a>
               </li>
             </ul>
             <div className="tab-content">
               <div className="tab-pane fade show active" id="product-desc-tab" role="tabpanel" aria-labelledby="product-desc-link">
                 <div className="product-desc-content">
-                  <h3>Product Information</h3>
-                  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis.</p>
+                  <h3>{t('Description')}</h3>
+                  <p>{product.observacion}</p>
                 </div>
               </div>
               <div className="tab-pane fade" id="product-info-tab" role="tabpanel" aria-labelledby="product-info-link">
                 <div className="product-desc-content">
-                  <h3>Additional information</h3>
-                  <p>Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede.</p>
+                  <h3>{t('Aditgional_info')}</h3>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <ul>
+                        <li><strong>{t('Weight_prod')}</strong> {product.peso || "N/A"}</li>
+                        <li><strong>{t('Height_prod')}</strong> {product.alto || "N/A"}</li>
+                        <li><strong>{t('Width_prod')}</strong> {product.ancho || "N/A"}</li>
+                        <li><strong>{t('Length_prod')}</strong> {product.largo || "N/A"}</li>
+                        <li><strong>{t('Size_prod')}</strong> {product.talla || "N/A"}</li>
+                      </ul>
+                    </div>
+                    <div className="col-md-6">
+                      <ul>
+                        <li><strong>{t('Dimensions_prod')}</strong> {product.dimensiones || "N/A"}</li>
+                        <li><strong>{t('Release_Date_prod')}</strong> {product.fecha_lanzamiento || "N/A"}</li>
+                        <li><strong>{t('Manufacturer_prod')}</strong> {product.fabricante || "N/A"}</li>
+                        <li><strong>{t('Year_prod')}</strong> {product.anio_fabricacion || "N/A"}</li>
+                        <li><strong>{t('Warranty_prod')}</strong> {product.garantia || "N/A"}</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div className="tab-pane fade" id="product-shipping-tab" role="tabpanel" aria-labelledby="product-shipping-link">
                 <div className="product-desc-content">
-                  <h3>Shipping & Returns</h3>
-                  <p>Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede.</p>
+                  <h3>{t('Shipping_returns_info')}</h3>
+                  <p>{t('shipping_intro')}</p>
+                  <h4>{t('return_policy_title')}</h4>
+                  <p>{t('return_policy_intro')}</p>
+                  <ul>
+                    <li>{t('return_condition_1')}</li>
+                    <li>{t('return_condition_2')}</li>
+                    <li>{t('return_condition_3')}</li>
+                  </ul>
+                  <h4>{t('terms_conditions_title')}</h4>
+                  <p>{t('terms_conditions_intro')}</p>
+                  <p>{t('contact_for_more_info')}</p>
                 </div>
               </div>
             </div>

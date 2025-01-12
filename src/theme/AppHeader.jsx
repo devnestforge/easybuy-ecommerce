@@ -1,11 +1,11 @@
-
 import React from 'react'
-
+import t from '../translations/i18n'
 import LoginRegister from '../components/modals/loginRegister'
+import { useCart } from '../functions/context/CartProvider'
 
 const NavBar = () => {
-    //const [cartTotalProd, setCartTotalProd] = useState(0)
-
+    const { cartItems, addToCart, removeFromCart, getTotalItems } = useCart() // Obtener los items del carrito y las funciones
+    const totalItems = getTotalItems()
     return (
         <>
             <div className="mobile-menu-overlay"></div>
@@ -26,17 +26,7 @@ const NavBar = () => {
                                         <a href="!#" onClick={(e) => e.preventDefault()}>Departamentos</a>
                                         <ul>
                                             <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop List</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 2 Columns</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 3 Columns</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 4 Columns</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Shop Boxed No Sidebar<span className="tip tip-hot">Hot</span></span></a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Fullwidth No Sidebar</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Product Category Boxed</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Product Category Fullwidth<span className="tip tip-new">New</span></span></a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Cart</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Checkout</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Wishlist</a></li>
-                                            <li><a href="!#" onClick={(e) => e.preventDefault()}>Lookbook</a></li>
+                                            {/* Other links */}
                                         </ul>
                                     </li>
                                 </ul>
@@ -65,9 +55,9 @@ const NavBar = () => {
                                     <a href="!#" onClick={(e) => e.preventDefault()}>Links</a>
                                     <ul>
                                         <li><i className="icon-phone"></i>Call: +0123 456 789</li>
-                                        <li><a href={global.ABOUT}>Nosotros</a></li>
-                                        <li><a href={global.CONTACT}>Contactanos</a></li>
-                                        <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>Login</a></li>
+                                        <li><a href={global.ABOUT}>{t('about_easybuy')}</a></li>
+                                        <li><a href={global.CONTACT}>{t('contact_easybuy')}</a></li>
+                                        <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>{t('login_easybuy')}</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -88,112 +78,50 @@ const NavBar = () => {
                                 <ul className="menu sf-arrows">
                                     <li className="megamenu-container active">
                                         <a href="!#" onClick={(e) => e.preventDefault()} className="sf-with-ul">Departamentos</a>
-
-                                        <div className="megamenu megamenu-md">
-                                            <div className="row no-gutters">
-                                                <div className="col-md-8">
-                                                    <div className="menu-col">
-                                                        <div className="row">
-                                                            <div className="col-md-6">
-                                                                <div className="menu-title">Shop with sidebar</div>
-                                                                <ul>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop List</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 2 Columns</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 3 Columns</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Grid 4 Columns</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Shop Market<span className="tip tip-new">New</span></span></a></li>
-                                                                </ul>
-
-                                                                <div className="menu-title">Shop no sidebar</div>
-                                                                <ul>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Shop Boxed No Sidebar<span className="tip tip-hot">Hot</span></span></a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Shop Fullwidth No Sidebar</a></li>
-                                                                </ul>
-                                                            </div>
-
-                                                            <div className="col-md-6">
-                                                                <div className="menu-title">Product Category</div>
-                                                                <ul>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Product Category Boxed</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}><span>Product Category Fullwidth<span className="tip tip-new">New</span></span></a></li>
-                                                                </ul>
-                                                                <div className="menu-title">Shop Pages</div>
-                                                                <ul>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Cart</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Checkout</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Wishlist</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>My Account</a></li>
-                                                                    <li><a href="!#" onClick={(e) => e.preventDefault()}>Lookbook</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {/* Megamenu content */}
                                     </li>
                                 </ul>
                             </nav>
                         </div>
                         <div className="header-right">
                             <div className="dropdown cart-dropdown">
-                                <a href="!#" onClick={(e) => e.preventDefault()} className="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <a href="!#" onClick={(e) => e.preventDefault()} className="dropdown-toggle">
                                     <i className="icon-shopping-cart"></i>
-                                    <span className="cart-count">0</span>
+                                    <span className="cart-count">{totalItems}</span>
                                 </a>
-
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <div className="dropdown-cart-products">
-                                        <div className="product">
-                                            <div className="product-cart-details">
-                                                <h4 className="product-title">
-                                                    <a href="!#" onClick={(e) => e.preventDefault()}>Beige knitted elastic runner shoes</a>
-                                                </h4>
-
-                                                <span className="cart-product-info">
-                                                    <span className="cart-product-qty">1</span>
-                                                    x $84.00
-                                                </span>
-                                            </div>
-
-                                            <figure className="product-image-container">
-                                                <a href="!#" onClick={(e) => e.preventDefault()} className="product-image">
-                                                    <img src="assets/images/products/cart/product-1.jpg" alt="product" />
-                                                </a>
-                                            </figure>
-                                            <a href="!#" onClick={(e) => e.preventDefault()} className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
-                                        </div>
-
-                                        <div className="product">
-                                            <div className="product-cart-details">
-                                                <h4 className="product-title">
-                                                    <a href="!#" onClick={(e) => e.preventDefault()}>Blue utility pinafore denim dress</a>
-                                                </h4>
-
-                                                <span className="cart-product-info">
-                                                    <span className="cart-product-qty">1</span>
-                                                    x $76.00
-                                                </span>
-                                            </div>
-
-                                            <figure className="product-image-container">
-                                                <a href="!#" onClick={(e) => e.preventDefault()} className="product-image">
-                                                    <img src="assets/images/products/cart/product-2.jpg" alt="product" />
-                                                </a>
-                                            </figure>
-                                            <a href="!#" onClick={(e) => e.preventDefault()} className="btn-remove" title="Remove Product"><i className="icon-close"></i></a>
-                                        </div>
+                                        {cartItems.length === 0 ? (
+                                            <p>No hay productos en el carrito.</p>
+                                        ) : (
+                                            cartItems.map(item => (
+                                                <div className="product" key={item.id}>
+                                                    <div className="product-cart-details">
+                                                        <h4 className="product-title">
+                                                            <a href="!#" onClick={(e) => e.preventDefault()}>{item.name}</a>
+                                                        </h4>
+                                                        <span className="cart-product-info">
+                                                            <span className="cart-product-qty">{item.quantity}</span> x ${item.price}
+                                                        </span>
+                                                    </div>
+                                                    <figure className="product-image-container">
+                                                        <a href="!#" className="product-image">
+                                                            <img src={`${global.IMGProd}${item.imageUrl}`} alt={item.name} />
+                                                        </a>
+                                                    </figure>
+                                                    <a href="!#" onClick={(e) => { e.preventDefault(); removeFromCart(item.id) }} className="btn-remove" title="Remove Product">
+                                                        <i className="icon-close"></i>
+                                                    </a>
+                                                </div>
+                                            ))
+                                        )}
                                     </div>
-
                                     <div className="dropdown-cart-total">
                                         <span>Total</span>
-
-                                        <span className="cart-total-price">$160.00</span>
+                                        <span className="cart-total-price">${cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</span>
                                     </div>
-
                                     <div className="dropdown-cart-action">
-                                        <a href="!#" onClick={(e) => e.preventDefault()} className="btn btn-primary">View Cart</a>
-                                        <a href="!#" onClick={(e) => e.preventDefault()} className="btn btn-outline-primary-2"><span>Checkout</span><i className="icon-long-arrow-right"></i></a>
+                                        <a href={global.VIEWCART} className="btn btn-primary">Ver Carrito</a>
                                     </div>
                                 </div>
                             </div>
@@ -204,4 +132,5 @@ const NavBar = () => {
         </>
     )
 }
+
 export default NavBar
