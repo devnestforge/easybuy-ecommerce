@@ -36,10 +36,23 @@ const successMapper = async (data, rowsTotal) => {
     return responseMapper
 }
 
+const loginRegisterMapper = async (data, rowsTotal) => {
+    let responseMapper = []
+    responseMapper = {
+        message: data.message ?? '',
+        success: data.error ?? false,
+        data: [],
+        variant: data.labelError,
+        error: data.error
+    }
+    return responseMapper
+}
+
 const generalMappers = {
     responseMapper,
     successMapper,
-    errorMapper
+    errorMapper,
+    loginRegisterMapper
   }
   
   export default generalMappers

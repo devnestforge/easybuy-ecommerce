@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { useTranslation } from 'react-i18next';
-import { useSnackbar } from 'notistack';
-import Spiner from './Spiner';
-import secutiryLogic from "../../functions/logic/securityLogic";
-import auditoryLogic from "../../functions/logic/auditoryLogic";
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import React, { useState, useEffect } from "react"
+import { useTranslation } from 'react-i18next'
+import { useSnackbar } from 'notistack'
+import Spiner from './Spiner'
+import secutiryLogic from "../../functions/logic/securityLogic"
+import auditoryLogic from "../../functions/logic/auditoryLogic"
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import t from '../../translations/i18n'
 
 const LoginRegister = () => {
-    const { t } = useTranslation();
-    const [spiner, setSpiner] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [policy, setPolicy] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [ip] = useState(localStorage.getItem('ip'));
+    const [spiner, setSpiner] = useState(false)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [policy, setPolicy] = useState(false)
+    const [showPassword, setShowPassword] = useState(false)
+    const [ip] = useState(localStorage.getItem('ip'))
     const [validations, setValidations] = useState({
         minLength: false,
         upperCase: false,
         lowerCase: false,
         number: false,
         specialChar: false
-    });
-    const { enqueueSnackbar } = useSnackbar();
-    let response = [];
+    })
+    const { enqueueSnackbar } = useSnackbar()
+    let response = []
 
     useEffect(() => {
         // Validate password each time it changes
         const validatePassword = (pwd) => {
-            const minLength = pwd.length >= 8;
-            const upperCase = /[A-Z]/.test(pwd);
-            const lowerCase = /[a-z]/.test(pwd);
-            const number = /\d/.test(pwd);
-            const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+            const minLength = pwd.length >= 8
+            const upperCase = /[A-Z]/.test(pwd)
+            const lowerCase = /[a-z]/.test(pwd)
+            const number = /\d/.test(pwd)
+            const specialChar = /[!@#$%^&*(),.?":{}|<>]/.test(pwd)
 
             setValidations({
                 minLength,
@@ -39,27 +39,27 @@ const LoginRegister = () => {
                 lowerCase,
                 number,
                 specialChar
-            });
-        };
+            })
+        }
 
-        validatePassword(password);
-    }, [password]);
+        validatePassword(password)
+    }, [password])
 
     const toggleShowPassword = () => {
-        setShowPassword(!showPassword);
-    };
+        setShowPassword(!showPassword)
+    }
 
     const handleLogin = async (e) => {
-        e.preventDefault();
-        setSpiner(true);
+        e.preventDefault()
+        setSpiner(true)
         try {
             const data = {
                 email,
                 password
-            };
-            response = await secutiryLogic.loginLogic(data, t);
+            }
+            response = await secutiryLogic.loginLogic(data, t)
             if (response.success) {
-                //navigate('/select-modulo', { replace: true });
+                //navigate('/select-modulo', { replace: true })
             } else {
             }
             enqueueSnackbar(response.message, {
@@ -68,7 +68,7 @@ const LoginRegister = () => {
                     vertical: global.SNACKBARVER,
                     horizontal: global.SNACKBARHOR
                 }
-            });
+            })
         } catch (e) {
             enqueueSnackbar(t('general_error_message'), {
                 variant: t('code_label_error'),
@@ -76,14 +76,14 @@ const LoginRegister = () => {
                     vertical: global.SNACKBARVER,
                     horizontal: global.SNACKBARHOR
                 }
-            });
+            })
         }
-        setSpiner(false);
-    };
+        setSpiner(false)
+    }
 
     const handleRegister = async (e) => {
-        e.preventDefault();
-        setSpiner(true);
+        e.preventDefault()
+        setSpiner(true)
         try {
 
             const data = {
@@ -93,42 +93,43 @@ const LoginRegister = () => {
                 "creation_user": 0,
                 "creation_ip": ip,
                 "creation_date": new Date(),
-            };
+            }
 
-            response = await secutiryLogic.registerLogic(data, t);
+            response = await secutiryLogic.registerLogic(data, t)
             if (response.success) {
-                //navigate('/select-modulo', { replace: true });
+                //navigate('/select-modulo', { replace: true })
             } else {
             }
             enqueueSnackbar(response.message, {
-                variant: response.labelError,
+                variant: response.variant,
                 anchorOrigin: {
                     vertical: global.SNACKBARVER,
                     horizontal: global.SNACKBARHOR
                 }
-            });
+            })
         } catch (e) {
             const data = {
-                "section_error": "loginRegister.jsx",
-                "detail_error": "login",
+                "section_error": "loginRegister.jsx front",
+                "detail_error": "login eccomerce front",
                 "mensaje_error": e.message,
-                "user_transac": email,
+                "user_transac": 0,
                 "module_transac": "Front loginRegister.jsx",
                 "operation_date": new Date(),
-                "operation_user": email,
+                "operation_user": 0,
                 "operation_ip": ip,
-            };
-            auditoryLogic.catchErrorLogic(data);
+                "env": 2
+            }
+            auditoryLogic.catchErrorLogic(data)
             enqueueSnackbar(t('general_error_message'), {
                 variant: t('code_label_error'),
                 anchorOrigin: {
                     vertical: global.SNACKBARVER,
                     horizontal: global.SNACKBARHOR
                 }
-            });
+            })
         }
-        setSpiner(false);
-    };
+        setSpiner(false)
+    }
 
     const styles = {
         validationInfo: {
@@ -154,7 +155,7 @@ const LoginRegister = () => {
         invalid: {
             color: 'red',
         },
-    };
+    }
 
     return (
         <>
@@ -313,7 +314,7 @@ const LoginRegister = () => {
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
 
-export default LoginRegister;
+export default LoginRegister

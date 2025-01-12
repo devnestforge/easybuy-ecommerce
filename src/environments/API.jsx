@@ -10,15 +10,15 @@ global.IMGProd = 'http://localhost/'
 //BACK
 
 //auditoria
-global.LOG_ERROR = global.URLBACKENDSECURITY  + "/logError"
+global.LOG_ERROR = global.URLBACKENDSECURITY  + "/ecomerce/logError"
 global.GET_IP = "https://api.bigdatacloud.net/data/client-ip"
 
 global.SECRETKEY = 'GABRIEL19892025EASYBUY'
 
 // secutiry
 
-global.LOGIN = global.URLBACKENDSECURITY  + "/login"
-global.REGISTER = global.URLBACKENDSECURITY  + "/register"
+global.LOGIN = global.URLBACKENDSECURITY  + "/ecomerce/login"
+global.REGISTER = global.URLBACKENDSECURITY  + "/ecomerce/register"
 
 // PRODUCTS
 global.PRODUCTS = global.URLBACKENDSECURITY  + "/ecomerce/getProducts"

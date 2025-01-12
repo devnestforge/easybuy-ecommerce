@@ -15,8 +15,8 @@ const loginLogic = async (dataLogin, t) => {
 
 const registerLogic = async (dataLogin, t) => {
     try {
-        const validation = securityValidation.register(dataLogin, t);
-        dataResp = validation;
+        const validation = await securityValidation.register(dataLogin, t);
+        dataResp = validation
         if (!dataResp.error) {
             dataResp = await securityService.registerService(dataLogin);
         }

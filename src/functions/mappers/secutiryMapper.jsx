@@ -6,6 +6,7 @@ const userDataMapper = (data, error) => {
         success: data.error ?? false,
         data: data.data,
         labelError: data.labelError,
+        variant: data.variant,
         error: data.error
     }
 
