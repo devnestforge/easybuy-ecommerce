@@ -3,7 +3,7 @@ let responseMapper = [];
 const userDataMapper = (data, error) => {
     responseMapper = {
         message: data.message ?? '',
-        success: data.error ?? false,
+        success: data.error ? false : true,
         data: data.data,
         labelError: data.labelError,
         variant: data.variant,
@@ -15,6 +15,6 @@ const userDataMapper = (data, error) => {
 
 const secutiryMapper = {
     userDataMapper
-  };
-  
-  export default secutiryMapper;
+};
+
+export default secutiryMapper;

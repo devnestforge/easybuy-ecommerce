@@ -70,5 +70,7 @@
   "Release_Date_prod": "Fecha lanzamiento:",
   "Manufacturer_prod": "Fabricante:",
   "Year_prod": "Año:",
-  "Warranty_prod": "Garantía:"
+  "Warranty_prod": "Garantía:",
+  "restore_pass_label": "Recuperar su contraseña",
+  "restore_button": "Recuperar"
 }

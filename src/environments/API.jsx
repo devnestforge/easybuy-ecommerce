@@ -19,6 +19,8 @@ global.SECRETKEY = 'GABRIEL19892025EASYBUY'
 
 global.LOGIN = global.URLBACKENDSECURITY  + "/ecomerce/login"
 global.REGISTER = global.URLBACKENDSECURITY  + "/ecomerce/register"
+global.RESTORE = global.URLBACKENDSECURITY  + "/ecomerce/sendLink"
+global.CHANGEPASSWORD = global.URLBACKENDSECURITY + '/ecomerce/changePassword'
 
 // PRODUCTS
 global.PRODUCTS = global.URLBACKENDSECURITY  + "/ecomerce/getProducts"
@@ -39,6 +41,8 @@ global.PRODUCTSEARCH = '/products'
 global.PRODUCTDETAIL = '/products-detail'
 global.VIEWCART = '/viewcart'
 global.CHECKOUT = '/checkout'
+global.RESETPASSWORD = '/cambiar-credenciales/:token'
+global.RESETPASSWORDLINK = '/cambiar-credenciales'
 
 global.ROUTE_HOME = "*"
 global.ROUTE_ANY = "/*"

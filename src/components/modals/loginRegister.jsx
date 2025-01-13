@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import Spiner from './Spiner'
 import secutiryLogic from "../../functions/logic/securityLogic"
@@ -59,11 +58,12 @@ const LoginRegister = () => {
             }
             response = await secutiryLogic.loginLogic(data, t)
             if (response.success) {
-                //navigate('/select-modulo', { replace: true })
-            } else {
+                localStorage.setItem("authToken", response.data.token)
+                localStorage.setItem("authEmail", email)
+                window.location.href = "/home";
             }
             enqueueSnackbar(response.message, {
-                variant: response.labelError,
+                variant: response.variant,
                 anchorOrigin: {
                     vertical: global.SNACKBARVER,
                     horizontal: global.SNACKBARHOR
@@ -214,8 +214,7 @@ const LoginRegister = () => {
                                                         <span>{t('Ingresar')}</span>
                                                         <i className="icon-long-arrow-right"></i>
                                                     </button>
-
-                                                    <a href="!#" className="forgot-link">{t('forgotPassword_button')}</a>
+                                                    <a href="#restore-pass-modal" data-toggle="modal" className="forgot-link">{t('forgotPassword_button')}</a>
                                                 </div>
                                             </form>
                                         </div>

@@ -1,15 +1,25 @@
 import React from 'react'
 import t from '../translations/i18n'
 import LoginRegister from '../components/modals/loginRegister'
+import RestorePassword from '../components/modals/RestorePassword'
 import { useCart } from '../functions/context/CartProvider'
 
 const NavBar = () => {
-    const { cartItems, addToCart, removeFromCart, getTotalItems } = useCart() // Obtener los items del carrito y las funciones
+    const { cartItems, addToCart, removeFromCart, getTotalItems } = useCart()
     const totalItems = getTotalItems()
+
+    const token = localStorage.getItem('authToken')
+
+    const handleLogout = () => {
+        localStorage.clear()
+        window.location.href = "/home"
+    }
+
     return (
         <>
             <div className="mobile-menu-overlay"></div>
             <LoginRegister />
+            <RestorePassword />
             <div className="mobile-menu-container mobile-menu-light">
                 <div className="mobile-menu-wrapper">
                     <span className="mobile-menu-close"><i className="icon-close"></i></span>
@@ -57,7 +67,26 @@ const NavBar = () => {
                                         <li><i className="icon-phone"></i>Call: +0123 456 789</li>
                                         <li><a href={global.ABOUT}>{t('about_easybuy')}</a></li>
                                         <li><a href={global.CONTACT}>{t('contact_easybuy')}</a></li>
-                                        <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>{t('login_easybuy')}</a></li>
+                                        {/* Mostrar el botón de login si no hay token */}
+                                        {!token ? (
+                                            <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>{t('login_easybuy')}</a></li>
+                                        ) : (
+                                            // Mostrar el botón de cerrar sesión con un dropdown si hay token
+                                            <li className="nav-item dropdown">
+                                                <a href="!#" className="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i className="icon-user"></i> Perfil <i className="icon-down-open"></i>
+                                                </a>
+                                                <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                                                    <a className="dropdown-item" href="!#">Configuración de cuenta</a>
+                                                    <a className="dropdown-item" href="!#">Historial de pedidos</a>
+                                                    <a className="dropdown-item" href="!#">Lista de deseos</a>
+                                                    <div className="dropdown-divider"></div>
+                                                    <a className="dropdown-item" href="!#" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
+                                                        Cerrar sesión
+                                                    </a>
+                                                </div>
+                                            </li>
+                                        )}
                                     </ul>
                                 </li>
                             </ul>

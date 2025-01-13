@@ -24,7 +24,7 @@ const login = (credenciales, t) => {
       data: [],
       error: true
     }
-    resp = generalMappers.responseMapper(data)
+    resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.email) {
     data = {
       message: t('email_error_message'),
@@ -34,7 +34,7 @@ const login = (credenciales, t) => {
       data: [],
       error: true
     }
-    resp = generalMappers.responseMapper(data)
+    resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.password) {
     data = {
       message: t('password_error_message'),
@@ -44,7 +44,7 @@ const login = (credenciales, t) => {
       data: [],
       error: true
     }
-    resp = generalMappers.responseMapper(data)
+    resp = generalMappers.loginRegisterMapper(data)
   } else if (!validarCorreo(credenciales.email)) {
     data = {
       message: t('email_error_message'),
@@ -54,7 +54,7 @@ const login = (credenciales, t) => {
       data: [],
       error: true
     }
-    resp = generalMappers.responseMapper(data)
+    resp = generalMappers.loginRegisterMapper(data)
   } else {
     data = {
       message: '',
@@ -146,9 +146,46 @@ const register = (credenciales, t) => {
   return resp
 }
 
+const restore = (credenciales, t) => {
+  if (!credenciales.email) {
+    data = {
+      message: t('login_error_message'),
+      code: t('code_error_message'),
+      labelError: t('code_label_warning'),
+      variant: t('code_label_warning'),
+      data: [],
+      error: true
+    }
+    resp = generalMappers.loginRegisterMapper(data)
+  } else if (!validarCorreo(credenciales.email)) {
+    data = {
+      message: t('email_error_message'),
+      code: t('code_error_message'),
+      labelError: t('code_label_warning'),
+      variant: t('code_label_warning'),
+      data: [],
+      error: true
+    }
+    resp = generalMappers.loginRegisterMapper(data)
+  } else {
+    data = {
+      message: '',
+      code: t('code_success_message'),
+      labelError: t('code_label_success'),
+      variant: t('code_label_success'),
+      data: [],
+      error: false
+    }
+    resp = generalMappers.responseMapper(data)
+  }
+
+  return resp
+}
+
 const securityValidation = {
   login,
-  register
+  register,
+  restore
 }
 
 export default securityValidation

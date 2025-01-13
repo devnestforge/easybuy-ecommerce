@@ -7,6 +7,7 @@ import ProductsSearch from '../views/products/ProductsSearch'
 import ProductsDetail from '../views/products/ProductsDetail'
 import Checkout from '../views/checkout/Checkout'
 import ShoppingCart from '../views/checkout/ShoppingCart'
+import ResetPasword from '../views/user/ResetPassword'
 
 const routes = [
 
@@ -19,6 +20,7 @@ const routes = [
   { path: `${global.PRODUCTDETAIL}/:id`, exact: true, name: 'ProductsDetail', element: ProductsDetail },
   { path: global.VIEWCART, exact: true, name: 'ShoppingCart', element: ShoppingCart },
   { path: global.CHECKOUT, exact: true, name: 'Checkout', element: Checkout },
+  { path: global.RESETPASSWORD, exact: true, name: 'ResetPasword', element: ResetPasword },
 
 ]
 

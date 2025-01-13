@@ -7,3 +7,4 @@ global.SNACKBARVER = "top";
 global.SNACKBARHOR = "right";
 global.REGEX_CORREO = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 global.REGEX_PASSWORD = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+global.LOGIN_FA_PASS = "fas fa-lock";
