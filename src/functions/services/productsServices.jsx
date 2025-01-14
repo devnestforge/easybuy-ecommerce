@@ -19,7 +19,7 @@ const getProductsService = async (idProduct, search) => {
                 idProduct === 0 ?
                     generalMappers.successMapper(productsMapper.productMapper(response.data), 1)
                     :
-                    generalMappers.successMapper(productsMapper.productIdMapper(response.data), 1)
+                    generalMappers.successMapper(productsMapper.productMapper(response.data), 1)
                 :
                 generalMappers.responseMapper(response, 1)
         } else {

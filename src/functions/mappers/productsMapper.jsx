@@ -7,6 +7,8 @@ const productMapper = (data) => {
       prod_descripcion: data[i].prod_descripcion ?? '',
       prod_name: data[i].prod_name ?? '',
       prod_precio: data[i].prod_precio ?? '',
+      iva_precio: data[i].iva_precio ?? '',
+      total_precio: data[i].total_precio ?? '',
       img_id: data[i].img_id ?? '',
       alto: data[i].alto ?? '',
       ancho: data[i].ancho ?? '',
@@ -16,6 +18,10 @@ const productMapper = (data) => {
       fecha_lanzamiento: data[i].fecha_lanzamiento ?? '',
       garantia: data[i].garantia ?? '',
       observacion: data[i].observacion ?? '',
+      tarifa: data[i].tarifa ?? '',
+      tarifa_descuento: data[i].tarifa_descuento ?? '',
+      valor_descuento: data[i].valor_descuento ?? '',
+      precio_descuento: data[i].precio_descuento ?? '',
       url_imagen: data[i].url_imagen ?? ''
     }
     prodMapper.push();

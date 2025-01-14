@@ -50,46 +50,98 @@ export default function Recommendations({ t, data }) {
 
                 <div className="products">
                     <div className="row justify-content-center">
-                        {data.map((item) => (
-                            <div key={item.id} className="col-6 col-md-4 col-lg-3">
-                                <div className="product product-2">
-                                    <figure className="product-media">
-                                        <a href={`${global.PRODUCTDETAIL}/${encryptId(item.id)}`}>
-                                            <img
-                                                src={`${global.IMGProd}${item.url_imagen}`}
-                                                alt={item.prod_name}
-                                                className="product-image-products"
-                                            />
-                                        </a>
+                        {data.map((item) => {
+                            const isDiscountAvailable = item.valor_descuento &&
+                                item.tarifa_descuento &&
+                                item.precio_descuento &&
+                                Number(item.valor_descuento) > 0 &&
+                                Number(item.tarifa_descuento) > 0 &&
+                                Number(item.precio_descuento) > 0;
 
-                                        <div className="product-action">
-                                            <a href="!#" className="btn-product btn-cart" title={t('add_to_cart')}>
-                                                <span>{t('add_to_cart')}</span>
-                                            </a>
-                                            {/* Aquí es donde agregamos el evento onClick para abrir el modal */}
-                                            <a
-                                                href="!#"
-                                                className="btn-product btn-quickview"
-                                                title="Quick view"
-                                                onClick={(e) => handleQuickViewClick(e, item)}  // Prevent redirection and open modal
-                                            >
-                                                <span>{t('quick_view')}</span>
-                                            </a>
-                                        </div>
-                                    </figure>
+                            return (
+                                <div key={item.id} className="col-6 col-md-4 col-lg-3">
+                                    {isDiscountAvailable ? (
+                                        // Tarjeta de descuento
+                                        <div className="product product-2">
+                                            <figure className="product-media">
+                                                <span className="product-label label-circle label-sale">Oferta</span>
+                                                <a href={`${global.PRODUCTDETAIL}/${encryptId(item.id)}`}>
+                                                    <img
+                                                        src={`${global.IMGProd}${item.url_imagen}`}
+                                                        alt={item.prod_name}
+                                                        className="product-image-products"
+                                                    />
+                                                </a>
+                                                <div className="product-action">
+                                                    <a href="!#" className="btn-product btn-cart" title={t('add_to_cart')}>
+                                                        <span>{t('add_to_cart')}</span>
+                                                    </a>
+                                                    <a
+                                                        href="!#"
+                                                        className="btn-product btn-quickview"
+                                                        title="Quick view"
+                                                        onClick={(e) => handleQuickViewClick(e, item)}
+                                                    >
+                                                        <span>{t('quick_view')}</span>
+                                                    </a>
+                                                </div>
+                                            </figure>
 
-                                    <div className="product-body">
-                                        <div className="product-cat">
-                                            <a href="!#">{item.cat_name}</a>
+                                            <div className="product-body">
+                                                <div className="product-cat">
+                                                    <a href="!#">{item.cat_name}</a>
+                                                </div>
+                                                <h3 className="product-title">
+                                                    <a href="product.html">{item.prod_name}</a>
+                                                </h3>
+                                                <div className="product-price">
+                                                    <span className="new-price">${item.precio_descuento}</span>
+                                                    <span className="old-price">Antes ${item.prod_precio}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <h3 className="product-title">
-                                            <a href="product.html">{item.prod_name}</a>
-                                        </h3>
-                                        <div className="product-price">${item.prod_precio}</div>
-                                    </div>
+                                    ) : (
+                                        // Tarjeta original
+                                        <div className="product product-2">
+                                            <figure className="product-media">
+                                                <a href={`${global.PRODUCTDETAIL}/${encryptId(item.id)}`}>
+                                                    <img
+                                                        src={`${global.IMGProd}${item.url_imagen}`}
+                                                        alt={item.prod_name}
+                                                        className="product-image-products"
+                                                    />
+                                                </a>
+                                                <div className="product-action">
+                                                    <a href="!#" className="btn-product btn-cart" title={t('add_to_cart')}>
+                                                        <span>{t('add_to_cart')}</span>
+                                                    </a>
+                                                    <a
+                                                        href="!#"
+                                                        className="btn-product btn-quickview"
+                                                        title="Quick view"
+                                                        onClick={(e) => handleQuickViewClick(e, item)}
+                                                    >
+                                                        <span>{t('quick_view')}</span>
+                                                    </a>
+                                                </div>
+                                            </figure>
+
+                                            <div className="product-body">
+                                                <div className="product-cat">
+                                                    <a href="!#">{item.cat_name}</a>
+                                                </div>
+                                                <h3 className="product-title">
+                                                    <a href="product.html">{item.prod_name}</a>
+                                                </h3>
+                                                <div className="product-price">${item.prod_precio}</div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
+
+
                     </div>
                 </div>
             </div>
