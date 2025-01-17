@@ -8,10 +8,22 @@ let responseMapper = []
 const loginService = async (dataLogin, t) => {
     try {
         const token = base64.encode(dataLogin.email + ':' + dataLogin.password)
-        const options = requestOptions.headers('POST', token, '')
+        const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const discountCode = localStorage.getItem('discountCode') || null
+        const shippingCost = parseFloat(localStorage.getItem('shippingCost')) || 0
+        const discountAmount = parseFloat(localStorage.getItem('discountAmount')) || 0
+
+        const cartData = {
+            storedCartItems,
+            discountCode,
+            shippingCost,
+            discountAmount,
+            "ip": localStorage.getItem('ip')
+        }
+        const options = requestOptions.headers('POST', token, cartData)
         const resp = await fetch(global.LOGIN, options)
         const dataResp = await resp.json()
-        responseMapper = secutiryMapper.userDataMapper(dataResp)
+        responseMapper = secutiryMapper.userLoginDataMapper(dataResp)
     } catch (e) {
         const data = {
             "section_error": "securityService.jsx front",
@@ -35,7 +47,7 @@ const registerService = async (dataLogin, t) => {
         const options = requestOptions.headers('POST', '', dataLogin)
         const resp = await fetch(global.REGISTER, options)
         const dataResp = await resp.json()
-        responseMapper = secutiryMapper.userDataMapper(dataResp)
+        responseMapper = secutiryMapper.userSaveCartDataMapper(dataResp)
     } catch (e) {
         const data = {
             "section_error": "securityService.jsx front",

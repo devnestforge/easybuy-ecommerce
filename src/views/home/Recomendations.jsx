@@ -1,12 +1,42 @@
 import React, { useState } from 'react'
 import Modal from 'react-modal'
 import CryptoJS from 'crypto-js'
+import { useCart } from '../../functions/context/CartProvider'
+import Spiner from '../../components/modals/Spiner'
+
 
 Modal.setAppElement('#root')
 
 export default function Recommendations({ t, data }) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [currentProduct, setCurrentProduct] = useState(null)
+    const { addToCart } = useCart()
+    const [load, setLoad] = useState(false);
+
+    const handleAddToCart = (item) => {
+        setLoad(true)
+        const quantity = 1 // Puedes manejar esto dinámicamente si lo necesitas
+        const iva = item.iva_precio * quantity // Cálculo del IVA
+        const total = item.prod_precio * quantity + iva
+
+        addToCart({
+            id: item.id,
+            empresa_id: item.empresa_id,
+            name: item.prod_name,
+            price: item.prod_precio,
+            iva,
+            total,
+            tarifa: item.tarifa,
+            valor_descuento: item.valor_descuento,
+            tarifa_descuento: item.tarifa_descuento,
+            precio_descuento: item.precio_descuento,
+            total_descuento: item.total_descuento,
+            iva_descuento: item.iva_descuento,
+            quantity,
+            imageUrl: item.url_imagen,
+        })
+        setLoad(false)
+    }
 
     const openModal = (product) => {
         setCurrentProduct(product)
@@ -35,6 +65,7 @@ export default function Recommendations({ t, data }) {
 
     return (
         <>
+            <Spiner opt={load} />
             <div className="container-fluid for-you">
                 <div className="heading heading-flex mb-3">
                     <div className="heading-left">
@@ -56,7 +87,7 @@ export default function Recommendations({ t, data }) {
                                 item.precio_descuento &&
                                 Number(item.valor_descuento) > 0 &&
                                 Number(item.tarifa_descuento) > 0 &&
-                                Number(item.precio_descuento) > 0;
+                                Number(item.precio_descuento) > 0
 
                             return (
                                 <div key={item.id} className="col-6 col-md-4 col-lg-3">
@@ -73,7 +104,12 @@ export default function Recommendations({ t, data }) {
                                                     />
                                                 </a>
                                                 <div className="product-action">
-                                                    <a href="!#" className="btn-product btn-cart" title={t('add_to_cart')}>
+                                                    <a href="!#"
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
+                                                            handleAddToCart(item)
+                                                        }}
+                                                        className="btn-product btn-cart" title={t('add_to_cart')}>
                                                         <span>{t('add_to_cart')}</span>
                                                     </a>
                                                     <a
@@ -112,7 +148,12 @@ export default function Recommendations({ t, data }) {
                                                     />
                                                 </a>
                                                 <div className="product-action">
-                                                    <a href="!#" className="btn-product btn-cart" title={t('add_to_cart')}>
+                                                    <a href="!#"
+                                                        onClick={(e) => {
+                                                            e.preventDefault()
+                                                            handleAddToCart(item)
+                                                        }}
+                                                        className="btn-product btn-cart" title={t('add_to_cart')}>
                                                         <span>{t('add_to_cart')}</span>
                                                     </a>
                                                     <a
@@ -138,7 +179,7 @@ export default function Recommendations({ t, data }) {
                                         </div>
                                     )}
                                 </div>
-                            );
+                            )
                         })}
 
 
@@ -197,7 +238,12 @@ export default function Recommendations({ t, data }) {
 
                                     {/* Actions: Add to Wishlist, Add to Cart */}
                                     <div className="product-details-action">
-                                        <a href="!#" className="btn-product btn-cart">
+                                        <a href="!#"
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                handleAddToCart(currentProduct)
+                                            }}
+                                            className="btn-product btn-cart">
                                             <span>{t('add_to_cart')}</span>
                                         </a>
                                     </div>

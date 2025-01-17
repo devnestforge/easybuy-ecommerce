@@ -2,31 +2,21 @@ import React, { useState, useEffect } from 'react'
 import Recomendations from '../home/Recomendations'
 import Spiner from '../../components/modals/Spiner'
 import productsLogic from '../../functions/logic/productsLogic'
-import generalLogic from '../../functions/logic/generalLogic'
 import t from '../../translations/i18n'
 
 export default function ShoppingCart() {
 
     const [cartItems, setCartItems] = useState([])
     const [load, setLoad] = useState(false)
-    const [cat, setCategories] = useState(false)
     const [prod, setProd] = useState(true)
-    const [catInfo, setCatInfo] = useState([])
     const [prodInfo, setProdInfo] = useState([])
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [shippingCost, setShippingCost] = useState(0)
-    const [taxRate, setTaxRate] = useState(0.15)
     const [discountCode, setDiscountCode] = useState('')
     const [discountApplied, setDiscountApplied] = useState(false)
     const [discountAmount, setDiscountAmount] = useState(0)
-    const [ivaVal, setIvaVal] = useState(0)
 
     const getProducts = async () => {
-        const categories = await productsLogic.getCategoriesLogic()
-        if (categories.success && categories.data.length > 0) {
-            setCategories(true)
-            setCatInfo(categories.data)
-        }
 
         const products = await productsLogic.getProductsLogic(0, '')
         if (products.success && products.data.length > 0) {
@@ -35,12 +25,8 @@ export default function ShoppingCart() {
         }
     }
 
-    const getIp = async () => {
-        const ip = await generalLogic.getIpClient()
-        localStorage.setItem('ip', ip["ipString"])
-    }
-
     useEffect(() => {
+        setLoad(true)
         // Recuperamos los productos desde el localStorage
         const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         const validatedCartItems = storedCartItems.map(item => ({
@@ -50,23 +36,28 @@ export default function ShoppingCart() {
             tarifa: parseFloat(item.tarifa) || 0,
         }));
         setCartItems(validatedCartItems);
-    
+
         // Recuperamos el descuento desde el localStorage
         const storedDiscountCode = localStorage.getItem('discountCode');
         const storedDiscountAmount = localStorage.getItem('discountAmount');
-        
+
         if (storedDiscountCode && storedDiscountAmount) {
             setDiscountCode(storedDiscountCode);
             setDiscountApplied(true);
             setDiscountAmount(parseFloat(storedDiscountAmount));
         }
-    
+
         // Recuperamos el costo de envío desde el localStorage
         const storedShippingCost = localStorage.getItem('shippingCost');
         if (storedShippingCost) {
             setShippingCost(parseFloat(storedShippingCost));
         }
-    
+
+        getProducts()
+
+        const token = localStorage.getItem('authToken');
+        setIsLoggedIn(!!token);
+        setLoad(false)
     }, []);
 
     const handleQuantityChange = (index, newQuantity) => {
@@ -81,8 +72,7 @@ export default function ShoppingCart() {
         // Si tarifa es 0, el IVA debe ser 0
         let iva = 0;
         if (ivaRate !== 0) {
-            iva = (updatedCartItems[index].price * ivaRate / 100 * newQuantity).toFixed(2);
-            setIvaVal(iva) // IVA con 2 decimales
+            iva = (updatedCartItems[index].price * ivaRate / 100 * newQuantity).toFixed(2);// IVA con 2 decimales
         }
 
         // Calcular el total (incluyendo IVA si no es 0)
@@ -115,23 +105,82 @@ export default function ShoppingCart() {
         }, 0).toFixed(2); // Subtotal con 2 decimales
     };
 
+    const calculateSubtotals = () => {
+        let subtotalIVA15 = 0;
+        let subtotalIVA12 = 0;
+        let subtotalIVA0 = 0;
+        let totalIVA = 0;
+
+        if (Array.isArray(cartItems)) {
+            cartItems.forEach(item => {
+                const itemPrice = parseFloat(item.precio_descuento) > 0
+                    ? parseFloat(item.precio_descuento)
+                    : parseFloat(item.price); // Usar precio con descuento si está disponible
+                const itemQuantity = parseInt(item.quantity) || 0;
+                const itemTarifa = parseFloat(item.tarifa) || 0;
+                const itemIVA = parseFloat(item.iva) || 0; // Tomar el IVA del producto directamente
+
+                const subtotal = itemPrice * itemQuantity;
+
+                // Calcular los subtotales según la tarifa
+                if (itemTarifa === 15) {
+                    subtotalIVA15 += subtotal;
+                } else if (itemTarifa === 12) {
+                    subtotalIVA12 += subtotal;
+                } else {
+                    subtotalIVA0 += subtotal;
+                }
+
+                // Acumular el total de IVA
+                totalIVA += itemIVA * itemQuantity;
+            });
+        }
+
+        return {
+            subtotalIVA15: subtotalIVA15.toFixed(2),
+            subtotalIVA12: subtotalIVA12.toFixed(2),
+            subtotalIVA0: subtotalIVA0.toFixed(2),
+            totalIVA: totalIVA.toFixed(2),
+        };
+    };
+
     const calculateTax = () => {
-        if (!Array.isArray(cartItems)) return 0;
-        return cartItems.reduce((totalIva, item) => {
-            const itemPrice = parseFloat(item.price) || 0;
-            const itemQuantity = parseInt(item.quantity) || 0;
-            const itemTarifa = parseFloat(item.tarifa) || 0;
-            const itemIva = (itemPrice * itemQuantity * itemTarifa / 100);
-            return totalIva + itemIva;
-        }, 0).toFixed(2); // Total IVA con 2 decimales
+        let totalTax = 0;
+
+        if (Array.isArray(cartItems)) {
+            cartItems.forEach(item => {
+                // Usar el precio con descuento si está disponible, de lo contrario usar el precio original
+                const itemPrice = parseFloat(item.precio_descuento) > 0
+                    ? parseFloat(item.precio_descuento)
+                    : parseFloat(item.price) || 0;
+
+                const itemQuantity = parseInt(item.quantity) || 0;
+                const itemTarifa = parseFloat(item.tarifa) || 0; // Tarifa del producto (porcentaje de IVA)
+
+                // Calcular el impuesto solo para productos gravados
+                if (itemTarifa > 0) {
+                    totalTax += itemPrice * itemQuantity * itemTarifa / 100;
+                }
+            });
+        }
+
+        return totalTax.toFixed(2);
     };
 
     const calculateTotal = () => {
-        const subtotal = parseFloat(calculateSubtotal()) || 0;
+        const { subtotalIVA15, subtotalIVA12, subtotalIVA0 } = calculateSubtotals();
         const tax = parseFloat(calculateTax()) || 0;
         const shipping = parseFloat(shippingCost) || 0;
         const discount = parseFloat(discountAmount) || 0;
-        return (subtotal + tax + shipping - discount).toFixed(2); // Total con 2 decimales
+
+        return (
+            parseFloat(subtotalIVA15) +
+            parseFloat(subtotalIVA12) +
+            parseFloat(subtotalIVA0) +
+            tax +
+            shipping -
+            discount
+        ).toFixed(2);
     };
 
     const handleShippingChange = (event) => {
@@ -145,33 +194,60 @@ export default function ShoppingCart() {
         } else {
             newShippingCost = 0
         }
-        setTaxRate(0.15)
         setShippingCost(newShippingCost)
         localStorage.setItem('shippingCost', newShippingCost)
     }
 
     const applyDiscount = (code) => {
-        let discount = 0;
-    
+        let discountPercentage = 0;
+
+        // Determinar el porcentaje de descuento según el código
         if (code === 'DESCUENTO10') {
-            discount = 10;
+            discountPercentage = 10;
         } else if (code === 'DESCUENTO20') {
-            discount = 20;
+            discountPercentage = 20;
         }
-    
-        if (discount > 0) {
+
+        if (discountPercentage > 0) {
+            // Aplicar el descuento a cada producto
+            const updatedCartItems = cartItems.map(item => {
+                const itemPrice = parseFloat(item.price) || 0;
+                const itemTarifa = parseFloat(item.tarifa) || 0; // Tarifa de IVA
+                const itemQuantity = parseInt(item.quantity) || 0;
+
+                // Calcular el descuento para cada producto
+                const discountedPrice = itemPrice - (itemPrice * discountPercentage / 100);
+
+                // Calcular IVA si aplica
+                const itemIVA = itemTarifa > 0 ? discountedPrice * (itemTarifa / 100) : 0;
+
+                // Calcular el total para este producto
+                const total = (discountedPrice + itemIVA) * itemQuantity;
+
+                return {
+                    ...item,
+                    discountedPrice: discountedPrice.toFixed(2),
+                    iva: itemIVA.toFixed(2),
+                    total: total.toFixed(2)
+                };
+            });
+
+            // Actualizar el carrito con los nuevos precios
+            setCartItems(updatedCartItems);
             setDiscountCode(code);
             setDiscountApplied(true);
-            setDiscountAmount(discount);
+            setDiscountAmount(discountPercentage);
             localStorage.setItem('discountCode', code);
-            localStorage.setItem('discountAmount', discount.toString());
+            localStorage.setItem('discountAmount', discountPercentage.toString());
         } else {
+            // Eliminar el descuento si el código no es válido
             setDiscountApplied(false);
             setDiscountAmount(0);
             localStorage.removeItem('discountCode');
             localStorage.removeItem('discountAmount');
         }
-    }
+    };
+
 
     const handleDiscountChange = (e) => {
         const code = e.target.value
@@ -214,16 +290,16 @@ export default function ShoppingCart() {
                                         <tr>
                                             <th>Product</th>
                                             <th>Price</th>
-                                            <th>Quantity</th>
-                                            <th>Total</th>
+                                            <th>Cantidad</th>
+                                            <th>Subtotal</th>
                                             <th>IVA</th>
+                                            <th>Total</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {cartItems.map((item, index) => {
                                             const itemPrice = parseFloat(item.price) || 0;
-                                            const totalPrice = (itemPrice * item.quantity).toFixed(2);
                                             const discountPrice = parseFloat(item.precio_descuento) || itemPrice; // Precio con descuento o precio base
                                             const totalDiscountPrice = (discountPrice * item.quantity).toFixed(2);
                                             const iva = (totalDiscountPrice * (parseFloat(item.tarifa) / 100)).toFixed(2); // IVA ajustado al descuento
@@ -254,13 +330,15 @@ export default function ShoppingCart() {
                                                     </td>
                                                     {/* Mostrar precio tachado solo si hay promoción */}
                                                     <td className="price-col">
-                                                        {hasPromotion && (
-                                                            <span style={{ textDecoration: "line-through", color: "red" }}>
-                                                                ${itemPrice.toFixed(2)}
-                                                            </span>
-                                                        )}
-                                                        {hasPromotion && <br />}
-                                                        <span>${discountPrice.toFixed(2)}</span>
+                                                        {hasPromotion ? (
+                                                            <>
+                                                                <span style={{ textDecoration: "line-through", color: "red" }}>
+                                                                    ${itemPrice.toFixed(2)}
+                                                                </span>
+                                                                <br />
+                                                                <span>${discountPrice.toFixed(2)}</span>
+                                                            </>
+                                                        ) : <span>${itemPrice.toFixed(2)}</span>}
                                                     </td>
                                                     {/* Cantidad */}
                                                     <td className="quantity-col">
@@ -333,15 +411,22 @@ export default function ShoppingCart() {
                                     <h3 className="summary-title">Cart Total</h3>
                                     <table className="table table-summary">
                                         <tbody>
-                                            <tr className="summary-subtotal">
-                                                <td>Subtotal:</td>
-                                                <td>${Number(calculateSubtotal()).toFixed(2)}</td>
+                                            <tr>
+                                                <td>Subtotal IVA 15%:</td>
+                                                <td>${calculateSubtotals().subtotalIVA15}</td>
                                             </tr>
-
+                                            <tr>
+                                                <td>Subtotal IVA 0%:</td>
+                                                <td>${calculateSubtotals().subtotalIVA0}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total IVA:</td>
+                                                <td>${calculateTax()}</td>
+                                            </tr>
                                             {/* Título de Shipping */}
                                             <tr className="summary-subtotal">
                                                 <td colSpan="2">
-                                                    <h4>Shipping</h4>
+                                                    <strong><label>Envío</label></strong>
                                                     <div className="custom-control custom-radio">
                                                         <input
                                                             type="radio"
@@ -383,31 +468,38 @@ export default function ShoppingCart() {
                                                     </div>
                                                 </td>
                                             </tr>
-
-                                            {/* Descuento */}
+                                            <tr>
+                                                <td>Shipping:</td>
+                                                <td>${shippingCost.toFixed(2)}</td>
+                                            </tr>
                                             {discountApplied && (
                                                 <tr>
                                                     <td>Discount:</td>
                                                     <td>-${discountAmount.toFixed(2)}</td>
                                                 </tr>
                                             )}
-
-                                            {/* Impuestos */}
-                                            <tr>
-                                                <td>Tax:</td>
-                                                <td>${calculateTax()}</td>
-                                            </tr>
-
-                                            {/* Total */}
                                             <tr className="summary-total">
                                                 <td>Total:</td>
                                                 <td>${calculateTotal()}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <a href="#" className="btn btn-outline-primary-2 btn-order btn-block">
+                                    <button
+                                        className="btn btn-outline-primary-2 btn-order btn-block"
+                                        disabled={!isLoggedIn} // Deshabilitado si no hay sesión
+                                        onClick={() => {
+                                            if (isLoggedIn) {
+                                                alert('Checkout successful!');
+                                            }
+                                        }}
+                                    >
                                         Proceed to Checkout
-                                    </a>
+                                    </button>
+                                    {!isLoggedIn && (
+                                        <p className="text-danger text-center mt-2">
+                                            Por favor, inicia sesión para proceder con el checkout.
+                                        </p>
+                                    )}
                                 </div>
                             </aside>
 

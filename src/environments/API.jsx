@@ -28,6 +28,9 @@ global.GET_PROMOTIONS = global.URLBACKENDSECURITY  + "/ecomerce/getPromotions"
 global.GET_RECOMENDED = global.URLBACKENDSECURITY  + "/ecomerce/getRecomended"
 global.GET_CATEGORIES = global.URLBACKENDSECURITY  + "/ecomerce/getCategories"
 
+//user
+global.SAVEVIEWCART = global.URLBACKENDSECURITY  + "/ecomerce/saveViewCart"
+
 
 // URL FRONT END
 

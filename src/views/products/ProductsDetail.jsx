@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import CryptoJS from 'crypto-js'
-import t from '../../translations/i18n'
 import productsLogic from '../../functions/logic/productsLogic'
 import Spiner from '../../components/modals/Spiner'
 import ErrorPage from '../../components/error'
@@ -50,6 +49,7 @@ export default function ProductsDetail() {
     const total = product.prod_precio * quantity + iva;
     addToCart({
       id: product.id,
+      empresa_id: product.empresa_id,
       name: product.prod_name,
       price: product.prod_precio,
       iva: iva,

@@ -2,6 +2,7 @@ const productMapper = (data) => {
   let prodMapper = [];
   for (var i = 0; i < data.length; i++) {
     prodMapper[i] = {
+      empresa_id: data[i].empresa_id ?? '',
       id: data[i].prod_id ?? '',
       cat_name: data[i].cat_name ?? '',
       prod_descripcion: data[i].prod_descripcion ?? '',
@@ -22,6 +23,7 @@ const productMapper = (data) => {
       tarifa_descuento: data[i].tarifa_descuento ?? '',
       valor_descuento: data[i].valor_descuento ?? '',
       precio_descuento: data[i].precio_descuento ?? '',
+      iva_descuento: data[i].iva_descuento ?? '',
       url_imagen: data[i].url_imagen ?? ''
     }
     prodMapper.push();
