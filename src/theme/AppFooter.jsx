@@ -40,12 +40,11 @@ const AppFooter = () => {
                   <h4 className="widget-title">Customer Service</h4>
 
                   <ul className="widget-list">
-                    <li><a href="!#">{t('PM_easybuy')}</a></li>
-                    <li><a href="!#">{t('Guarantee_easybuy')}</a></li>
-                    <li><a href="!#">{t('Reembolso_easybuy')}</a></li>
-                    <li><a href="!#">{t('Shipping_easybuy')}</a></li>
-                    <li><a href="!#">{t('use_term')}</a></li>
-                    <li><a href="!#">{t('privacy_policy')}</a></li>
+                    <li><a href={global.METODOPAGO}>{t('PM_easybuy')}</a></li>
+                    <li><a href={global.GRANTIA}>{t('Guarantee_easybuy')}</a></li>
+                    <li><a href={global.ENVIO}>{t('Shipping_easybuy')}</a></li>
+                    <li><a href={global.TERMINOS}>{t('use_term')}</a></li>
+                    <li><a href={global.POLITICA}>{t('privacy_policy')}</a></li>
                   </ul>
                 </div>
               </div>
@@ -56,9 +55,9 @@ const AppFooter = () => {
 
                   <ul className="widget-list">
                     <li><a href="#signin-modal" data-toggle="modal">{t('sign_easybuy')}</a></li>
-                    <li><a href="!#">{t('cart_easybuy')}</a></li>
-                    <li><a href="!#">{t('Tmyo_easybuy')}</a></li>
-                    <li><a href="!#">{t('Help_easybuy')}</a></li>
+                    <li><a href={global.VIEWCART}>{t('cart_easybuy')}</a></li>
+                    <li><a href={global.RASTREAPEDIDOS}>{t('Tmyo_easybuy')}</a></li>
+                    <li><a href={global.AYUDA}>{t('Help_easybuy')}</a></li>
                   </ul>
                 </div>
               </div>

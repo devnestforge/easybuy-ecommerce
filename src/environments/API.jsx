@@ -47,6 +47,20 @@ global.CHECKOUT = '/checkout'
 global.RESETPASSWORD = '/cambiar-credenciales/:token'
 global.RESETPASSWORDLINK = '/cambiar-credenciales'
 
+global.DEVOLUCION = '/devolucion'
+global.ENVIO = '/envio'
+global.GRANTIA = '/garantia'
+global.METODOPAGO = '/metodos-de-pago'
+global.POLITICA = '/politica'
+global.TERMINOS = '/terminos-y-condiciones'
+global.RASTREAPEDIDOS = '/rastrea-tus-pedidos'
+global.AYUDA = '/ayuda'
+
+// USERS
+global.USERPERFIL = '/perfil'
+global.ENVIOFACT = '/envio-facturacion'
+global.HISTORY = '/historial-pedidos'
+
 global.ROUTE_HOME = "*"
 global.ROUTE_ANY = "/*"
 global.URLPROD = "http://localhost/"

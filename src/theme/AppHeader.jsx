@@ -5,7 +5,8 @@ import RestorePassword from '../components/modals/RestorePassword'
 import { useCart } from '../functions/context/CartProvider'
 
 const NavBar = () => {
-    const { cartItems, addToCart, removeFromCart, getTotalItems } = useCart()
+    const { cartItems, removeFromCart, getTotalItems } = useCart()
+    //const { cartItems, addToCart, removeFromCart, getTotalItems } = useCart()
     const totalItems = getTotalItems()
 
     const token = localStorage.getItem('authToken')
@@ -77,9 +78,9 @@ const NavBar = () => {
                                                     <i className="icon-user"></i> Perfil <i className="icon-down-open"></i>
                                                 </a>
                                                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                                    <a className="dropdown-item" href="!#">Configuración de cuenta</a>
-                                                    <a className="dropdown-item" href="!#">Historial de pedidos</a>
-                                                    <a className="dropdown-item" href="!#">Lista de deseos</a>
+                                                    <a className="dropdown-item" href={global.USERPERFIL}>Perfil</a>
+                                                    <a className="dropdown-item" href={global.ENVIOFACT}>Envío y Facturación</a>
+                                                    <a className="dropdown-item" href={global.HISTORY}>Historial de pedidos</a>
                                                     <div className="dropdown-divider"></div>
                                                     <a className="dropdown-item" href="!#" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
                                                         Cerrar sesión

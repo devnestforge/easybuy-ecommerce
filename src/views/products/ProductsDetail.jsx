@@ -5,6 +5,7 @@ import productsLogic from '../../functions/logic/productsLogic'
 import Spiner from '../../components/modals/Spiner'
 import ErrorPage from '../../components/error'
 import { useCart } from '../../functions/context/CartProvider' // Importa el hook de CartContext
+import { ProductionQuantityLimitsSharp } from '@mui/icons-material'
 
 const decryptId = (encryptedId) => {
   const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '==' // Decodifica la id
@@ -13,40 +14,40 @@ const decryptId = (encryptedId) => {
 }
 
 export default function ProductsDetail() {
-  const { id } = useParams();
-  const [product, setProduct] = useState(null);
-  const [load, setLoad] = useState(false);
-  const [quantity, setQuantity] = useState(1); // Estado para manejar la cantidad
-  const { addToCart } = useCart(); // Usa el hook de CartContext para acceder a la función addToCart
+  const { id } = useParams()
+  const [product, setProduct] = useState(null)
+  const [load, setLoad] = useState(false)
+  const [quantity, setQuantity] = useState(1)
+  const { addToCart } = useCart()
 
   useEffect(() => {
-    setLoad(true);
-    const decryptedId = decryptId(id);
-    getProductsDetail(decryptedId);
-  }, [id]);
+    setLoad(true)
+    const decryptedId = decryptId(id)
+    getProductsDetail(decryptedId)
+  }, [id])
 
   const getProductsDetail = async (productId) => {
     try {
-      const productDetails = await productsLogic.getProductsLogic(productId, '');
+      const productDetails = await productsLogic.getProductsLogic(productId, '')
       if (productDetails.success && productDetails.data.length > 0) {
-        setProduct(productDetails.data[0]);
+        setProduct(productDetails.data[0])
       } else {
-        setProduct(null);
+        setProduct(null)
       }
     } catch (error) {
-      console.error('Error fetching product details:', error);
+      console.error('Error fetching product details:', error)
     } finally {
-      setLoad(false);
+      setLoad(false)
     }
-  };
+  }
 
   if (!product) {
-    return <ErrorPage />;
+    return <ErrorPage />
   }
 
   const handleAddToCart = () => {
-    const iva = product.iva_precio * quantity; // Cálculo del IVA
-    const total = product.prod_precio * quantity + iva;
+    const iva = product.iva_precio * ProductionQuantityLimitsSharp
+    //const total = product.prod_precio * quantity + iva
     addToCart({
       id: product.id,
       empresa_id: product.empresa_id,
@@ -60,15 +61,15 @@ export default function ProductsDetail() {
       precio_descuento: product.precio_descuento,
       total_descuento: product.total_descuento,
       iva_descuento: product.iva_descuento,
-      quantity, // Usamos el estado `quantity` aquí
-      imageUrl: product.url_imagen, // Pasamos la URL de la imagen del producto
-    });
-  };
+      quantity,
+      imageUrl: product.url_imagen,
+    })
+  }
 
   const handleQuantityChange = (e) => {
-    const value = Math.max(1, Math.min(10, Number(e.target.value))); // Aseguramos que esté entre 1 y 10
-    setQuantity(value);
-  };
+    const value = Math.max(1, Math.min(10, Number(e.target.value)))
+    setQuantity(value)
+  }
 
   const isDiscountAvailable =
     product.valor_descuento &&
@@ -76,7 +77,7 @@ export default function ProductsDetail() {
     product.precio_descuento &&
     Number(product.valor_descuento) > 0 &&
     Number(product.tarifa_descuento) > 0 &&
-    Number(product.precio_descuento) > 0;
+    Number(product.precio_descuento) > 0
 
   return (
     <main className="main">
@@ -167,6 +168,6 @@ export default function ProductsDetail() {
         </div>
       </div>
     </main>
-  );
+  )
 }
 
