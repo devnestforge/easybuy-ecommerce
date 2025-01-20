@@ -30,6 +30,8 @@ global.GET_CATEGORIES = global.URLBACKENDSECURITY  + "/ecomerce/getCategories"
 
 //user
 global.SAVEVIEWCART = global.URLBACKENDSECURITY  + "/ecomerce/saveViewCart"
+global.SAVEDITADDRESS = global.URLBACKENDSECURITY  + "/ecomerce/saveEditAddress"
+global.GETADDRESS = global.URLBACKENDSECURITY  + "/ecomerce/getAddress"
 
 
 // URL FRONT END

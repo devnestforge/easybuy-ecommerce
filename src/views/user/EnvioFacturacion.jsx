@@ -1,104 +1,125 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
+import FormModal from '../../components/modals/FormModal'
+import Spiner from '../../components/modals/Spiner'
+import userLogic from '../../functions/logic/userLogic'
+import { useSnackbar } from 'notistack'
 
 export default function EnvioFacturacion() {
+    const { enqueueSnackbar } = useSnackbar()
+    const [showModal, setShowModal] = useState(false)
+    const [spiner, setSpiner] = useState(false)
+    const [tittle, setTittle] = useState('')
+    const [defaultAddress, setDefaultAddress] = useState([])
+
+    useEffect(() => {
+        setSpiner(true)
+        getAddress()
+        setSpiner(false)
+    }, [])
+
+    const getAddress = async () => {
+        const address = await userLogic.getAddressLogic(0, '')
+        if (address.success && address.data.length > 0) {
+            setDefaultAddress(address.data)
+        }
+    }
+
+    const [newAddress, setNewAddress] = useState({
+        name: '',
+        phone: '',
+        address: '',
+        city: '',
+        province: '',
+        zip: '',
+    })
+
+    const handleModalClose = () => setShowModal(false)
+    const handleModalShow = () => {
+        setSpiner(true)
+        setTittle('Actualizar dirección de envío')
+        setShowModal(true)
+        setSpiner(false)
+    }
+
+    const handledSaveParam = async (event) => {
+        setSpiner(true)
+        event.preventDefault()
+        const response = await userLogic.saveAddressLogic(event.target)
+        console.log(response)
+        enqueueSnackbar(response.message, {
+            variant: response.variant,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        })
+        setSpiner(false)
+    }
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target
+        setNewAddress({ ...newAddress, [name]: value })
+    }
+
+    const hasAddresses = defaultAddress.name !== '' && defaultAddress.phone !== ''
+
     return (
         <>
-            <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
+            <Spiner opt={spiner} />
+            <FormModal
+                isOpen={showModal}
+                handleCloseModal={handleModalClose}
+                header={tittle}
+                button={'Guardar'}
+                formData={[]}
+                handledSave={handledSaveParam}
+                opt={'addressInvoice'}
+            />
+            <nav aria-label="breadcrumb" className="breadcrumb-nav mb-2">
                 <div className="container">
                     <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="index.html">Inicio</a></li>
-                        <li className="breadcrumb-item"><a href="!#">Páginas</a></li>
-                        <li className="breadcrumb-item active" aria-current="page">Envío y Facturación</li>
+                        <li className="breadcrumb-item">Usuario</li>
+                        <li className="breadcrumb-item">Envío y Facturación</li>
                     </ol>
                 </div>
             </nav>
-
             <div className="page-content">
                 <div className="container">
-                    <hr className="mt-3 mb-5 mt-md-1" />
-                    <div className="touch-container row justify-content-center">
-                        <div className="col-md-9 col-lg-7">
-                            <div className="text-center">
-                                <h2 className="title mb-1">Dirección de Envío</h2>
-                                <form action="#" className="contact-form mb-2">
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <label htmlFor="shipping-name" className="sr-only">Nombre</label>
-                                            <input type="text" className="form-control" id="shipping-name" placeholder="Nombre *" required />
-                                        </div>
-
-                                        <div className="col-sm-6">
-                                            <label htmlFor="shipping-phone" className="sr-only">Teléfono</label>
-                                            <input type="tel" className="form-control" id="shipping-phone" placeholder="Teléfono" />
-                                        </div>
+                    <div className="addresses">
+                        {hasAddresses ? (
+                            <>
+                                <div className="address-card">
+                                    <h3>Dirección Envío Predeterminada</h3>
+                                    <div className="address-details">
+                                        <p><strong>Nombre:</strong> {defaultAddress.name}</p>
+                                        <p><strong>Teléfono:</strong> {defaultAddress.phone}</p>
+                                        <p><strong>Dirección:</strong> {defaultAddress.address}</p>
+                                        <p><strong>Ciudad:</strong> {defaultAddress.city}</p>
+                                        <p><strong>Provincia:</strong> {defaultAddress.province}</p>
+                                        <p><strong>Código Postal:</strong> {defaultAddress.zip}</p>
                                     </div>
+                                    <button className="custom-btn edit-btn" onClick={handleModalShow}>Editar Dirección</button>
+                                </div>
 
-                                    <label htmlFor="shipping-address" className="sr-only">Dirección</label>
-                                    <input type="text" className="form-control" id="shipping-address" placeholder="Dirección *" required />
-
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <label htmlFor="shipping-city" className="sr-only">Ciudad</label>
-                                            <input type="text" className="form-control" id="shipping-city" placeholder="Ciudad *" required />
-                                        </div>
-
-                                        <div className="col-sm-6">
-                                            <label htmlFor="shipping-zip" className="sr-only">Código Postal</label>
-                                            <input type="text" className="form-control" id="shipping-zip" placeholder="Código Postal" />
-                                        </div>
+                                <div className="address-card">
+                                    <h3>Dirección Facturación Predeterminada</h3>
+                                    <div className="address-details">
+                                        <p><strong>Nombre:</strong> {defaultAddress.name}</p>
+                                        <p><strong>Teléfono:</strong> {defaultAddress.phone}</p>
+                                        <p><strong>Dirección:</strong> {defaultAddress.address}</p>
+                                        <p><strong>Ciudad:</strong> {defaultAddress.city}</p>
+                                        <p><strong>Provincia:</strong> {defaultAddress.province}</p>
+                                        <p><strong>Código Postal:</strong> {defaultAddress.zip}</p>
                                     </div>
-
-                                    <div className="text-center">
-                                        <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
-                                            <span>GUARDAR DIRECCIÓN DE ENVÍO</span>
-                                            <i className="icon-long-arrow-right"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div className="text-center mt-5">
-                                <h2 className="title mb-1">Dirección de Facturación</h2>
-                                <form action="#" className="contact-form mb-2">
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <label htmlFor="billing-name" className="sr-only">Nombre</label>
-                                            <input type="text" className="form-control" id="billing-name" placeholder="Nombre *" required />
-                                        </div>
-
-                                        <div className="col-sm-6">
-                                            <label htmlFor="billing-phone" className="sr-only">Teléfono</label>
-                                            <input type="tel" className="form-control" id="billing-phone" placeholder="Teléfono" />
-                                        </div>
-                                    </div>
-
-                                    <label htmlFor="billing-address" className="sr-only">Dirección</label>
-                                    <input type="text" className="form-control" id="billing-address" placeholder="Dirección *" required />
-
-                                    <div className="row">
-                                        <div className="col-sm-6">
-                                            <label htmlFor="billing-city" className="sr-only">Ciudad</label>
-                                            <input type="text" className="form-control" id="billing-city" placeholder="Ciudad *" required />
-                                        </div>
-
-                                        <div className="col-sm-6">
-                                            <label htmlFor="billing-zip" className="sr-only">Código Postal</label>
-                                            <input type="text" className="form-control" id="billing-zip" placeholder="Código Postal" />
-                                        </div>
-                                    </div>
-
-                                    <div className="text-center">
-                                        <button type="submit" className="btn btn-outline-success-2 btn-minwidth-sm">
-                                            <span>GUARDAR DIRECCIÓN DE FACTURACIÓN</span>
-                                            <i className="icon-long-arrow-right"></i>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                                    <button className="custom-btn edit-btn" onClick={handleModalShow}>Editar Dirección</button>
+                                </div>
+                            </>
+                        ) : (
+                            <button className="custom-btn" onClick={handleModalShow}>Agregar Dirección</button>
+                        )}
                     </div>
                 </div>
             </div>
         </>
-    );
+    )
 }

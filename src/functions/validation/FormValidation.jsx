@@ -9,7 +9,7 @@ const FormValidatiopn = (Data, saveType) => {
     Object.entries(Data).forEach(([key, value2]) => {
         if (typeof Data[key].value != "undefined") {
             if (Data[key].name !== "" &&
-                (Data[key].name !== "weight" && Data[key].name !== "height" && Data[key].name !== "width" && Data[key].name !== "lengthd"
+                (Data[key].name !== "esPrincipal" && Data[key].name !== "height" && Data[key].name !== "width" && Data[key].name !== "lengthd"
                     && Data[key].name !== "size" && Data[key].name !== "dimensions" && Data[key].name !== "launchDate" && Data[key].name !== "warranty"
                     && Data[key].name !== "manufacturer" && Data[key].name !== "manufacturingYear" && Data[key].name !== "observation" && Data[key].name !== "meteriales"
                     && Data[key].name !== "modelo")) {
