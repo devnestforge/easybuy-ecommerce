@@ -59,10 +59,35 @@ const saveAddressLogic = async (data, id) => {
     return dataResp;
 }
 
+const savePrincipalLogic = async (data) => {
+    let dataResp = []
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        let dataSave = {
+            id: data.id,
+            nombres: data.nombres,
+            apellidos: data.apellidos,
+            provincia: data.provincia,
+            ciudad: data.ciudad,
+            direccion: data.direccion,
+            referencia: data.referencia,
+            codigoPostal: data.codigoPostal,
+            telefono: data.telefono,
+            esPrincipal: true,
+            status: 'CONFIGH0002',
+            creation_ip: localStorage.getItem('ip')
+        }
+        dataResp = await userServices.saveAddressService(dataSave, token);
+    }
+    return dataResp;
+}
+
 const userLogic = {
     saveViewCartLogic,
     saveAddressLogic,
-    getAddressLogic
+    getAddressLogic,
+    savePrincipalLogic
 }
 
 export default userLogic

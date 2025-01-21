@@ -264,11 +264,7 @@ export default function ShoppingCart() {
 
     return (
         <main className="main">
-            <div className="page-header text-center" style={{ backgroundImage: "url('assets/images/page-header-bg.jpg')" }}>
-                <div className="container">
-                    <h1 className="page-title">Shopping Cart<span>Shop</span></h1>
-                </div>
-            </div>
+            <br/>
 
             <div className="page-content">
                 <div className="cart">
@@ -479,11 +475,11 @@ export default function ShoppingCart() {
                                         disabled={!isLoggedIn} // Deshabilitado si no hay sesión
                                         onClick={() => {
                                             if (isLoggedIn) {
-                                                alert('Checkout successful!')
+                                                window.location.href = global.CHECKOUT
                                             }
                                         }}
                                     >
-                                        Proceed to Checkout
+                                        Continuar con el pago
                                     </button>
                                     {!isLoggedIn && (
                                         <p className="text-danger text-center mt-2">

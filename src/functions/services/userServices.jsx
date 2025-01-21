@@ -22,9 +22,9 @@ const getAddressServices = async (idAddress, search, token) => {
         if (!response.error) {
             respAnswer = response.data.length > 0 ?
                 idAddress === 0 ?
-                    generalMappers.successMapper(userMapper.productMapper(response.data), 1)
+                    generalMappers.successMapper(userMapper.userAddressMapper(response.data), 1)
                     :
-                    generalMappers.successMapper(userMapper.productMapper(response.data), 1)
+                    generalMappers.successMapper(userMapper.userAddressMapper(response.data), 1)
                 :
                 generalMappers.responseMapper(response, 1)
         } else {

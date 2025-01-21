@@ -13,23 +13,24 @@ export default function EnvioFacturacionForm(props) {
     const [isPrincipal, setIsPrincipal] = useState(false)
 
     useEffect(() => {
-        if (props.formData.length > 0) {
-            const datForm = props.formData[0]
-            setIdAddress(datForm["idAddress"])
-            setNombres(datForm["identification"])
-            setApellidos(datForm["identification"])
-            setProvincia(datForm["names"])
-            setCiudad(datForm["middleNames"])
-            setDireccion(datForm["direction"])
-            setReferencia(datForm["phone"])
-            setCodigoPostal(datForm["email"])
-            setTelefono(datForm["userName"])
-            setIsPrincipal(datForm["isPrincipal"] === 'true')
+        console.log(props.formData )
+        if (props.formData) {
+            const datForm = props.formData
+            setIdAddress(datForm["id"])
+            setNombres(datForm["nombres"])
+            setApellidos(datForm["apellidos"])
+            setProvincia(datForm["provincia"])
+            setCiudad(datForm["ciudad"])
+            setDireccion(datForm["direccion"])
+            setReferencia(datForm["telefono_contacto"])
+            setCodigoPostal(datForm["referencia"])
+            setTelefono(datForm["telefono_contacto"])
+            setIsPrincipal(datForm["es_principal"] === 'true')
         } else {
             setIdAddress(localStorage.getItem("idAddress"))
             setNombres(localStorage.getItem("nombres"))
             setApellidos(localStorage.getItem("nombres"))
-            setProvincia(localStorage.getItem("provincia"))
+            setProvincia(localStorage.getItem("apellidos"))
             setCiudad(localStorage.getItem("ciudad"))
             setDireccion(localStorage.getItem("direccion"))
             setReferencia(localStorage.getItem("referencia"))
