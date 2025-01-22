@@ -10,7 +10,7 @@ const loginService = async (dataLogin, t) => {
         const token = base64.encode(dataLogin.email + ':' + dataLogin.password)
         const storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         const discountCode = localStorage.getItem('discountCode') || null
-        const shippingCost = parseFloat(localStorage.getItem('shippingCost')) || 0
+        const shippingCost = localStorage.getItem('shippingCost') || ''
         const discountAmount = parseFloat(localStorage.getItem('discountAmount')) || 0
 
         const cartData = {

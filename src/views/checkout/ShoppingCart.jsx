@@ -3,7 +3,8 @@ import Recomendations from '../home/Recomendations'
 import Spiner from '../../components/modals/Spiner'
 import productsLogic from '../../functions/logic/productsLogic'
 import t from '../../translations/i18n'
-//import { useCart } from '../../functions/context/CartProvider'
+import generalLogic from '../../functions/logic/generalLogic'
+import { useSnackbar } from 'notistack'
 import userLogic from '../../functions/logic/userLogic'
 
 export default function ShoppingCart() {
@@ -17,10 +18,12 @@ export default function ShoppingCart() {
     const [discountCode, setDiscountCode] = useState('')
     const [discountApplied, setDiscountApplied] = useState(false)
     const [discountAmount, setDiscountAmount] = useState(0)
-   // const { addToCart } = useCart()
+    const [shippings, setShippings] = useState([])
+    const [selectedShipping, setSelectedShipping] = useState("")
+    const [ship, setEnvio] = useState(0)
+    const { enqueueSnackbar } = useSnackbar()
 
     const getProducts = async () => {
-
         const products = await productsLogic.getProductsLogic(0, '')
         if (products.success && products.data.length > 0) {
             setProd(true)
@@ -54,13 +57,36 @@ export default function ShoppingCart() {
         }
 
         getProducts()
-
+        getShippingMethods()
         const token = localStorage.getItem('authToken')
         setIsLoggedIn(!!token)
         setLoad(false)
     }, [])
 
+    const getShippingMethods = async () => {
+        setLoad(true)
+        const shipping = await generalLogic.getShippingMethods()
+        if (shipping.success && shipping.data.length > 0) {
+            setShippings(shipping.data)
+            const storedShippingCost = localStorage.getItem('shippingCost')
+            let defaultShippingCost = "";
+            if (storedShippingCost) {
+                defaultShippingCost = storedShippingCost
+            } else {
+                defaultShippingCost = "TIPENV0001"
+            }
+            const defaultShipping = shipping.data.find(
+                (method) => method.nemonicoTiposEnvio === defaultShippingCost
+            )
+            setSelectedShipping(defaultShipping || null)
+            setEnvio(parseFloat(defaultShipping?.costo || 0))
+            setShippingCost(defaultShipping.costo)
+        }
+        setLoad(false)
+    }
+
     const handleQuantityChange = (index, newQuantity) => {
+        setLoad(true)
         const updatedCartItems = [...cartItems]
         updatedCartItems[index].quantity = newQuantity
         const ivaRate = updatedCartItems[index].tarifa
@@ -76,23 +102,17 @@ export default function ShoppingCart() {
         setCartItems(updatedCartItems)
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems))
         userLogic.saveViewCartLogic(updatedCartItems)
+        setLoad(false)
     }
 
     const handleRemoveItem = (index) => {
+        setLoad(true)
         const updatedCartItems = cartItems.filter((_, i) => i !== index)
         setCartItems(updatedCartItems)
         localStorage.setItem('cartItems', JSON.stringify(updatedCartItems))
         userLogic.saveViewCartLogic(updatedCartItems)
+        setLoad(false)
     }
-
-    /*const calculateSubtotal = () => {
-        if (!Array.isArray(cartItems)) return 0
-        return cartItems.reduce((total, item) => {
-            const itemPrice = parseFloat(item.price) || 0
-            const itemQuantity = parseInt(item.quantity) || 0
-            return total + (itemPrice * itemQuantity)
-        }, 0).toFixed(2)
-    }*/
 
     const calculateSubtotals = () => {
         let subtotalIVA15 = 0
@@ -104,14 +124,13 @@ export default function ShoppingCart() {
             cartItems.forEach(item => {
                 const itemPrice = parseFloat(item.precio_descuento) > 0
                     ? parseFloat(item.precio_descuento)
-                    : parseFloat(item.price) // Usar precio con descuento si está disponible
+                    : parseFloat(item.price)
                 const itemQuantity = parseInt(item.quantity) || 0
                 const itemTarifa = parseFloat(item.tarifa) || 0
-                const itemIVA = parseFloat(item.iva) || 0 // Tomar el IVA del producto directamente
+                const itemIVA = parseFloat(item.iva) || 0
 
                 const subtotal = itemPrice * itemQuantity
 
-                // Calcular los subtotales según la tarifa
                 if (itemTarifa === 15) {
                     subtotalIVA15 += subtotal
                 } else if (itemTarifa === 12) {
@@ -172,7 +191,7 @@ export default function ShoppingCart() {
         ).toFixed(2)
     }
 
-    const handleShippingChange = (event) => {
+    /*const handleShippingChange2 = (event) => {
         const selectedShipping = event.target.id
         let newShippingCost = 0
 
@@ -185,57 +204,69 @@ export default function ShoppingCart() {
         }
         setShippingCost(newShippingCost)
         localStorage.setItem('shippingCost', newShippingCost)
-        
+
+    }*/
+
+    const handleShippingChange = (event) => {
+        setLoad(true)
+        const selectedId = event.target.value;
+        const selected = shippings.find((method) => method.id === selectedId);
+        if (selected) {
+            setSelectedShipping(selected);
+            setEnvio(parseFloat(selected.costo));
+            setShippingCost(selected.costo)
+            localStorage.setItem('shippingCost', selected.nemonicoTiposEnvio)
+            const updatedCartItems = localStorage.getItem('cartItems')
+            userLogic.saveViewCartLogic(updatedCartItems)
+        }
+        setLoad(false)
     }
 
-    const applyDiscount = (code) => {
+    const applyDiscount = async (code) => {
+        setLoad(true)
         let discountPercentage = 0
+        const discount = await generalLogic.getDiscountLogic(code)
+        if (discount.success && discount.data.length > 0) {
+            discountPercentage = parseFloat(discount.data[0]["descuento"])
+            if (discountPercentage > 0) {
+                const updatedCartItems = cartItems.map(item => {
+                    const itemPrice = parseFloat(item.price) || 0
+                    const itemTarifa = parseFloat(item.tarifa) || 0
+                    const itemQuantity = parseInt(item.quantity) || 0
+                    const discountedPrice = itemPrice - (itemPrice * discountPercentage / 100)
+                    const itemIVA = itemTarifa > 0 ? discountedPrice * (itemTarifa / 100) : 0
+                    const total = (discountedPrice + itemIVA) * itemQuantity
+                    return {
+                        ...item,
+                        discountedPrice: discountedPrice.toFixed(2),
+                        iva: itemIVA.toFixed(2),
+                        total: total.toFixed(2)
+                    }
+                })
 
-        // Determinar el porcentaje de descuento según el código
-        if (code === 'DESCUENTO10') {
-            discountPercentage = 10
-        } else if (code === 'DESCUENTO20') {
-            discountPercentage = 20
-        }
-
-        if (discountPercentage > 0) {
-            // Aplicar el descuento a cada producto
-            const updatedCartItems = cartItems.map(item => {
-                const itemPrice = parseFloat(item.price) || 0
-                const itemTarifa = parseFloat(item.tarifa) || 0 // Tarifa de IVA
-                const itemQuantity = parseInt(item.quantity) || 0
-
-                // Calcular el descuento para cada producto
-                const discountedPrice = itemPrice - (itemPrice * discountPercentage / 100)
-
-                // Calcular IVA si aplica
-                const itemIVA = itemTarifa > 0 ? discountedPrice * (itemTarifa / 100) : 0
-
-                // Calcular el total para este producto
-                const total = (discountedPrice + itemIVA) * itemQuantity
-
-                return {
-                    ...item,
-                    discountedPrice: discountedPrice.toFixed(2),
-                    iva: itemIVA.toFixed(2),
-                    total: total.toFixed(2)
+                // Actualizar el carrito con los nuevos precios
+                setCartItems(updatedCartItems)
+                setDiscountCode(code)
+                setDiscountApplied(true)
+                setDiscountAmount(discountPercentage)
+                localStorage.setItem('discountCode', code)
+                localStorage.setItem('discountAmount', discountPercentage.toString())
+            } else {
+                setDiscountApplied(false)
+                setDiscountAmount(0)
+                localStorage.removeItem('discountCode')
+                localStorage.removeItem('discountAmount')
+            }
+        } else {
+            enqueueSnackbar('No existe el código de oferta ingresado', {
+                variant: "warning",
+                anchorOrigin: {
+                    vertical: global.SNACKBARVER,
+                    horizontal: global.SNACKBARHOR
                 }
             })
-
-            // Actualizar el carrito con los nuevos precios
-            setCartItems(updatedCartItems)
-            setDiscountCode(code)
-            setDiscountApplied(true)
-            setDiscountAmount(discountPercentage)
-            localStorage.setItem('discountCode', code)
-            localStorage.setItem('discountAmount', discountPercentage.toString())
-        } else {
-            // Eliminar el descuento si el código no es válido
-            setDiscountApplied(false)
-            setDiscountAmount(0)
-            localStorage.removeItem('discountCode')
-            localStorage.removeItem('discountAmount')
         }
+        setLoad(false)
     }
 
 
@@ -251,7 +282,6 @@ export default function ShoppingCart() {
     if (cartItems.length === 0) {
         return (
             <>
-                <Spiner opt={load} />
                 <div className="container text-center mt-5">
                     <h2 style={{ fontSize: '2rem', fontWeight: 'bold' }}>
                         No tienes productos en tu carrito, pero aquí tenemos algunas opciones
@@ -264,12 +294,20 @@ export default function ShoppingCart() {
 
     return (
         <main className="main">
-            <br/>
-
+            <Spiner opt={load} />
+            <br />
             <div className="page-content">
                 <div className="cart">
                     <div className="container">
                         <div className="row">
+                            <div className='col-lg-9'>
+
+                                {discountApplied && (
+                                    <div className="alert alert-info mt-3">
+                                        <strong>¡Descuento Aplicado!</strong> Has utilizado el código de descuento <span style={{ color: 'black' }}>{discountCode}</span>.
+                                    </div>
+                                )}
+                            </div>
                             <div className="col-lg-9">
                                 <table className="table table-cart table-mobile">
                                     <thead>
@@ -385,11 +423,6 @@ export default function ShoppingCart() {
                                             </div>
                                         </form>
                                     </div>
-                                    {discountApplied && (
-                                        <div className="alert alert-info mt-3">
-                                            <strong>¡Descuento Aplicado!</strong> Has utilizado el código de descuento <span style={{ color: 'blue' }}>{discountCode}</span>.
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                             <aside className="col-lg-3">
@@ -412,51 +445,33 @@ export default function ShoppingCart() {
                                             {/* Título de Shipping */}
                                             <tr className="summary-subtotal">
                                                 <td colSpan="2">
-                                                    <strong><label>Envío</label></strong>
-                                                    <div className="custom-control custom-radio">
-                                                        <input
-                                                            type="radio"
-                                                            id="standart-shipping"
-                                                            name="shipping"
-                                                            className="custom-control-input"
-                                                            onChange={handleShippingChange}
-                                                            checked={shippingCost === 10}
-                                                        />
-                                                        <label className="custom-control-label" htmlFor="standart-shipping">
-                                                            Standard Shipping - $10.00
-                                                        </label>
-                                                    </div>
-                                                    <div className="custom-control custom-radio">
-                                                        <input
-                                                            type="radio"
-                                                            id="express-shipping"
-                                                            name="shipping"
-                                                            className="custom-control-input"
-                                                            onChange={handleShippingChange}
-                                                            checked={shippingCost === 20}
-                                                        />
-                                                        <label className="custom-control-label" htmlFor="express-shipping">
-                                                            Express Shipping - $20.00
-                                                        </label>
-                                                    </div>
-                                                    <div className="custom-control custom-radio">
-                                                        <input
-                                                            type="radio"
-                                                            id="free-shipping"
-                                                            name="shipping"
-                                                            className="custom-control-input"
-                                                            onChange={handleShippingChange}
-                                                            checked={shippingCost === 0}
-                                                        />
-                                                        <label className="custom-control-label" htmlFor="free-shipping">
-                                                            Free Shipping
-                                                        </label>
-                                                    </div>
+                                                    <strong>
+                                                        <label>Envío</label>
+                                                    </strong>
+                                                    {shippings.map((method) => (
+                                                        <div className="custom-control custom-radio" key={method.id}>
+                                                            <input
+                                                                type="radio"
+                                                                id={`shipping-${method.id}`}
+                                                                name="shipping"
+                                                                className="custom-control-input"
+                                                                value={method.id}
+                                                                onChange={handleShippingChange}
+                                                                checked={selectedShipping?.id === method.id}
+                                                            />
+                                                            <label
+                                                                className="custom-control-label"
+                                                                htmlFor={`shipping-${method.id}`}
+                                                            >
+                                                                {method.nombre} - ${parseFloat(method.costo).toFixed(2)} ({method.dias} días)
+                                                            </label>
+                                                        </div>
+                                                    ))}
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td>Shipping:</td>
-                                                <td>${shippingCost.toFixed(2)}</td>
+                                                <td>${ship.toFixed(2)}</td>
                                             </tr>
                                             {discountApplied && (
                                                 <tr>
@@ -488,7 +503,6 @@ export default function ShoppingCart() {
                                     )}
                                 </div>
                             </aside>
-
                         </div>
                     </div>
                 </div>

@@ -48,11 +48,42 @@ const loginRegisterMapper = async (data, rowsTotal) => {
     return responseMapper
 }
 
+const shippingsMapper = (data) => {
+    let prodMapper = [];
+    for (var i = 0; i < data.length; i++) {
+        prodMapper[i] = {
+            id: data[i].id ?? '',
+            nemonicoTiposEnvio: data[i].nemonico_tipos_envio ?? '',
+            nombre: data[i].nombre ?? '',
+            costo: data[i].costo ?? '',
+            dias: data[i].dias ?? '',
+            descripcion: data[i].descripcion ?? ''
+        }
+        prodMapper.push();
+    }
+    return prodMapper;
+}
+
+const discountMapper = (data) => {
+    let prodMapper = [];
+    for (var i = 0; i < data.length; i++) {
+        prodMapper[i] = {
+            codigo: data[i].codigo ?? '',
+            descuento: data[i].descuento ?? '',
+            observation: data[i].observation ?? ''
+        }
+        prodMapper.push();
+    }
+    return prodMapper;
+}
+
 const generalMappers = {
     responseMapper,
     successMapper,
     errorMapper,
-    loginRegisterMapper
-  }
-  
-  export default generalMappers
+    loginRegisterMapper,
+    shippingsMapper,
+    discountMapper
+}
+
+export default generalMappers

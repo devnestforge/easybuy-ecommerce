@@ -11,3 +11,53 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.bank-accounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.bank-account-card {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Ajusta el ancho de cada tarjeta */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bank-account-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.bank-account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.bank-account-header h5 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.bank-account-header span {
+  font-size: 1.2rem;
+  color: #777;
+}
+
+.bank-account-details p {
+  margin: 5px 0;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.bank-account-details strong {
+  color: #333;
+}

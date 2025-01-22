@@ -135,3 +135,51 @@
   font-size: 1.4rem; /* Reducir el tamaño del texto */
   line-height: 1.4; /* Mejorar la legibilidad */
 }
+
+.order-summary-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.order-summary-items {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.order-summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.order-summary-item-name {
+  font-size: 0.9rem;
+}
+
+.order-summary-item-price {
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.order-summary-totals p {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  font-size: 1.4rem;
+}
+
+.order-summary-line {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+.order-summary-total {
+  font-size: 1rem;
+  font-weight: bold;
+}

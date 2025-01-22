@@ -22,6 +22,11 @@ global.REGISTER = global.URLBACKENDSECURITY  + "/ecomerce/register"
 global.RESTORE = global.URLBACKENDSECURITY  + "/ecomerce/sendLink"
 global.CHANGEPASSWORD = global.URLBACKENDSECURITY + '/ecomerce/changePassword'
 
+//gENERRAK
+global.GETSHIPPINGS = global.URLBACKENDSECURITY + '/ecomerce/getShippings'
+global.GETDISCOUTNCODE = global.URLBACKENDSECURITY + '/ecomerce/getDiscountCode'
+global.GETPAYMETHOD = global.URLBACKENDSECURITY + '/ecomerce/getPayMethod'
+
 // PRODUCTS
 global.PRODUCTS = global.URLBACKENDSECURITY  + "/ecomerce/getProducts"
 global.GET_PROMOTIONS = global.URLBACKENDSECURITY  + "/ecomerce/getPromotions"
