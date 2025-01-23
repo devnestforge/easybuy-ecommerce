@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react"
 import Spiner from '../../components/modals/Spiner'
 import userLogic from '../../functions/logic/userLogic'
 import generalLogic from "../../functions/logic/generalLogic"
+import FormModal from '../../components/modals/FormModal'
+import { useSnackbar } from 'notistack'
 
 export default function Checkout() {
     const [step, setStep] = useState("envio")
+    const { enqueueSnackbar } = useSnackbar()
     const [spiner, setSpiner] = useState(false)
     const [defaultAddress, setDefaultAddress] = useState([])
     const [cartItems, setCartItems] = useState([])
@@ -12,10 +15,12 @@ export default function Checkout() {
     const [shippings, setShippings] = useState([])
     const [payMethods, setPayMethods] = useState([])
     const [bankAccounts, setBankAccounts] = useState([])
-    const [selectedMethod, setSelectedMethod] = useState(null)
     const [selectedShipping, setSelectedShipping] = useState("")
     const [ship, setEnvio] = useState(0)
-    const [shippingCost, setShippingCost] = useState(0)
+    const [showModal, setShowModal] = useState(false)
+    const [tittle, setTittle] = useState('')
+    const [selectedAddress, setSelectedAddress] = useState(null)
+    //const [shippingCost, setShippingCost] = useState(0)
 
     useEffect(() => {
         setSpiner(true)
@@ -125,7 +130,7 @@ export default function Checkout() {
         if (selected) {
             setSelectedShipping(selected)
             setEnvio(parseFloat(selected.costo))
-            setShippingCost(selected.costo)
+            //setShippingCost(selected.costo)
             localStorage.setItem('shippingCost', selected.nemonicoTiposEnvio)
             const updatedCartItems = localStorage.getItem('cartItems')
             userLogic.saveViewCartLogic(updatedCartItems)
@@ -136,10 +141,50 @@ export default function Checkout() {
         console.log(method)
     }
 
+    const handleModalClose = () => {
+        setShowModal(false)
+        setSelectedAddress(null)
+    }
+
+    const handleModalShow = (address) => {
+        setSpiner(true)
+        setTittle('Actualizar dirección de envío')
+        setSelectedAddress(address.defaultAddress)
+        setShowModal(true)
+        setSpiner(false)
+        getAddress()
+    }
+
+    const handledSaveParam = async (event) => {
+        setSpiner(true)
+        event.preventDefault()
+        const response = await userLogic.saveAddressLogic(event.target)
+        enqueueSnackbar(response.message, {
+            variant: response.variant,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        })
+        if (response.success) {
+            setShowModal(false)
+            window.location.reload();
+        }
+        setSpiner(false)
+    }
+
     return (
         <>
             <Spiner opt={spiner} />
-
+            <FormModal
+                isOpen={showModal}
+                handleCloseModal={handleModalClose}
+                header={tittle}
+                button={'Guardar'}
+                formData={selectedAddress || {}}
+                handledSave={handledSaveParam}
+                opt={'addressInvoice'}
+            />
             <main className="main">
                 <div className="page-content">
                     <div className="checkout">
@@ -182,6 +227,7 @@ export default function Checkout() {
                                                     <p>{defaultAddress.direccion}, {defaultAddress.codigo_postal || "Sin código postal"}</p>
                                                     <p>Provincia {defaultAddress.provincia}, Ciudad {defaultAddress.ciudad}</p>
                                                     <p>{defaultAddress.telefono_contacto || "Sin teléfono de contacto"}</p>
+                                                    <p>{defaultAddress.referencia || "Sin teléfono de contacto"}</p>
                                                     <p>Esta es tu dirección de envío por defecto</p>
                                                 </div>
                                             ) : (
@@ -189,12 +235,24 @@ export default function Checkout() {
                                             )}
                                             <br />
                                             <hr class="linea" />
-                                            <button
-                                                className="btn btn-outline-primary mt-1"
-                                                onClick={() => goToStep("pago")}
-                                            >
-                                                Nueva Dirección
-                                            </button>
+                                            <div className="row gx-4 gy-4">
+                                                <div className="col-12 col-md-3">
+                                                    <button
+                                                        className="btn btn-outline-primary mt-1"
+                                                        onClick={() => handleModalShow({ defaultAddress })}
+                                                    >
+                                                        Editar dirección
+                                                    </button>
+                                                </div>
+                                                <div className="col-12 col-md-6">
+                                                    <button
+                                                        className="btn btn-outline-primary mt-1"
+                                                        onClick={() => handleModalShow({})}
+                                                    >
+                                                        Nueva dirección
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div className="summary mb-1">
                                             <h3 className="summary-title">Métodos de Envío</h3>

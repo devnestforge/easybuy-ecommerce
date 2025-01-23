@@ -26,6 +26,7 @@ global.CHANGEPASSWORD = global.URLBACKENDSECURITY + '/ecomerce/changePassword'
 global.GETSHIPPINGS = global.URLBACKENDSECURITY + '/ecomerce/getShippings'
 global.GETDISCOUTNCODE = global.URLBACKENDSECURITY + '/ecomerce/getDiscountCode'
 global.GETPAYMETHOD = global.URLBACKENDSECURITY + '/ecomerce/getPayMethod'
+global.GETREGIONS = global.URLBACKENDSECURITY + '/ecomerce/getRegions'
 
 // PRODUCTS
 global.PRODUCTS = global.URLBACKENDSECURITY  + "/ecomerce/getProducts"

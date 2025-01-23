@@ -34,13 +34,19 @@ const getPayMethodLogic = async () => {
     return dataResp
 }
 
+const getRegionsLogic = async () => {
+    const dataResp = await generalService.getRegionsServices()
+    return dataResp
+}
+
 const generalLogic = {
     catchErrorLogic,
     deleteCharacters,
     getIpClient,
     getShippingMethods,
     getDiscountLogic,
-    getPayMethodLogic
+    getPayMethodLogic,
+    getRegionsLogic
 }
 
 export default generalLogic

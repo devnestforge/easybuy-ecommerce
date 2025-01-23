@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import generalLogic from '../../functions/logic/generalLogic'
 
 export default function EnvioFacturacionForm(props) {
     const [nombres, setNombres] = useState('')
@@ -11,69 +12,70 @@ export default function EnvioFacturacionForm(props) {
     const [telefono, setTelefono] = useState('')
     const [idAddress, setIdAddress] = useState(0)
     const [isPrincipal, setIsPrincipal] = useState(false)
+    const [provinces, setProvinces] = useState([])
+    const [cities, setCities] = useState([])
+    const [filteredCities, setFilteredCities] = useState([])
 
+    // Obtener las regiones (provincias y ciudades) solo una vez al montar el componente
     useEffect(() => {
-        console.log(props.formData )
+        const getRegions = async () => {
+            try {
+                const combos = await generalLogic.getRegionsLogic()
+                if (combos.success && combos.data) {
+                    setProvinces(combos.data.provincias || [])
+                    setCities(combos.data.canton || [])
+                } else {
+                    console.error('Error: No se pudieron cargar los combos')
+                }
+            } catch (error) {
+                console.error('Error en getRegions:', error)
+            }
+        }
+        getRegions()
+    }, []) // Sin dependencias, solo se ejecuta una vez
+
+    // Filtrar las ciudades según la provincia seleccionada
+    useEffect(() => {
+        if (provincia) {
+            const filtered = cities.filter(
+                city => String(city.provincia_id) === String(provincia)
+            )
+            setFilteredCities(filtered)
+        } else {
+            setFilteredCities([])
+        }
+        setCiudad('') // Resetear ciudad seleccionada al cambiar de provincia
+    }, [provincia, cities])
+
+    // Cargar datos de `props.formData` o `localStorage` al inicializar el componente
+    useEffect(() => {
         if (props.formData) {
             const datForm = props.formData
-            setIdAddress(datForm["id"])
-            setNombres(datForm["nombres"])
-            setApellidos(datForm["apellidos"])
-            setProvincia(datForm["provincia"])
-            setCiudad(datForm["ciudad"])
-            setDireccion(datForm["direccion"])
-            setReferencia(datForm["telefono_contacto"])
-            setCodigoPostal(datForm["referencia"])
-            setTelefono(datForm["telefono_contacto"])
-            setIsPrincipal(datForm["es_principal"] === 'true')
+            setIdAddress(datForm.id)
+            setNombres(datForm.nombres)
+            setApellidos(datForm.apellidos)
+            setProvincia(datForm.provincia)
+            setCiudad(datForm.ciudad)
+            setDireccion(datForm.direccion)
+            setReferencia(datForm.referencia)
+            setCodigoPostal(datForm.codigoPostal)
+            setTelefono(datForm.telefono_contacto)
+            setIsPrincipal(datForm.es_principal === 'true')
         } else {
-            setIdAddress(localStorage.getItem("idAddress"))
-            setNombres(localStorage.getItem("nombres"))
-            setApellidos(localStorage.getItem("nombres"))
-            setProvincia(localStorage.getItem("apellidos"))
-            setCiudad(localStorage.getItem("ciudad"))
-            setDireccion(localStorage.getItem("direccion"))
-            setReferencia(localStorage.getItem("referencia"))
-            setCodigoPostal(localStorage.getItem("codigoPostal"))
-            setTelefono(localStorage.getItem("telefono"))
-            setIsPrincipal(localStorage.getItem("isPrincipal") === 'true')
+            setIdAddress(localStorage.getItem('idAddress') || 0)
+            setNombres(localStorage.getItem('nombres') || '')
+            setApellidos(localStorage.getItem('apellidos') || '')
+            setProvincia(localStorage.getItem('provincia') || '')
+            setCiudad(localStorage.getItem('ciudad') || '')
+            setDireccion(localStorage.getItem('direccion') || '')
+            setReferencia(localStorage.getItem('referencia') || '')
+            setCodigoPostal(localStorage.getItem('codigoPostal') || '')
+            setTelefono(localStorage.getItem('telefono') || '')
+            setIsPrincipal(localStorage.getItem('isPrincipal') === 'true')
         }
-    }, [props])
+    }, [props.formData])
 
-    const [defaultAddress, setDefaultAddress] = useState({
-        name: 'Juan Pérez',
-        phone: '555-1234',
-        address: 'Calle Falsa 123',
-        city: 'Ciudad de México',
-        province: 'Ciudad de México',
-        zip: '12345',
-    })
-
-    const [newAddress, setNewAddress] = useState({
-        name: '',
-        phone: '',
-        address: '',
-        city: '',
-        province: '',
-        zip: '',
-    })
-
-    const provinces = [
-        { id: '1', name: 'Pichincha' },
-        { id: '2', name: 'Guayas' },
-        { id: '3', name: 'Azuay' },
-        { id: '4', name: 'Manabí' }
-    ];
-
-    const cities = [
-        { id: '1', name: 'Pichincha' },
-        { id: '2', name: 'Guayas' },
-        { id: '3', name: 'Azuay' },
-        { id: '4', name: 'Manabí' }
-    ];
-
-
-    const handleCheckboxChange = (e) => {
+    const handleCheckboxChange = e => {
         setIsPrincipal(e.target.checked)
     }
 
@@ -135,7 +137,7 @@ export default function EnvioFacturacionForm(props) {
                             onChange={e => setProvincia(e.target.value)}
                         >
                             <option value="">Selecciona una provincia</option>
-                            {provinces.map((province) => (
+                            {provinces.map(province => (
                                 <option key={province.id} value={province.id}>
                                     {province.name}
                                 </option>
@@ -144,6 +146,7 @@ export default function EnvioFacturacionForm(props) {
                     </div>
                 </div>
 
+                {/* Combo de Ciudades */}
                 <div className="col-sm-6">
                     <div className="form-group">
                         <label>Ciudad</label>
@@ -153,9 +156,10 @@ export default function EnvioFacturacionForm(props) {
                             name="ciudad"
                             value={ciudad}
                             onChange={e => setCiudad(e.target.value)}
+                            disabled={!provincia}
                         >
                             <option value="">Selecciona una ciudad</option>
-                            {cities.map((city) => (
+                            {filteredCities.map(city => (
                                 <option key={city.id} value={city.id}>
                                     {city.name}
                                 </option>

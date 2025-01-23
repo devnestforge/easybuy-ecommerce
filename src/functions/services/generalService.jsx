@@ -80,10 +80,35 @@ const getPayMethodServices = async () => {
     }
 }
 
+const getRegionsServices = async () => {
+    try {
+        const token = localStorage.getItem('authToken')
+        const secretKey = global.SECRETKEY;
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('GET', credentials, '')
+        const resp = await fetch(global.GETREGIONS, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ?
+                generalMappers.successMapper(response.data, 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
 const generalServices = {
     getShippingServices,
     getDiscountServices,
-    getPayMethodServices
+    getPayMethodServices,
+    getRegionsServices
 }
 
 export default generalServices;
