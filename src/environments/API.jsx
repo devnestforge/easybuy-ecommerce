@@ -37,6 +37,7 @@ global.GET_CATEGORIES = global.URLBACKENDSECURITY  + "/ecomerce/getCategories"
 //user
 global.SAVEVIEWCART = global.URLBACKENDSECURITY  + "/ecomerce/saveViewCart"
 global.SAVEDITADDRESS = global.URLBACKENDSECURITY  + "/ecomerce/saveEditAddress"
+global.SAVEORDERS = global.URLBACKENDSECURITY  + "/ecomerce/saveOrders"
 global.GETADDRESS = global.URLBACKENDSECURITY  + "/ecomerce/getAddress"
 
 
@@ -54,6 +55,7 @@ global.VIEWCART = '/viewcart'
 global.CHECKOUT = '/checkout'
 global.RESETPASSWORD = '/cambiar-credenciales/:token'
 global.RESETPASSWORDLINK = '/cambiar-credenciales'
+global.ORDERCONFIRM = '/orden-ingresada'
 
 global.DEVOLUCION = '/devolucion'
 global.ENVIO = '/envio'

@@ -6,14 +6,29 @@ import { useCart } from '../functions/context/CartProvider'
 
 const NavBar = () => {
     const { cartItems, removeFromCart, getTotalItems } = useCart()
-    //const { cartItems, addToCart, removeFromCart, getTotalItems } = useCart()
     const totalItems = getTotalItems()
 
     const token = localStorage.getItem('authToken')
+    const envio = parseFloat(localStorage.getItem('envio')) || 0
+    const discountAmount = parseFloat(localStorage.getItem('discountAmount')) || 0
 
     const handleLogout = () => {
         localStorage.clear()
         window.location.href = "/home"
+    }
+
+
+    const calculateTotal = () => {
+        const total = cartItems.reduce((total, item) => {
+            const itemTotal = item.precio_descuento > 0
+                ? item.precio_descuento * item.quantity
+                : item.price * item.quantity
+            const iva = item.precio_descuento > 0
+                ? item.iva_descuento * item.quantity
+                : item.iva
+            return total + itemTotal + iva;
+        }, 0) + envio - discountAmount
+        return total.toFixed(2)
     }
 
     return (
@@ -68,11 +83,9 @@ const NavBar = () => {
                                         <li><i className="icon-phone"></i>Call: +0123 456 789</li>
                                         <li><a href={global.ABOUT}>{t('about_easybuy')}</a></li>
                                         <li><a href={global.CONTACT}>{t('contact_easybuy')}</a></li>
-                                        {/* Mostrar el botón de login si no hay token */}
                                         {!token ? (
                                             <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>{t('login_easybuy')}</a></li>
                                         ) : (
-                                            // Mostrar el botón de cerrar sesión con un dropdown si hay token
                                             <li className="nav-item dropdown">
                                                 <a href="!#" className="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i className="icon-user"></i> Perfil <i className="icon-down-open"></i>
@@ -104,14 +117,6 @@ const NavBar = () => {
                             <a href="/home" className="logo">
                                 <img src="/assets/images/logo.png" alt="Molla Logo" width="105" height="25" />
                             </a>
-                            <nav className="main-nav">
-                                <ul className="menu sf-arrows">
-                                    <li className="megamenu-container active">
-                                        <a href="!#" onClick={(e) => e.preventDefault()} className="sf-with-ul">Departamentos</a>
-                                        {/* Megamenu content */}
-                                    </li>
-                                </ul>
-                            </nav>
                         </div>
                         <div className="header-right">
                             <div className="dropdown cart-dropdown">
@@ -131,7 +136,19 @@ const NavBar = () => {
                                                             <a href="!#" onClick={(e) => e.preventDefault()}>{item.name}</a>
                                                         </h4>
                                                         <span className="cart-product-info">
-                                                            <span className="cart-product-qty">{item.quantity}</span> x ${item.price}
+                                                            {item.precio_descuento > 0 ? (
+                                                                <>
+                                                                    <span className="cart-product-price">
+                                                                        <span style={{ textDecoration: 'line-through', color: 'red' }}>
+                                                                            ${item.price.toFixed(2)}
+                                                                        </span>
+                                                                    </span>
+                                                                    <span className="cart-product-price">${item.precio_descuento.toFixed(2)}</span>
+                                                                </>
+                                                            ) : (
+                                                                <span className="cart-product-price">${item.price.toFixed(2)}</span>
+                                                            )}
+                                                            <span className="cart-product-qty"> x {item.quantity}</span>
                                                         </span>
                                                     </div>
                                                     <figure className="product-image-container">
@@ -148,7 +165,7 @@ const NavBar = () => {
                                     </div>
                                     <div className="dropdown-cart-total">
                                         <span>Total</span>
-                                        <span className="cart-total-price">${cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}</span>
+                                        <span className="cart-total-price">${calculateTotal()}</span>
                                     </div>
                                     <div className="dropdown-cart-action">
                                         <a href={global.VIEWCART} className="btn btn-primary">Ver Carrito</a>

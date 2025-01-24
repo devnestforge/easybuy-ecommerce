@@ -83,11 +83,25 @@ const savePrincipalLogic = async (data) => {
     return dataResp;
 }
 
+const saveOrderLogic = async (payMethod) => {
+    let dataResp = []
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        let dataSave = {
+            metodoPago: payMethod.nemonico_metodos_pago
+        }
+        dataResp = await userServices.saveOrderService(dataSave, token);
+    }
+    return dataResp;
+}
+
 const userLogic = {
     saveViewCartLogic,
     saveAddressLogic,
     getAddressLogic,
-    savePrincipalLogic
+    savePrincipalLogic,
+    saveOrderLogic
 }
 
 export default userLogic

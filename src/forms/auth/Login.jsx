@@ -64,6 +64,7 @@ const LoginRegister = () => {
                 localStorage.setItem("authEmail", email)
                 setCartItems(response.data.viewCartDetail || [])
                 localStorage.setItem('shippingCost', response.data.viewCart[0].envio_id)
+                localStorage.setItem('envio', response.data.viewCart[0].envio)
                 localStorage.setItem('discountCode', response.data.viewCart[0].codigo_oferta || "")
                 localStorage.setItem('discountAmount', response.data.viewCart[0].descuento || "")
                 window.location.href = "/home";

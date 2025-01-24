@@ -20,6 +20,7 @@ export default function Checkout() {
     const [showModal, setShowModal] = useState(false)
     const [tittle, setTittle] = useState('')
     const [selectedAddress, setSelectedAddress] = useState(null)
+    const [payMethod, setPayMethod] = useState([])
     //const [shippingCost, setShippingCost] = useState(0)
 
     useEffect(() => {
@@ -103,7 +104,7 @@ export default function Checkout() {
             // Si el producto tiene tarifa (IVA 15%)
             if (item.tarifa > 0) {
                 subtotalIva15 += subtotal
-                totalIva += (parseFloat(item.iva) * item.quantity)
+                totalIva += ((unitPrice * parseFloat(item.tarifa) / 100) * item.quantity)
 
                 // Aplicar el IVA de descuento si hay
                 if (parseFloat(item.iva_descuento) > 0) {
@@ -120,8 +121,8 @@ export default function Checkout() {
 
     const { subtotalIva15, subtotalIva0, totalIva, totalIvaDescuento } = calculateTotals()
 
-    const envio = 0
-    const totalIvaFinal = totalIva - totalIvaDescuento
+    const envio = ship
+    const totalIvaFinal = totalIva
     const totalGeneral = subtotalIva15 + subtotalIva0 + totalIvaFinal + envio - discountAmount
 
     const handleShippingChange = (event) => {
@@ -138,7 +139,8 @@ export default function Checkout() {
     }
 
     const handlePaymentMethodSelect = (method) => {
-        console.log(method)
+        //console.log(method)
+        setPayMethod(method)
     }
 
     const handleModalClose = () => {
@@ -169,6 +171,24 @@ export default function Checkout() {
         if (response.success) {
             setShowModal(false)
             window.location.reload();
+        }
+        setSpiner(false)
+    }
+
+    const saveOrder = async (event) => {
+        setSpiner(true)
+        event.preventDefault()
+        const response = await userLogic.saveOrderLogic(payMethod)
+        enqueueSnackbar(response.message, {
+            variant: response.variant,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        })
+        if (response.success) {
+            setShowModal(false)
+            //window.location.reload();
         }
         setSpiner(false)
     }
@@ -467,7 +487,7 @@ export default function Checkout() {
                                                         <div className="col-12 col-md-4">
                                                             <button
                                                                 className="btn btn-primary w-100"
-                                                                onClick={() => alert("pago")}
+                                                                onClick={(e) => saveOrder(e)}
                                                             >
                                                                 Finalizar pedido
                                                             </button>
