@@ -14,14 +14,14 @@ const AppFooter = () => {
         <div className="footer-middle">
           <div className="container-fluid">
             <div className="row">
-              <div className="col-sm-12 col-lg-4">
+              {/*<div className="col-sm-12 col-lg-4">
                 <div className="widget widget-about">
                   <img src="/assets/images/logo.png" className="footer-logo" alt="Footer Logo" width="105" height="25" />
                   <div>
                     {t('about_page')}
                   </div>
                 </div>
-              </div>
+              </div>*/}
 
               <div className="col-sm-4 col-lg-2">
                 <div className="widget">

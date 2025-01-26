@@ -33,7 +33,8 @@ const routes = [
   { path: global.VIEWCART, exact: true, name: 'ShoppingCart', element: ShoppingCart },
   { path: global.CHECKOUT, exact: true, name: 'Checkout', element: Checkout },
   { path: global.RESETPASSWORD, exact: true, name: 'ResetPasword', element: ResetPasword },
-  { path: `${global.ORDERCONFIRM}/:id`, exact: true, name: 'OrderConfirm', element: OrderConfirm },
+  { path: global.ORDERCONFIRM, exact: true, name: 'OrderConfirm', element: OrderConfirm },
+
 
   { path: global.DEVOLUCION, exact: true, name: 'Devolucion', element: Devolucion },
   { path: global.ENVIO, exact: true, name: 'Envio', element: Envio },

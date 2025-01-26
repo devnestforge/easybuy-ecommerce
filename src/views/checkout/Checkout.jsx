@@ -20,7 +20,7 @@ export default function Checkout() {
     const [showModal, setShowModal] = useState(false)
     const [tittle, setTittle] = useState('')
     const [selectedAddress, setSelectedAddress] = useState(null)
-    const [payMethod, setPayMethod] = useState([])
+    const [payMethod, setPayMethod] = useState(null)
     //const [shippingCost, setShippingCost] = useState(0)
 
     useEffect(() => {
@@ -44,6 +44,7 @@ export default function Checkout() {
         const poyMethod = await generalLogic.getPayMethodLogic()
         if (poyMethod.success && poyMethod.data) {
             setPayMethods(poyMethod.data.metodoPago || [])
+            setPayMethod(poyMethod.data.metodoPago[0])
             setBankAccounts(poyMethod.data.cta || [])
         } else {
             console.error('Error: No se pudieron cargar los métodos de pago.')
@@ -187,8 +188,7 @@ export default function Checkout() {
             }
         })
         if (response.success) {
-            setShowModal(false)
-            //window.location.reload();
+            //window.location.href = response.data.url;
         }
         setSpiner(false)
     }
@@ -479,8 +479,6 @@ export default function Checkout() {
                                                                 ))}
                                                             </div>
                                                         </div>
-
-
                                                     </div>
                                                     <div className="">
                                                         <h3 className="summary-title">Finaliza tu pedido</h3>
