@@ -179,8 +179,10 @@ export default function Checkout() {
     const saveOrder = async (event) => {
         setSpiner(true)
         event.preventDefault()
-        const response = await userLogic.saveOrderLogic(payMethod)
-        enqueueSnackbar(response.message, {
+        const linkRastreo = window.location.origin + '' + global.ORDERCRASTREO;
+        const linkOrderDetail = window.location.origin + '' + global.ORDERDETAIL;
+        const response = await userLogic.saveOrderLogic(payMethod, linkRastreo, linkOrderDetail)
+        enqueueSnackbar(response.data.message, {
             variant: response.variant,
             anchorOrigin: {
                 vertical: 'top',

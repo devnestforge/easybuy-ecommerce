@@ -20,6 +20,8 @@ import TerminosDeUso from '../views/sections/TerminosDeUso'
 import RastrearPedido from '../views/sections/RastrearPedido'
 import Ayuda from '../views/sections/Ayuda'
 import OrderConfirm from '../views/checkout/orderConfirm'
+import OrderDetail from '../views/user/OrderDetail'
+import OrderRastreo from '../views/user/OrderRastreo'
 
 const routes = [
 
@@ -34,6 +36,8 @@ const routes = [
   { path: global.CHECKOUT, exact: true, name: 'Checkout', element: Checkout },
   { path: global.RESETPASSWORD, exact: true, name: 'ResetPasword', element: ResetPasword },
   { path: global.ORDERCONFIRM, exact: true, name: 'OrderConfirm', element: OrderConfirm },
+  { path: global.ORDERCRASTREO, exact: true, name: 'orderRastreo', element: OrderRastreo },
+  { path: global.ORDERDETAIL, exact: true, name: 'orderDetail', element: OrderDetail },
 
 
   { path: global.DEVOLUCION, exact: true, name: 'Devolucion', element: Devolucion },

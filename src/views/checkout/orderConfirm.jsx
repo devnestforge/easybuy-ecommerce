@@ -60,7 +60,7 @@ export default function OrderConfirm() {
                             <p className="mb-4">
                                 Your order has been successfully placed. Here is your order number:
                             </p>
-                            <h3 className="mb-4 text-primary">Order #12433334234</h3>
+                            <h3 className="mb-4 text-primary">Order #{order}</h3>
                             <p className="mb-4">
                                 You can view your order details or continue shopping by clicking the buttons below:
                             </p>

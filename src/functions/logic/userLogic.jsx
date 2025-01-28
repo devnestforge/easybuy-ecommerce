@@ -83,13 +83,16 @@ const savePrincipalLogic = async (data) => {
     return dataResp;
 }
 
-const saveOrderLogic = async (payMethod) => {
+const saveOrderLogic = async (payMethod, linkRastreo, linkOrderDetail) => {
     let dataResp = []
     const token = localStorage.getItem('authToken')
     const isLoggedIn = !!token
     if (isLoggedIn) {
         let dataSave = {
-            metodoPago: payMethod.nemonico_metodos_pago
+            metodoPago: payMethod.nemonico_metodos_pago,
+            creation_ip: localStorage.getItem('ip'),
+            linkRastreo: linkRastreo,
+            linkOrderDetail: linkOrderDetail
         }
         dataResp = await userServices.saveOrderService(dataSave, token);
     }

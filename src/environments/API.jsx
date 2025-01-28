@@ -56,6 +56,8 @@ global.CHECKOUT = '/checkout'
 global.RESETPASSWORD = '/cambiar-credenciales/:token'
 global.RESETPASSWORDLINK = '/cambiar-credenciales'
 global.ORDERCONFIRM = '/orden-ingresada'
+global.ORDERCRASTREO = '/orden-rastreo'
+global.ORDERDETAIL = '/orden-detalle'
 
 global.DEVOLUCION = '/devolucion'
 global.ENVIO = '/envio'
