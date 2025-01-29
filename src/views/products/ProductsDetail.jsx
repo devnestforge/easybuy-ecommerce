@@ -46,14 +46,15 @@ export default function ProductsDetail() {
   }
 
   const handleAddToCart = () => {
-    const iva = product.iva_precio * ProductionQuantityLimitsSharp
+    const iva = product.iva_precio // * ProductionQuantityLimitsSharp
+    
     //const total = product.prod_precio * quantity + iva
     addToCart({
       id: product.id,
       empresa_id: product.empresa_id,
       name: product.prod_name,
       price: product.prod_precio,
-      iva: iva,
+      iva: product.iva_precio,
       total: product.total_precio,
       tarifa: product.tarifa,
       valor_descuento: product.valor_descuento,

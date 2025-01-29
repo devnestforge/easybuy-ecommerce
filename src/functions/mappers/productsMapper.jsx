@@ -7,26 +7,26 @@ const productMapper = (data) => {
       cat_name: data[i].cat_name ?? '',
       prod_descripcion: data[i].prod_descripcion ?? '',
       prod_name: data[i].prod_name ?? '',
-      prod_precio: data[i].prod_precio ?? '',
-      iva_precio: data[i].iva_precio ?? '',
-      total_precio: data[i].total_precio ?? '',
+      prod_precio: parseFloat(data[i].prod_precio) || 0,
+      iva_precio: parseFloat(data[i].iva_precio) || 0,
+      total_precio: parseFloat(data[i].total_precio) || 0,
       img_id: data[i].img_id ?? '',
-      alto: data[i].alto ?? '',
-      ancho: data[i].ancho ?? '',
-      anio_fabricacion: data[i].anio_fabricacion ?? '',
+      alto: parseFloat(data[i].alto) || 0,
+      ancho: parseFloat(data[i].ancho) || 0,
+      anio_fabricacion: parseInt(data[i].anio_fabricacion) || 0,
       dimensiones: data[i].dimensiones ?? '',
       fabricante: data[i].fabricante ?? '',
       fecha_lanzamiento: data[i].fecha_lanzamiento ?? '',
       garantia: data[i].garantia ?? '',
       observacion: data[i].observacion ?? '',
-      tarifa: data[i].tarifa ?? '',
-      tarifa_descuento: data[i].tarifa_descuento ?? '',
-      valor_descuento: data[i].valor_descuento ?? '',
-      precio_descuento: data[i].precio_descuento ?? '',
-      iva_descuento: data[i].iva_descuento ?? '',
+      tarifa: parseFloat(data[i].tarifa) || 0,
+      tarifa_descuento: parseFloat(data[i].tarifa_descuento) || 0,
+      valor_descuento: parseFloat(data[i].valor_descuento) || 0,
+      precio_descuento: parseFloat(data[i].precio_descuento) || 0,
+      iva_descuento: parseFloat(data[i].iva_descuento) || 0,
       url_imagen: data[i].url_imagen ?? ''
     }
-    prodMapper.push();
+    prodMapper.push(prodMapper[i]);
   }
   return prodMapper;
 }

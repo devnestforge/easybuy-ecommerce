@@ -181,7 +181,8 @@ export default function Checkout() {
         event.preventDefault()
         const linkRastreo = window.location.origin + '' + global.ORDERCRASTREO;
         const linkOrderDetail = window.location.origin + '' + global.ORDERDETAIL;
-        const response = await userLogic.saveOrderLogic(payMethod, linkRastreo, linkOrderDetail)
+        const linkOrderConfirm = window.location.origin + '' + global.ORDERCONFIRM;
+        const response = await userLogic.saveOrderLogic(payMethod, linkRastreo, linkOrderDetail, linkOrderConfirm)
         enqueueSnackbar(response.data.message, {
             variant: response.variant,
             anchorOrigin: {
@@ -190,7 +191,12 @@ export default function Checkout() {
             }
         })
         if (response.success) {
-            //window.location.href = response.data.url;
+            window.location.href = response.data.url;
+            localStorage.removeItem('cartItems');
+            localStorage.removeItem('discountAmount');
+            localStorage.removeItem('discountCode');
+            localStorage.removeItem('envio');
+            localStorage.removeItem('shippingCost');
         }
         setSpiner(false)
     }

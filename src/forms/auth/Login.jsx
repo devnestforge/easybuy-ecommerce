@@ -59,14 +59,18 @@ const LoginRegister = () => {
                 password
             }
             response = await secutiryLogic.loginLogic(data, t)
+            console.log(response)
             if (response.success) {
                 localStorage.setItem("authToken", response.data.userData[0].token)
                 localStorage.setItem("authEmail", email)
                 setCartItems(response.data.viewCartDetail || [])
-                localStorage.setItem('shippingCost', response.data.viewCart[0].envio_id)
-                localStorage.setItem('envio', response.data.viewCart[0].envio)
-                localStorage.setItem('discountCode', response.data.viewCart[0].codigo_oferta || "")
-                localStorage.setItem('discountAmount', response.data.viewCart[0].descuento || "")
+                if (response.data.viewCart && response.data.viewCart.length > 0) {
+                    const firstCartItem = response.data.viewCart[0];
+                    localStorage.setItem('shippingCost', firstCartItem.envio_id || "");
+                    localStorage.setItem('envio', firstCartItem.envio || "");
+                    localStorage.setItem('discountCode', firstCartItem.codigo_oferta || "");
+                    localStorage.setItem('discountAmount', firstCartItem.descuento || "");
+                }
                 window.location.href = "/home";
             }
             enqueueSnackbar(response.message, {

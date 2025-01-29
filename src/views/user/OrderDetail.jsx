@@ -24,7 +24,7 @@ export default function OrderDtail() {
             window.location.href = global.HOME;
         }
         getAddress()
-        getViewCart()
+        getViewCartByCode()
         getShippingMethods()
         getPayMethod()
         setSpiner(false)
@@ -65,10 +65,12 @@ export default function OrderDtail() {
         }
     }
 
-    const getViewCart = async () => {
+    const getViewCartByCode = async () => {
+        const viewcartDetail = await userLogic.getWiewcartByCodeLogic(order)
+        console.log(viewcartDetail.data.checkout_det)
         const storedCartItems = localStorage.getItem("cartItems")
-        if (storedCartItems) {
-            const parsedCartItems = JSON.parse(storedCartItems)
+        if (viewcartDetail.data.checkout_det) {
+            const parsedCartItems = viewcartDetail.data.checkout_det
             setCartItems(parsedCartItems)
             //const total = parsedCartItems.reduce((acc, item) => acc + item.quantity, 0)
             //setTotalProducts(total)

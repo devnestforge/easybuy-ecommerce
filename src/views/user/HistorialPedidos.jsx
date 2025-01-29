@@ -1,117 +1,177 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Spiner from '../../components/modals/Spiner';
+import userLogic from '../../functions/logic/userLogic';
 
 export default function HistorialPedidos() {
-    
-const pedidos = [
-    {
-        id: '12345',
-        fecha: '2025-01-15',
-        direccionEnvio: 'Calle Falsa 123, Ciudad, CP 12345',
-        direccionFacturacion: 'Calle Real 456, Ciudad, CP 54321',
-        productos: [
-            { nombre: 'Producto 1', cantidad: 2, precio: 100 },
-            { nombre: 'Producto 2', cantidad: 1, precio: 200 }
-        ]
-    },
-    {
-        id: '67890',
-        fecha: '2025-01-10',
-        direccionEnvio: 'Avenida Libertad 789, Ciudad, CP 67890',
-        direccionFacturacion: 'Avenida Central 101, Ciudad, CP 98765',
-        productos: [
-            { nombre: 'Producto 3', cantidad: 1, precio: 150 }
-        ]
-    }
-];
+    const [spiner, setSpiner] = useState(false);
+    const [orders, setOrders] = useState([]);
+
+    useEffect(() => {
+        setSpiner(true);
+        const token = localStorage.getItem('authToken');
+        const isLoggedIn = !!token;
+        if (!isLoggedIn) {
+            window.location.href = global.HOME;
+        }
+        getHistoryOrders();
+        setSpiner(false);
+    }, []);
+
+    const getHistoryOrders = async () => {
+        const orderResp = await userLogic.getHistoryOrdersLogic();
+        if (orderResp.success && orderResp.data.data.length > 0) {
+            setOrders(orderResp.data.data); // Guardar los pedidos en el estado
+        }
+    };
 
     // Número de pedidos por página
     const pedidosPorPagina = 5;
-
     const [paginaActual, setPaginaActual] = useState(1);
 
     // Calcular los pedidos que se deben mostrar en la página actual
     const indiceUltimoPedido = paginaActual * pedidosPorPagina;
     const indicePrimerPedido = indiceUltimoPedido - pedidosPorPagina;
-    const pedidosPaginados = pedidos.slice(indicePrimerPedido, indiceUltimoPedido);
+    const pedidosPaginados = orders.slice(indicePrimerPedido, indiceUltimoPedido);
 
     // Función para cambiar la página
     const cambiarPagina = (pagina) => {
         setPaginaActual(pagina);
     };
 
+    // Estado para controlar el acordeón
+    const [acordeonActivo, setAcordeonActivo] = useState(orders[0]?.id || null); // El primer pedido siempre está abierto
+
+    const toggleAcordeon = (id) => {
+        // Alterna el estado del acordeón. Si el mismo id es clickeado, se cierra el acordeón
+        setAcordeonActivo(acordeonActivo === id ? null : id);
+    };
+
     return (
         <div className="container">
-            <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
-                <div className="container">
-                    <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="index.html">Inicio</a></li>
-                        <li className="breadcrumb-item active" aria-current="page">Historial de Pedidos</li>
-                    </ol>
-                </div>
-            </nav>
-
+            <Spiner opt={spiner} />
             <div className="page-content mt-5">
                 <h2 className="text-center mb-4">Historial de Pedidos</h2>
-
-                {pedidosPaginados.map((pedido) => (
-                    <div className="card mb-4" key={pedido.id}>
-                        <div className="card-header">
-                            <h5>Pedido #{pedido.id} - {pedido.fecha}</h5>
-                        </div>
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <h6><strong>Dirección de Envío:</strong></h6>
-                                    <p>{pedido.direccionEnvio}</p>
-                                </div>
-                                <div className="col-md-6">
-                                    <h6><strong>Dirección de Facturación:</strong></h6>
-                                    <p>{pedido.direccionFacturacion}</p>
-                                </div>
-                            </div>
-
-                            <h6><strong>Productos:</strong></h6>
-                            <ul>
-                                {pedido.productos.map((producto, index) => (
-                                    <li key={index}>
-                                        {producto.nombre} - {producto.cantidad} x ${producto.precio} = ${producto.cantidad * producto.precio}
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <hr />
-                            <div className="d-flex justify-content-between">
-                                <span><strong>Total:</strong> ${pedido.productos.reduce((total, producto) => total + producto.cantidad * producto.precio, 0)}</span>
-                                <button className="btn btn-outline-primary btn-sm">Ver detalles</button>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-
-                <div className="d-flex justify-content-center mt-4">
-                    <nav>
-                        <ul className="pagination">
-                            <li className="page-item">
-                                <button
-                                    className="page-link"
-                                    onClick={() => cambiarPagina(paginaActual - 1)}
-                                    disabled={paginaActual === 1}
+                {pedidosPaginados.length === 0 ? (
+                    <p className="text-center">No tienes pedidos en tu historial.</p>
+                ) : (
+                    pedidosPaginados.map((pedido) => (
+                        <div className="card mb-4 shadow-sm" key={pedido.id}>
+                            <div
+                                className="card-header d-flex justify-content-between align-items-center"
+                                onClick={() => toggleAcordeon(pedido.id)}
+                                style={{
+                                    cursor: 'pointer',
+                                    backgroundColor: '#007bff',
+                                    color: '#fff',
+                                    padding: '10px 15px',
+                                    borderRadius: '5px',
+                                    marginBottom: '10px',
+                                    fontSize: '16px',
+                                }}
+                            >
+                                <h5 className="mb-0">Pedido #{pedido.numero_orden}</h5>
+                                <span
+                                    style={{
+                                        fontSize: '18px',
+                                        transition: 'transform 0.3s',
+                                        transform: acordeonActivo === pedido.id ? 'rotate(180deg)' : 'rotate(0deg)',
+                                    }}
                                 >
-                                    Anterior
-                                </button>
-                            </li>
-                            <li className="page-item">
-                                <button
-                                    className="page-link"
-                                    onClick={() => cambiarPagina(paginaActual + 1)}
-                                    disabled={paginaActual * pedidosPorPagina >= pedidos.length}
-                                >
-                                    Siguiente
-                                </button>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                                    ▼
+                                </span>
+                            </div>
+                            {acordeonActivo === pedido.id && (
+                                <div className="card-body" style={{ padding: '20px' }}>
+                                    <div className="row">
+                                        <div className="col-md-6">
+                                            <h6><strong>Productos:</strong></h6>
+                                            <ul className="list-unstyled">
+                                                {pedido.details.map((producto) => (
+                                                    <li key={producto.id} className="d-flex align-items-center mb-3">
+                                                        <img
+                                                            src={`${global.IMGProd}${producto.imageUrl}`}
+                                                            alt={producto.name}
+                                                            width="50"
+                                                            height="50"
+                                                            className="mr-3"
+                                                            style={{ borderRadius: '5px' }}
+                                                        />
+                                                        <span>{producto.name} - {producto.quantity} x ${producto.price} = ${producto.total}</span>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                        <div className="col-md-6">
+                                            <h6><strong>Dirección de Envío:</strong></h6>
+                                            <p>{pedido.direccionEnvio}</p>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <span><strong>Total:</strong> ${pedido.total}</span>
+                                        <div className="d-flex">
+                                            <a
+                                                href={global.ORDERDETAIL + '?orden=' + pedido.numero_orden}
+                                                target="_blank"
+                                                className="btn btn-outline-primary-2 btn-sm mr-2"
+                                                style={{
+                                                    backgroundColor: '#28a745',
+                                                    color: '#fff',
+                                                    padding: '8px 16px',
+                                                    borderRadius: '5px',
+                                                    fontSize: '14px',
+                                                }}
+                                            >
+                                                <span>Detalle de la orden</span>
+                                                <i className="icon-long-arrow-right"></i>
+                                            </a>
+                                            <a
+                                                href={global.ORDERCRASTREO + '?orden=' + pedido.numero_orden}
+                                                target="_blank"
+                                                className="btn btn-outline-primary-2 btn-sm"
+                                                style={{
+                                                    backgroundColor: '#ffc107',
+                                                    color: '#fff',
+                                                    padding: '8px 16px',
+                                                    borderRadius: '5px',
+                                                    fontSize: '14px',
+                                                }}
+                                            >
+                                                <span>Rastreo</span>
+                                                <i className="icon-long-arrow-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))
+                )}
+                <nav aria-label="Page navigation">
+                    <ul className="pagination justify-content-center">
+                        <li className="page-item">
+                            <button
+                                className="page-link"
+                                onClick={() => cambiarPagina(paginaActual - 1)}
+                                disabled={paginaActual === 1}
+                            >
+                                Anterior
+                            </button>
+                        </li>
+                        <li className="page-item">
+                            <span className="page-link">Página {paginaActual}</span>
+                        </li>
+                        <li className="page-item">
+                            <button
+                                className="page-link"
+                                onClick={() => cambiarPagina(paginaActual + 1)}
+                                disabled={pedidosPaginados.length < pedidosPorPagina}
+                            >
+                                Siguiente
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     );

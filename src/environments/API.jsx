@@ -39,6 +39,9 @@ global.SAVEVIEWCART = global.URLBACKENDSECURITY  + "/ecomerce/saveViewCart"
 global.SAVEDITADDRESS = global.URLBACKENDSECURITY  + "/ecomerce/saveEditAddress"
 global.SAVEORDERS = global.URLBACKENDSECURITY  + "/ecomerce/saveOrders"
 global.GETADDRESS = global.URLBACKENDSECURITY  + "/ecomerce/getAddress"
+global.GETORDERTRACK = global.URLBACKENDSECURITY  + "/ecomerce/getOrderTrack"
+global.GETCARTBYCODE = global.URLBACKENDSECURITY  + "/ecomerce/getViewCartByCode"
+global.GETHISTORYORDERS = global.URLBACKENDSECURITY  + "/ecomerce/getHistoryOrders"
 
 
 // URL FRONT END

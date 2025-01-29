@@ -115,11 +115,85 @@ const saveOrderService = async (payMethod, token) => {
     return responseMapper
 }
 
+const getRastreoServices = async (order, token) => {
+    try {
+        const secretKey = global.SECRETKEY;
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('GET', credentials, '')
+        let filters = '/' + order
+        const resp = await fetch(global.GETORDERTRACK + filters, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ?
+                generalMappers.successMapper(userMapper.userTrackingMapper(response.data), 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
+const getWiewcartByCodeServices = async (order, token) => {
+    try {
+        const secretKey = global.SECRETKEY;
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('GET', credentials, '')
+        let filters = '/' + order
+        const resp = await fetch(global.GETCARTBYCODE + filters, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ?
+                generalMappers.successMapper(userMapper.userTrackingMapper(response.data), 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
+const getHistoryOrdersServices = async (token) => {
+    try {
+        const secretKey = global.SECRETKEY;
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('GET', credentials, '')
+        const resp = await fetch(global.GETHISTORYORDERS, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ?
+                generalMappers.successMapper(userMapper.userTrackingMapper(response.data), 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
 const userServices = {
     saveViewCartService,
     saveAddressService,
     getAddressServices,
-    saveOrderService
+    saveOrderService,
+    getRastreoServices,
+    getWiewcartByCodeServices,
+    getHistoryOrdersServices
 };
 
 export default userServices;

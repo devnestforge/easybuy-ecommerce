@@ -20,8 +20,26 @@ const userAddressMapper = (data) => {
   return prodMapper;
 }
 
+const userTrackingMapper = (data) => {
+  let prodMapper = [];
+  for (var i = 0; i < data.length; i++) {
+    prodMapper[i] = {
+      fecha_pedido: data[i].fecha_pedido ?? '',
+      fecha: data[i].fecha_ingreso ?? '',
+      fecha_finalizacion: data[i].fecha_finalizacion ?? '',
+      descripcion: data[i].descripcion ?? '',
+      notas: data[i].notas ?? '',
+      completado: data[i].nombre_parametro === "Activo" ? true : false,
+      nombre2: data[i].nombre2 ?? ''
+    }
+    prodMapper.push();
+  }
+  return prodMapper;
+}
+
 const userMapper = {
-  userAddressMapper
+  userAddressMapper,
+  userTrackingMapper
 }
 
 export default userMapper;

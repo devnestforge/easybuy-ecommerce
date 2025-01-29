@@ -83,7 +83,7 @@ const savePrincipalLogic = async (data) => {
     return dataResp;
 }
 
-const saveOrderLogic = async (payMethod, linkRastreo, linkOrderDetail) => {
+const saveOrderLogic = async (payMethod, linkRastreo, linkOrderDetail, linkOrderConfirm) => {
     let dataResp = []
     const token = localStorage.getItem('authToken')
     const isLoggedIn = !!token
@@ -92,11 +92,52 @@ const saveOrderLogic = async (payMethod, linkRastreo, linkOrderDetail) => {
             metodoPago: payMethod.nemonico_metodos_pago,
             creation_ip: localStorage.getItem('ip'),
             linkRastreo: linkRastreo,
-            linkOrderDetail: linkOrderDetail
+            linkOrderDetail: linkOrderDetail,
+            linkOrderConfirm: linkOrderConfirm
         }
         dataResp = await userServices.saveOrderService(dataSave, token);
     }
     return dataResp;
+}
+
+const getRastreoLogic = async (order) => {
+    let dataResp
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.getRastreoServices(order, token)
+    }
+    return dataResp
+}
+
+const getOrderDetailLogic = async (idAddress, search) => {
+    let dataResp
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.getAddressServices(idAddress, search, token)
+    }
+    return dataResp
+}
+
+const getWiewcartByCodeLogic = async (code) => {
+    let dataResp
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.getWiewcartByCodeServices(code, token)
+    }
+    return dataResp
+}
+
+const getHistoryOrdersLogic = async () => {
+    let dataResp
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.getHistoryOrdersServices(token)
+    }
+    return dataResp
 }
 
 const userLogic = {
@@ -104,7 +145,11 @@ const userLogic = {
     saveAddressLogic,
     getAddressLogic,
     savePrincipalLogic,
-    saveOrderLogic
+    saveOrderLogic,
+    getRastreoLogic,
+    getOrderDetailLogic,
+    getWiewcartByCodeLogic,
+    getHistoryOrdersLogic
 }
 
 export default userLogic
