@@ -20,11 +20,17 @@ const getCategoriesLogic = async () => {
     return dataResp
 }
 
+const getProductsSearchLogic = async (page, perPage, search) => {
+    const dataResp = await productsServices.getProductsSearchService(page, perPage, search)
+    return dataResp
+}
+
 const productsLogic = {
     getPromotionsLogic,
     getRecomendedLogic,
     getProductsLogic,
-    getCategoriesLogic
+    getCategoriesLogic,
+    getProductsSearchLogic
 }
 
 export default productsLogic
