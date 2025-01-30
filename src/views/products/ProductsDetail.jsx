@@ -5,7 +5,7 @@ import productsLogic from '../../functions/logic/productsLogic'
 import Spiner from '../../components/modals/Spiner'
 import ErrorPage from '../../components/error'
 import { useCart } from '../../functions/context/CartProvider' // Importa el hook de CartContext
-import { ProductionQuantityLimitsSharp } from '@mui/icons-material'
+import t from '../../translations/i18n'
 
 const decryptId = (encryptedId) => {
   const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '==' // Decodifica la id
@@ -46,7 +46,7 @@ export default function ProductsDetail() {
   }
 
   const handleAddToCart = () => {
-    const iva = product.iva_precio // * ProductionQuantityLimitsSharp
+    //const iva = product.iva_precio // * ProductionQuantityLimitsSharp
     
     //const total = product.prod_precio * quantity + iva
     addToCart({
@@ -129,7 +129,7 @@ export default function ProductsDetail() {
                   </div>
 
                   <div className="details-filter-row details-row-size">
-                    <label htmlFor="qty">Qty:</label>
+                    <label htmlFor="qty">{t('products.Qty')}:</label>
                     <div className="product-details-quantity">
                       <input
                         type="number"
@@ -150,13 +150,13 @@ export default function ProductsDetail() {
                       className="btn-product btn-cart"
                       onClick={handleAddToCart} // Agrega el producto al carrito al hacer clic
                     >
-                      <span>add to cart</span>
+                      <span>{t('products.add_to_cart')}</span>
                     </button>
                   </div>
 
                   <div className="product-details-footer">
                     <div className="product-cat">
-                      <span>Category:</span>
+                    <span>{t('products.category')}</span>
                       <a href="!#">{product.cat_name}</a>
                     </div>
                   </div>

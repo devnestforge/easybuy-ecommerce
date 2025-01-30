@@ -27,6 +27,7 @@ const LoginRegister = () => {
 
     useEffect(() => {
         // Validate password each time it changes
+        console.log(t('auth.login_label'));
         const validatePassword = (pwd) => {
             const minLength = pwd.length >= 8
             const upperCase = /[A-Z]/.test(pwd)
@@ -183,17 +184,17 @@ const LoginRegister = () => {
                                 <div className="form-tab">
                                     <ul className="nav nav-pills nav-fill nav-border-anim" role="tablist">
                                         <li className="nav-item">
-                                            <a className="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">{t('login_label')}</a>
+                                            <a className="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">{t('auth.login_label')}</a>
                                         </li>
                                         <li className="nav-item">
-                                            <a className="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">{t('register_label')}</a>
+                                            <a className="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">{t('auth.register_label')}</a>
                                         </li>
                                     </ul>
                                     <div className="tab-content" id="tab-content-5">
                                         <div className="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                             <form action="!#">
                                                 <div className="form-group">
-                                                    <label htmlFor="singin-email">{t('email_input')} *</label>
+                                                    <label htmlFor="singin-email">{t('auth.email_input')} *</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
@@ -206,7 +207,7 @@ const LoginRegister = () => {
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="singin-password">{t('password_input')} *</label>
+                                                    <label htmlFor="singin-password">{t('auth.password_input')} *</label>
                                                     <input
                                                         type="password"
                                                         className="form-control"
@@ -225,7 +226,7 @@ const LoginRegister = () => {
                                                         <span>{t('Ingresar')}</span>
                                                         <i className="icon-long-arrow-right"></i>
                                                     </button>
-                                                    <a href="#restore-pass-modal" data-toggle="modal" className="forgot-link">{t('forgotPassword_button')}</a>
+                                                    <a href="#restore-pass-modal" data-toggle="modal" className="forgot-link">{t('auth.forgotPassword_button')}</a>
                                                 </div>
                                             </form>
                                         </div>
@@ -245,7 +246,7 @@ const LoginRegister = () => {
                                                 </div>
 
                                                 <div className="form-group">
-                                                    <label htmlFor="register-password">{t('password_input')} *</label>
+                                                    <label htmlFor="register-password">{t('auth.password_input')} *</label>
                                                     <div className="input-group">
                                                         <input
                                                             type={showPassword ? "text" : "password"}
@@ -285,32 +286,32 @@ const LoginRegister = () => {
                                                             id="register-policy"
                                                             checked={policy}
                                                         />
-                                                        <label className="custom-control-label" htmlFor="register-policy">{t('acepto_politicas_label')} *</label>
+                                                        <label className="custom-control-label" htmlFor="register-policy">{t('auth.acepto_politicas_label')} *</label>
                                                     </div>
                                                     <br />
                                                     <br />
                                                 </div>
                                             </form>
                                             <div className="validation-info" style={styles.validationInfo}>
-                                                <h5 style={styles.validationTitle}>{t('password_validation_title')}</h5>
+                                                <h5 style={styles.validationTitle}>{t('errors.password_validation_title')}</h5>
                                                 <div className="row" style={styles.validationRow}>
                                                     <div className="col-md-6">
                                                         <span style={{ ...styles.validationSpan, ...(validations.minLength ? styles.valid : styles.invalid) }}>
-                                                            {t('password_min_length')}
+                                                            {t('errors.password_min_length')}
                                                         </span>
                                                         <span style={{ ...styles.validationSpan, ...(validations.upperCase ? styles.valid : styles.invalid) }}>
-                                                            {t('password_uppercase')}
+                                                            {t('errors.password_uppercase')}
                                                         </span>
                                                         <span style={{ ...styles.validationSpan, ...(validations.lowerCase ? styles.valid : styles.invalid) }}>
-                                                            {t('password_lowercase')}
+                                                            {t('errors.password_lowercase')}
                                                         </span>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <span style={{ ...styles.validationSpan, ...(validations.number ? styles.valid : styles.invalid) }}>
-                                                            {t('password_number')}
+                                                            {t('errors.password_number')}
                                                         </span>
                                                         <span style={{ ...styles.validationSpan, ...(validations.specialChar ? styles.valid : styles.invalid) }}>
-                                                            {t('password_special_char')}
+                                                            {t('errors.password_special_char')}
                                                         </span>
                                                     </div>
                                                 </div>

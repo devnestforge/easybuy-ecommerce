@@ -1,0 +1,108 @@
+{
+  "general": {
+    "error_message": "An error occurred, please try again in a few minutes"
+  },
+  "branding": {
+    "img_logo": "/assets/images/logo.png",
+    "page_name": "EasyBuy"
+  },
+  "legal": {
+    "use_term": "Terms of Use",
+    "privacy_policy": "Privacy Policy"
+  },
+  "social": {
+    "social_icons": "Social Media"
+  },
+  "about": {
+    "about_page": "Welcome to our online store, the perfect place to find everything you need with just one click. Discover a wide variety of high-quality products at amazing prices. From technology and appliances to fashion and home goods, we have something for everyone. Enjoy an easy, fast, and secure shopping experience with shipping options tailored to your needs. Start exploring and make your shopping experience unforgettable!",
+    "about_easybuy": "About EasyBuy",
+    "contact_easybuy": "Contact Us"
+  },
+  "auth": {
+    "login_easybuy": "Login",
+    "user_profile": "Profile",
+    "user_addrress": "Shipping Addresses",
+    "user_history": "Order History",
+    "user_logout": "Logout",
+    "sign_easybuy": "Sign Up",
+    "login_label": "Log in",
+    "email_input": "Email",
+    "password_input": "Password",
+    "login_button": "Sign in",
+    "forgotPassword_button": "Forgot your password?",
+    "register_label": "Sign up",
+    "register_button": "Register",
+    "privacy_policy_check": "I agree with the privacy policy"
+  },
+  "user": {
+    "welcome": "Welcome",
+    "logout": "Log out"
+  },
+  "errors": {
+    "login_error_message": "Enter required fields",
+    "email_error_message": "Enter a valid email",
+    "password_error_message": "Enter a password",
+    "policy_error_message": "Accept the privacy terms",
+    "strong_password_error_message": "Enter a strong password",
+    "password_min_length": "The password must be at least 8 characters long.",
+    "password_uppercase": "The password must contain at least one uppercase letter.",
+    "password_number": "The password must contain at least one number (digit 0-9).",
+    "password_lowercase": "The password must contain at least one lowercase letter.",
+    "password_special_char": "The password must contain at least one special character, such as !@#$%^&*(),.?\":{}|<>.",
+    "password_validation_title": "Secure Password",
+    "code_error_message": 500,
+    "code_success_message": 200,
+    "code_label_error": "error",
+    "code_label_warning": "warning",
+    "code_label_success": "success"
+  },
+  "shopping": {
+    "cart_easybuy": "Cart",
+    "Tmyo_easybuy": "Track my order",
+    "Help_easybuy": "Help",
+    "Cat_easybuy": "Categories",
+    "PM_easybuy": "Payment Methods",
+    "Guarantee_easybuy": "Warranty",
+    "Reembolso_easybuy": "Refund",
+    "Shipping_easybuy": "Shipping"
+  },
+  "products": {
+    "category": "Categories",
+    "add_to_cart": "Add to Cart",
+    "quick_view": "Quick View",
+    "products": "Products",
+    "view_more_products": "View More Products",
+    "Qty": "Quantity",
+    "Description": "Description",
+    "Description_desc": "Product Information",
+    "Aditgional_info": "Additional Information",
+    "Shipping_returns_info": "Shipping & Returns"
+  },
+  "shipping": {
+    "shipping_intro": "We offer fast and secure shipping options so you can receive your products as soon as possible. Before making your purchase, we recommend carefully reviewing the product specifications to ensure it meets your expectations.",
+    "return_policy_title": "Return Policy",
+    "return_policy_intro": "We accept product returns as long as they meet the following conditions:",
+    "return_condition_1": "The product must be in its original packaging, unopened, and with no signs of use.",
+    "return_condition_2": "Returns will not be accepted for products that have been opened, damaged, or show signs of misuse.",
+    "return_condition_3": "Perishable items such as food, medicine, or any product with an expiration date cannot be returned under any circumstances.",
+    "terms_conditions_title": "Terms and Conditions",
+    "terms_conditions_intro": "All return requests must be made within the first 14 days after receiving the product. The customer is responsible for the return shipping costs unless the return is due to a manufacturing defect or an error in the order. Once we receive the product at our facilities, we will inspect its condition and proceed with a refund or exchange as appropriate.",
+    "contact_for_more_info": "For more information about our shipping and return policies, please contact us. We're here to help."
+  },
+  "product_details": {
+    "Weight_prod": "Weight:",
+    "Height_prod": "Height:",
+    "Width_prod": "Width:",
+    "Length_prod": "Length:",
+    "Size_prod": "Size:",
+    "Dimensions_prod": "Dimensions:",
+    "Release_Date_prod": "Release Date:",
+    "Manufacturer_prod": "Manufacturer:",
+    "Year_prod": "Year:",
+    "Warranty_prod": "Warranty:"
+  },
+  "restore": {
+    "restore_pass_label": "Recover your password",
+    "restore_button": "Recover"
+  }
+}

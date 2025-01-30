@@ -3,24 +3,8 @@ import React from 'react';
 export default function Ayuda() {
     return (
         <>
-
+            <br />
             <main className="main">
-                <div className="page-header text-center" style={{ backgroundImage: "url('assets/images/page-header-bg.jpg')" }}>
-                    <div className="container">
-                        <h1 className="page-title">F.A.Q<span>Pages</span></h1>
-                    </div>
-                </div>
-
-                <nav aria-label="breadcrumb" className="breadcrumb-nav">
-                    <div className="container">
-                        <ol className="breadcrumb">
-                            <li className="breadcrumb-item"><a href="!#">Home</a></li>
-                            <li className="breadcrumb-item"><a href="!#">Pages</a></li>
-                            <li className="breadcrumb-item active" aria-current="page">FAQ</li>
-                        </ol>
-                    </div>
-                </nav>
-
                 <div className="page-content">
                     <div className="container">
                         <h2 className="title text-center mb-3">Shipping Information</h2>

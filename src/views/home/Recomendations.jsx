@@ -69,12 +69,12 @@ export default function Recommendations({ t, data }) {
             <div className="container-fluid for-you">
                 <div className="heading heading-flex mb-3">
                     <div className="heading-left">
-                        <h2 className="title">{t('products')}</h2>
+                        <h2 className="title">{t('products.products')}</h2>
                     </div>
 
                     <div className="heading-right">
                         <a href={global.PRODUCTSEARCH} className="title-link">
-                            {t('view_more_products')} <i className="icon-long-arrow-right"></i>
+                            {t('products.view_more_products')} <i className="icon-long-arrow-right"></i>
                         </a>
                     </div>
                 </div>
@@ -109,8 +109,8 @@ export default function Recommendations({ t, data }) {
                                                             e.preventDefault()
                                                             handleAddToCart(item)
                                                         }}
-                                                        className="btn-product btn-cart" title={t('add_to_cart')}>
-                                                        <span>{t('add_to_cart')}</span>
+                                                        className="btn-product btn-cart" title={t('products.add_to_cart')}>
+                                                        <span>{t('products.add_to_cart')}</span>
                                                     </a>
                                                     <a
                                                         href="!#"
@@ -118,7 +118,7 @@ export default function Recommendations({ t, data }) {
                                                         title="Quick view"
                                                         onClick={(e) => handleQuickViewClick(e, item)}
                                                     >
-                                                        <span>{t('quick_view')}</span>
+                                                        <span>{t('products.quick_view')}</span>
                                                     </a>
                                                 </div>
                                             </figure>
@@ -153,8 +153,8 @@ export default function Recommendations({ t, data }) {
                                                             e.preventDefault()
                                                             handleAddToCart(item)
                                                         }}
-                                                        className="btn-product btn-cart" title={t('add_to_cart')}>
-                                                        <span>{t('add_to_cart')}</span>
+                                                        className="btn-product btn-cart" title={t('products.add_to_cart')}>
+                                                        <span>{t('products.add_to_cart')}</span>
                                                     </a>
                                                     <a
                                                         href="!#"
@@ -162,7 +162,7 @@ export default function Recommendations({ t, data }) {
                                                         title="Quick view"
                                                         onClick={(e) => handleQuickViewClick(e, item)}
                                                     >
-                                                        <span>{t('quick_view')}</span>
+                                                        <span>{t('products.quick_view')}</span>
                                                     </a>
                                                 </div>
                                             </figure>
@@ -222,7 +222,7 @@ export default function Recommendations({ t, data }) {
                                     </div>
 
                                     {/* Quantity input */}
-                                    <label htmlFor="qty">{t('Qty')}</label>
+                                    <label htmlFor="qty">{t('products.Qty')}</label>
                                     <div className="product-details-quantity">
                                         <input
                                             type="number"
@@ -244,7 +244,7 @@ export default function Recommendations({ t, data }) {
                                                 handleAddToCart(currentProduct)
                                             }}
                                             className="btn-product btn-cart">
-                                            <span>{t('add_to_cart')}</span>
+                                            <span>{t('products.add_to_cart')}</span>
                                         </a>
                                     </div>
                                 </div>

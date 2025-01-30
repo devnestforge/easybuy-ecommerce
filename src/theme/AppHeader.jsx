@@ -81,22 +81,22 @@ const NavBar = () => {
                                     <a href="!#" onClick={(e) => e.preventDefault()}>Links</a>
                                     <ul>
                                         <li><i className="icon-phone"></i>Call: +0123 456 789</li>
-                                        <li><a href={global.ABOUT}>{t('about_easybuy')}</a></li>
-                                        <li><a href={global.CONTACT}>{t('contact_easybuy')}</a></li>
+                                        <li><a href={global.ABOUT}>{t('about.about_easybuy')}</a></li>
+                                        <li><a href={global.CONTACT}>{t('about.contact_easybuy')}</a></li>
                                         {!token ? (
-                                            <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>{t('login_easybuy')}</a></li>
+                                            <li><a href="#signin-modal" data-toggle="modal"><i className="icon-user"></i>{t('auth.login_easybuy')}</a></li>
                                         ) : (
                                             <li className="nav-item dropdown">
                                                 <a href="!#" className="nav-link dropdown-toggle" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i className="icon-user"></i> Perfil <i className="icon-down-open"></i>
                                                 </a>
                                                 <div className="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                                                    <a className="dropdown-item" href={global.USERPERFIL}>Perfil</a>
-                                                    <a className="dropdown-item" href={global.ENVIOFACT}>Envío y Facturación</a>
-                                                    <a className="dropdown-item" href={global.HISTORY}>Historial de pedidos</a>
+                                                    <a className="dropdown-item" href={global.USERPERFIL}>{t('auth.user_profile')}</a>
+                                                    <a className="dropdown-item" href={global.ENVIOFACT}>{t('auth.user_addrress')}</a>
+                                                    <a className="dropdown-item" href={global.HISTORY}>{t('auth.user_history')}</a>
                                                     <div className="dropdown-divider"></div>
                                                     <a className="dropdown-item" href="!#" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
-                                                        Cerrar sesión
+                                                        {t('user_logout')}
                                                     </a>
                                                 </div>
                                             </li>
@@ -115,7 +115,7 @@ const NavBar = () => {
                                 <i className="icon-bars"></i>
                             </button>
                             <a href="/home" className="logo">
-                                <img src="/assets/images/logo.png" alt="Molla Logo" width="105" height="25" />
+                                <img src={t('branding.img_logo')} alt="Molla Logo" width="105" height="25" />
                             </a>
                         </div>
                         <div className="header-right">
@@ -127,7 +127,7 @@ const NavBar = () => {
                                 <div className="dropdown-menu dropdown-menu-right">
                                     <div className="dropdown-cart-products">
                                         {cartItems.length === 0 ? (
-                                            <p>No hay productos en el carrito.</p>
+                                            <p>{t('shopping.Empty_cart')}</p>
                                         ) : (
                                             cartItems.map(item => (
                                                 <div className="product" key={item.id}>
@@ -164,7 +164,7 @@ const NavBar = () => {
                                         )}
                                     </div>
                                     <div className="dropdown-cart-total">
-                                        <span>Total</span>
+                                        <span>{t('shopping.Total')}</span>
                                         <span className="cart-total-price">${calculateTotal()}</span>
                                     </div>
                                     <div className="dropdown-cart-action">

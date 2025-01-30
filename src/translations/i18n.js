@@ -1,5 +1,5 @@
-import es from './es';
-import en from './en';
+import es from './es'
+import en from './en'
 
 const translations = {
   en,
@@ -14,7 +14,10 @@ const detectBrowserLanguage = () => {
 
 const currentLanguage = detectBrowserLanguage();
 
-const t = (key) => translations[currentLanguage][key] || key;
+const t = (key) => {
+  const keys = key.split('.');
+  return keys.reduce((obj, k) => (obj && obj[k] ? obj[k] : key), translations[currentLanguage]);
+};
 
 // Hacer `t` globalmente disponible
 window.t = t;

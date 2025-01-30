@@ -1,93 +1,78 @@
 import React from 'react';
+import t from '../../translations/i18n'
 
 export default function Contact() {
 
     return (
         <>
-            <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
-                <div className="container">
-                    <ol className="breadcrumb">
-                        <li className="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li className="breadcrumb-item"><a href="!#">Pages</a></li>
-                        <li className="breadcrumb-item active" aria-current="page">Contact us 2</li>
-                    </ol>
-                </div>
-            </nav>
-
             <div className="page-content">
                 <div className="container">
-                    <hr className="mt-3 mb-5 mt-md-1" />
+                    <br />
                     <div className="touch-container row justify-content-center">
                         <div className="col-md-9 col-lg-7">
                             <div className="text-center">
-                                <h2 className="title mb-1">Get In Touch</h2>
-                                <p className="lead text-primary">
-                                    We collaborate with ambitious brands and people; we’d love to build something great together.
+                                <h2 className="title mb-1">{t('contact.Tittle')}</h2>
+                                <p className="mb-3">
+                                    {t('contact.Parrafo')}
                                 </p>
-                                <p className="mb-3">Vestibulum volutpat, lacus a ultrices sagittis, mi neque euismod dui, eu pulvinar nunc sapien ornare nisl. Phasellus pede arcu, dapibus eu, fermentum et, dapibus sed, urna.</p>
                             </div>
 
                             <form action="#" className="contact-form mb-2">
                                 <div className="row">
-                                    <div className="col-sm-4">
-                                        <label for="cname" className="sr-only">Name</label>
-                                        <input type="text" className="form-control" id="cname" placeholder="Name *" required />
+                                    <div className="col-sm-6">
+                                        <label for="cname" className="sr-only">{t('general.Name')}</label>
+                                        <input type="text" className="form-control" id="cname" placeholder={t('general.Name')} required />
                                     </div>
-
-                                    <div className="col-sm-4">
-                                        <label for="cemail" className="sr-only">Name</label>
-                                        <input type="email" className="form-control" id="cemail" placeholder="Email *" required />
+                                    <div className="col-sm-6">
+                                        <label for="cphone" className="sr-only">{t('general.Phone')}</label>
+                                        <input type="tel" className="form-control" id="cphone" placeholder={t('general.Phone')} />
                                     </div>
-
-                                    <div className="col-sm-4">
-                                        <label for="cphone" className="sr-only">Phone</label>
-                                        <input type="tel" className="form-control" id="cphone" placeholder="Phone" />
+                                    <div className="col-sm-12">
+                                        <label for="cemail" className="sr-only">{t('general.Email')}</label>
+                                        <input type="email" className="form-control" id="cemail" placeholder={t('general.Email')} required />
                                     </div>
                                 </div>
 
-                                <label for="csubject" className="sr-only">Subject</label>
-                                <input type="text" className="form-control" id="csubject" placeholder="Subject" />
+                                <label for="csubject" className="sr-only">{t('general.Subject')}</label>
+                                <input type="text" className="form-control" id="csubject" placeholder={t('general.Subject')} />
 
-                                <label for="cmessage" className="sr-only">Message</label>
-                                <textarea className="form-control" cols="30" rows="4" id="cmessage" required placeholder="Message *"></textarea>
+                                <label for="cmessage" className="sr-only">{t('general.Message')}</label>
+                                <textarea className="form-control" cols="30" rows="4" id="cmessage" required placeholder={t('general.Message')}></textarea>
 
                                 <div className="text-center">
                                     <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
-                                        <span>SUBMIT</span>
+                                        <span>{t('general.Submit')}</span>
                                         <i className="icon-long-arrow-right"></i>
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    
+
                     <div className="row">
                         <div className="col-md-4">
                             <div className="contact-box text-center">
-                                <h3>Office</h3>
-                                <address>1 New York Plaza, New York, <br />NY 10004, USA</address>
+                                <h3>{t('Bussiness.Country_City')}</h3>
+                                <address>{t('Bussiness.Direction')}</address>
                             </div>
                         </div>
 
                         <div className="col-md-4">
                             <div className="contact-box text-center">
-                                <h3>Start a Conversation</h3>
+                                <h3>{t('Bussiness.Conversation')}</h3>
 
-                                <div><a href="mailto:#">info@Molla.com</a></div>
-                                <div><a href="tel:#">+1 987-876-6543</a>, <a href="tel:#">+1 987-976-1234</a></div>
+                                <div><a href="mailto:#">{t('Bussiness.Email')}</a></div>
+                                <div><a href="tel:#">{t('Bussiness.Phone')}</a></div>
                             </div>
                         </div>
 
                         <div className="col-md-4">
                             <div className="contact-box text-center">
-                                <h3>Social</h3>
-
+                                <h3>{t('social.social_icons')}</h3>
                                 <div className="social-icons social-icons-color justify-content-center">
-                                    <a href="!#" className="social-icon social-facebook" title="Facebook" target="_blank"><i className="icon-facebook-f"></i></a>
-                                    <a href="!#" className="social-icon social-twitter" title="Twitter" target="_blank"><i className="icon-twitter"></i></a>
-                                    <a href="!#" className="social-icon social-instagram" title="Instagram" target="_blank"><i className="icon-instagram"></i></a>
-                                    <a href="!#" className="social-icon social-youtube" title="Youtube" target="_blank"><i className="icon-youtube"></i></a>
-                                    <a href="!#" className="social-icon social-pinterest" title="Pinterest" target="_blank"><i className="icon-pinterest"></i></a>
+                                    <a href={t('social.social_face_url')} without rel="noreferrer" className="social-icon social-facebook" title="Facebook" target="_blank"><i className={t('social.social_face')}></i></a>
+                                    <a href={t('social.social_x_url')} without rel="noreferrer" className="social-icon social-twitter" title="Twitter" target="_blank"><i className={t('social.social_x')}></i></a>
+                                    <a href={t('social.social_ins_url')} without rel="noreferrer" className="social-icon social-instagram" title="Instagram" target="_blank"><i className={t('social.social_ins')}></i></a>
                                 </div>
                             </div>
                         </div>

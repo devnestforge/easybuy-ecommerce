@@ -5,7 +5,7 @@ export default function Popular({ t, data }) {
     return (
         <>
             <div className="container-fluid">
-                <h2 className="title text-center mb-4">{t('category')}</h2>
+                <h2 className="title text-center mb-4">{t('products.category')}</h2>
 
                 <div className="cat-blocks-container">
                     <div className="row">
