@@ -140,6 +140,25 @@ const getHistoryOrdersLogic = async () => {
     return dataResp
 }
 
+const getUserProfileInfoLogic = async (token) => {
+    let dataResp
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.getUserProfileInfoServices(token)
+    }
+    return dataResp
+}
+
+const saveProfileLogic = async (dataSave) => {
+    let dataResp = []
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.saveProfileService(dataSave, token);
+    }
+    return dataResp;
+}
+
 const userLogic = {
     saveViewCartLogic,
     saveAddressLogic,
@@ -149,7 +168,9 @@ const userLogic = {
     getRastreoLogic,
     getOrderDetailLogic,
     getWiewcartByCodeLogic,
-    getHistoryOrdersLogic
+    getHistoryOrdersLogic,
+    getUserProfileInfoLogic,
+    saveProfileLogic
 }
 
 export default userLogic

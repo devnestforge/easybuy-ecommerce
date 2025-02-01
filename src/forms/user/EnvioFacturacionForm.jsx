@@ -16,7 +16,6 @@ export default function EnvioFacturacionForm(props) {
     const [cities, setCities] = useState([])
     const [filteredCities, setFilteredCities] = useState([])
 
-    // Obtener las regiones (provincias y ciudades) solo una vez al montar el componente
     useEffect(() => {
         const getRegions = async () => {
             try {
@@ -32,9 +31,8 @@ export default function EnvioFacturacionForm(props) {
             }
         }
         getRegions()
-    }, []) // Sin dependencias, solo se ejecuta una vez
+    }, [])
 
-    // Filtrar las ciudades según la provincia seleccionada
     useEffect(() => {
         if (provincia) {
             const filtered = cities.filter(
@@ -44,10 +42,9 @@ export default function EnvioFacturacionForm(props) {
         } else {
             setFilteredCities([])
         }
-        setCiudad('') // Resetear ciudad seleccionada al cambiar de provincia
+        setCiudad('')
     }, [provincia, cities])
 
-    // Cargar datos de `props.formData` o `localStorage` al inicializar el componente
     useEffect(() => {
         if (props.formData) {
             const datForm = props.formData

@@ -1,50 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import Spiner from '../../components/modals/Spiner';
-import userLogic from '../../functions/logic/userLogic';
+import React, { useState, useEffect } from 'react'
+import Spiner from '../../components/modals/Spiner'
+import userLogic from '../../functions/logic/userLogic'
 
 export default function HistorialPedidos() {
-    const [spiner, setSpiner] = useState(false);
-    const [orders, setOrders] = useState([]);
+    const [spiner, setSpiner] = useState(false)
+    const [orders, setOrders] = useState([])
 
     useEffect(() => {
-        setSpiner(true);
-        const token = localStorage.getItem('authToken');
-        const isLoggedIn = !!token;
+        setSpiner(true)
+        const token = localStorage.getItem('authToken')
+        const isLoggedIn = !!token
         if (!isLoggedIn) {
-            window.location.href = global.HOME;
+            window.location.href = global.HOME
         }
-        getHistoryOrders();
-        setSpiner(false);
-    }, []);
+        getHistoryOrders()
+        setSpiner(false)
+    }, [])
 
     const getHistoryOrders = async () => {
-        const orderResp = await userLogic.getHistoryOrdersLogic();
+        const orderResp = await userLogic.getHistoryOrdersLogic()
         if (orderResp.success && orderResp.data.data.length > 0) {
-            setOrders(orderResp.data.data); // Guardar los pedidos en el estado
+            setOrders(orderResp.data.data)
         }
-    };
+    }
 
-    // Número de pedidos por página
-    const pedidosPorPagina = 5;
-    const [paginaActual, setPaginaActual] = useState(1);
+    const pedidosPorPagina = 5
+    const [paginaActual, setPaginaActual] = useState(1)
 
-    // Calcular los pedidos que se deben mostrar en la página actual
-    const indiceUltimoPedido = paginaActual * pedidosPorPagina;
-    const indicePrimerPedido = indiceUltimoPedido - pedidosPorPagina;
-    const pedidosPaginados = orders.slice(indicePrimerPedido, indiceUltimoPedido);
+    const indiceUltimoPedido = paginaActual * pedidosPorPagina
+    const indicePrimerPedido = indiceUltimoPedido - pedidosPorPagina
+    const pedidosPaginados = orders.slice(indicePrimerPedido, indiceUltimoPedido)
 
-    // Función para cambiar la página
     const cambiarPagina = (pagina) => {
-        setPaginaActual(pagina);
-    };
+        setPaginaActual(pagina)
+    }
 
-    // Estado para controlar el acordeón
-    const [acordeonActivo, setAcordeonActivo] = useState(orders[0]?.id || null); // El primer pedido siempre está abierto
+    const [acordeonActivo, setAcordeonActivo] = useState(orders[0]?.id || null)
 
     const toggleAcordeon = (id) => {
-        // Alterna el estado del acordeón. Si el mismo id es clickeado, se cierra el acordeón
-        setAcordeonActivo(acordeonActivo === id ? null : id);
-    };
+        setAcordeonActivo(acordeonActivo === id ? null : id)
+    }
 
     return (
         <div className="container">
@@ -174,5 +169,5 @@ export default function HistorialPedidos() {
                 </nav>
             </div>
         </div>
-    );
+    )
 }

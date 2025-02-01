@@ -9,12 +9,12 @@ let responseMapper = []
 
 const getAddressServices = async (idAddress, search, token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('GET', credentials, '')
         let filters = '/' + idAddress
         if (search.trim() === "") {
-            filters += '/no';
+            filters += '/no'
         }
         const resp = await fetch(global.GETADDRESS + filters, options)
         const response = await resp.json()
@@ -39,7 +39,7 @@ const getAddressServices = async (idAddress, search, token) => {
 
 const saveViewCartService = async (cartDatam, token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('POST', credentials, cartDatam)
         const resp = await fetch(global.SAVEVIEWCART, options)
@@ -65,7 +65,7 @@ const saveViewCartService = async (cartDatam, token) => {
 
 const saveAddressService = async (dataSave, token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('POST', credentials, dataSave)
         const resp = await fetch(global.SAVEDITADDRESS, options)
@@ -91,7 +91,7 @@ const saveAddressService = async (dataSave, token) => {
 
 const saveOrderService = async (payMethod, token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('POST', credentials, payMethod)
         const resp = await fetch(global.SAVEORDERS, options)
@@ -117,7 +117,7 @@ const saveOrderService = async (payMethod, token) => {
 
 const getRastreoServices = async (order, token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('GET', credentials, '')
         let filters = '/' + order
@@ -134,14 +134,14 @@ const getRastreoServices = async (order, token) => {
         }
         return respAnswer
     } catch (error) {
-        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        await logError(error.message, 'getPromotionService', 'getRastreoServices.jsx')
         return { error: global.MESSAGE_ERROR_CATCH }
     }
 }
 
 const getWiewcartByCodeServices = async (order, token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('GET', credentials, '')
         let filters = '/' + order
@@ -158,14 +158,14 @@ const getWiewcartByCodeServices = async (order, token) => {
         }
         return respAnswer
     } catch (error) {
-        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        await logError(error.message, 'getPromotionService', 'getWiewcartByCodeServices.jsx')
         return { error: global.MESSAGE_ERROR_CATCH }
     }
 }
 
 const getHistoryOrdersServices = async (token) => {
     try {
-        const secretKey = global.SECRETKEY;
+        const secretKey = global.SECRETKEY
         const credentials = base64.encode(token + ':' + secretKey)
         const options = requestOptions.headers('GET', credentials, '')
         const resp = await fetch(global.GETHISTORYORDERS, options)
@@ -181,9 +181,58 @@ const getHistoryOrdersServices = async (token) => {
         }
         return respAnswer
     } catch (error) {
-        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        await logError(error.message, 'getPromotionService', 'getHistoryOrdersServices.jsx')
         return { error: global.MESSAGE_ERROR_CATCH }
     }
+}
+
+const getUserProfileInfoServices = async (token) => {
+    try {
+        const secretKey = global.SECRETKEY
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('GET', credentials, '')
+        const resp = await fetch(global.GETUSERPROFILE, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.length > 0 ?
+                generalMappers.successMapper(userMapper.userProfileMapper(response.data), 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'getUserProfileInfoServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
+const saveProfileService = async (dataSave, token) => {
+    try {
+        const secretKey = global.SECRETKEY
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('POST', credentials, dataSave)
+        const resp = await fetch(global.SAVEPROFILE, options)
+        const dataResp = await resp.json()
+        responseMapper = secutiryMapper.userDataMapper(dataResp)
+    } catch (e) {
+        const data = {
+            "section_error": "userServices.jsx front",
+            "detail_error": "saveAddressService user",
+            "mensaje_error": e.message,
+            "user_transac": 0,
+            "module_transac": "Front userServices.jsx saveAddressService user",
+            "operation_date": new Date(),
+            "operation_user": 0,
+            "operation_ip": localStorage.getItem('ip'),
+            "env": 2
+        }
+
+        auditoryServices.catchErrorService(data)
+    }
+    return responseMapper
 }
 
 const userServices = {
@@ -193,7 +242,9 @@ const userServices = {
     saveOrderService,
     getRastreoServices,
     getWiewcartByCodeServices,
-    getHistoryOrdersServices
-};
+    getHistoryOrdersServices,
+    getUserProfileInfoServices,
+    saveProfileService
+}
 
-export default userServices;
+export default userServices

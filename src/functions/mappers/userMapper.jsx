@@ -37,9 +37,31 @@ const userTrackingMapper = (data) => {
   return prodMapper;
 }
 
+const userProfileMapper = (data) => {
+  let prodMapper = [];
+  for (var i = 0; i < data.length; i++) {
+    prodMapper[i] = {
+      identification: data[i].identification ?? '',
+      nombres: data[i].nombres ?? '',
+      apellidos: data[i].apellidos ?? '',
+      direction: data[i].direction ?? '',
+      descuento: data[i].descuento ?? '',
+      cellphone: data[i].phone ?? '',
+      gender: data[i].gender ?? '',
+      provincia_id: data[i].provincia_id ?? 0,
+      parroquia_id: data[i].parroquia_id ?? 0,
+      fecha_nacimiento: data[i].fecha_nacimiento ?? '',
+      email: data[i].email ?? ''
+    }
+    prodMapper.push();
+  }
+  return prodMapper;
+}
+
 const userMapper = {
   userAddressMapper,
-  userTrackingMapper
+  userTrackingMapper,
+  userProfileMapper
 }
 
 export default userMapper;

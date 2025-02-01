@@ -43,7 +43,8 @@ global.GETORDERTRACK = global.URLBACKENDSECURITY  + "/ecomerce/getOrderTrack"
 global.GETCARTBYCODE = global.URLBACKENDSECURITY  + "/ecomerce/getViewCartByCode"
 global.GETHISTORYORDERS = global.URLBACKENDSECURITY  + "/ecomerce/getHistoryOrders"
 global.PRODUCTSSEARCH = global.URLBACKENDSECURITY  + "/ecomerce/getProductsSearch"
-
+global.GETUSERPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/getUserProfile"
+global.SAVEPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/saveProfile"
 
 // URL FRONT END
 
