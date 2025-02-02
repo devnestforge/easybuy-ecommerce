@@ -39,6 +39,11 @@ const getRegionsLogic = async () => {
     return dataResp
 }
 
+const sendContactLogic = async (data) => {
+    const dataResp = await generalService.sendContactService(data)
+    return dataResp
+}
+
 const generalLogic = {
     catchErrorLogic,
     deleteCharacters,
@@ -46,7 +51,8 @@ const generalLogic = {
     getShippingMethods,
     getDiscountLogic,
     getPayMethodLogic,
-    getRegionsLogic
+    getRegionsLogic,
+    sendContactLogic
 }
 
 export default generalLogic

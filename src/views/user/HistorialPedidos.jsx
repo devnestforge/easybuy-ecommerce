@@ -44,8 +44,8 @@ export default function HistorialPedidos() {
     return (
         <div className="container">
             <Spiner opt={spiner} />
-            <div className="page-content mt-5">
-                <h2 className="text-center mb-4">Historial de Pedidos</h2>
+            <div className="page-content mt-2">
+                <h4 className="text-center mb-4">Historial de Pedidos</h4>
                 {pedidosPaginados.length === 0 ? (
                     <p className="text-center">No tienes pedidos en tu historial.</p>
                 ) : (
@@ -56,15 +56,18 @@ export default function HistorialPedidos() {
                                 onClick={() => toggleAcordeon(pedido.id)}
                                 style={{
                                     cursor: 'pointer',
-                                    backgroundColor: '#007bff',
-                                    color: '#fff',
+                                    backgroundColor: '#0086E6',
+                                    color: '#1C1B22',
                                     padding: '10px 15px',
                                     borderRadius: '5px',
                                     marginBottom: '10px',
                                     fontSize: '16px',
                                 }}
                             >
-                                <h5 className="mb-0">Pedido #{pedido.numero_orden}</h5>
+                                <p style={{
+                                    cursor: 'pointer',
+                                    color: '#1C1B22',
+                                }} className="mb-0">Pedido #{pedido.numero_orden}</p>
                                 <span
                                     style={{
                                         fontSize: '18px',
@@ -72,7 +75,6 @@ export default function HistorialPedidos() {
                                         transform: acordeonActivo === pedido.id ? 'rotate(180deg)' : 'rotate(0deg)',
                                     }}
                                 >
-                                    ▼
                                 </span>
                             </div>
                             {acordeonActivo === pedido.id && (
@@ -108,10 +110,11 @@ export default function HistorialPedidos() {
                                             <a
                                                 href={global.ORDERDETAIL + '?orden=' + pedido.numero_orden}
                                                 target="_blank"
+                                                rel="noreferrer"
                                                 className="btn btn-outline-primary-2 btn-sm mr-2"
                                                 style={{
-                                                    backgroundColor: '#28a745',
-                                                    color: '#fff',
+                                                    backgroundColor: '#D9DADF',
+                                                    color: '#1C1B22',
                                                     padding: '8px 16px',
                                                     borderRadius: '5px',
                                                     fontSize: '14px',
@@ -123,10 +126,11 @@ export default function HistorialPedidos() {
                                             <a
                                                 href={global.ORDERCRASTREO + '?orden=' + pedido.numero_orden}
                                                 target="_blank"
+                                                rel="noreferrer"
                                                 className="btn btn-outline-primary-2 btn-sm"
                                                 style={{
-                                                    backgroundColor: '#ffc107',
-                                                    color: '#fff',
+                                                    backgroundColor: '#D9DADF',
+                                                    color: '#1C1B22',
                                                     padding: '8px 16px',
                                                     borderRadius: '5px',
                                                     fontSize: '14px',

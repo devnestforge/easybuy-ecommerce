@@ -2,6 +2,9 @@ import requestOptions from './requestOptions'
 import generalMappers from '../mappers/generalMapper'
 import { logError } from '../../logs/ErrorLoger'
 import base64 from 'react-native-base64'
+import secutiryMapper from '../mappers/secutiryMapper'
+import auditoryServices from '../services/auditoryServices'
+let responseMapper = []
 
 const getShippingServices = async () => {
     try {
@@ -104,11 +107,39 @@ const getRegionsServices = async () => {
     }
 }
 
+const sendContactService = async (data) => {
+    try {
+        const token = localStorage.getItem('authToken')
+        const secretKey = global.SECRETKEY
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('POST', credentials, data)
+        const resp = await fetch(global.SENDCONTACT, options)
+        const dataResp = await resp.json()
+        responseMapper = secutiryMapper.userDataMapper(dataResp)
+    } catch (e) {
+        const data = {
+            "section_error": "userServices.jsx front",
+            "detail_error": "saveAddressService user",
+            "mensaje_error": e.message,
+            "user_transac": 0,
+            "module_transac": "Front userServices.jsx saveAddressService user",
+            "operation_date": new Date(),
+            "operation_user": 0,
+            "operation_ip": localStorage.getItem('ip'),
+            "env": 2
+        }
+
+        auditoryServices.catchErrorService(data)
+    }
+    return responseMapper
+}
+
 const generalServices = {
     getShippingServices,
     getDiscountServices,
     getPayMethodServices,
-    getRegionsServices
+    getRegionsServices,
+    sendContactService
 }
 
 export default generalServices;
