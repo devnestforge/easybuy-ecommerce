@@ -6,6 +6,7 @@ import Spiner from '../../components/modals/Spiner'
 import ErrorPage from '../../components/error'
 import { useCart } from '../../functions/context/CartProvider' // Importa el hook de CartContext
 import t from '../../translations/i18n'
+import RatingStars from '../../components/RatingStars'
 
 const decryptId = (encryptedId) => {
   const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '==' // Decodifica la id
@@ -19,12 +20,72 @@ export default function ProductsDetail() {
   const [load, setLoad] = useState(false)
   const [quantity, setQuantity] = useState(1)
   const { addToCart } = useCart()
+  const [activeTab, setActiveTab] = useState('product-desc-tab')
+  const [rating, setRating] = useState(0)
+  const [reviewText, setReviewText] = useState('')
+  const token = localStorage.getItem('authToken')
+  const isLoggedIn = !!token
 
   useEffect(() => {
     setLoad(true)
     const decryptedId = decryptId(id)
     getProductsDetail(decryptedId)
   }, [id])
+
+  const [reviews, setReviews] = useState([
+    {
+      id: 1,
+      user: "Samanta J.",
+      rating: (5 / 5) * 100,
+      date: "6 days ago",
+      title: "Good, perfect size",
+      content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!",
+      helpful: 2,
+      unhelpful: 0,
+    },
+    {
+      id: 2,
+      user: "John Doe",
+      rating: (1 / 5) * 100,
+      date: "5 days ago",
+      title: "Very good",
+      content: "Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!",
+      helpful: 0,
+      unhelpful: 0,
+    }
+  ])
+
+  const [newReview, setNewReview] = useState({
+    name: '',
+    title: '',
+    content: '',
+    rating: 0,
+    cedula: '',
+    email: '',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewReview((prevReview) => ({
+      ...prevReview,
+      [name]: value,
+    }));
+  };
+
+  const handleAddReview = (e) => {
+    console.log(`Calificación: ${rating} estrellas`);
+    console.log(`Reseña: ${reviewText}`);
+    e.preventDefault();
+    const newReviewData = {
+      ...newReview,
+      id: reviews.length + 1,
+      date: 'Just now',
+      helpful: 0,
+      unhelpful: 0,
+    };
+    setReviews((prevReviews) => [...prevReviews, newReviewData]);
+    setNewReview({ name: '', title: '', content: '', rating: 0 });
+  };
 
   const getProductsDetail = async (productId) => {
     try {
@@ -47,7 +108,7 @@ export default function ProductsDetail() {
 
   const handleAddToCart = () => {
     //const iva = product.iva_precio // * ProductionQuantityLimitsSharp
-    
+
     //const total = product.prod_precio * quantity + iva
     addToCart({
       id: product.id,
@@ -91,7 +152,7 @@ export default function ProductsDetail() {
               <div className="col-md-6">
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row">
-                  <span className="product-label label-circle label-sale">Oferta</span>
+                    <span className="product-label label-circle label-sale">Oferta</span>
                     <figure className="product-main-image">
                       {product.url_imagen ? (
                         <img
@@ -114,10 +175,10 @@ export default function ProductsDetail() {
                   <div className="product-price">
                     {isDiscountAvailable ? (
                       <>
-                      
+
                         <span className="new-price">${product.precio_descuento}</span>
                         <span className="old-price">antes ${product.prod_precio}</span>
-                        
+
                       </>
                     ) : (
                       <span>${product.prod_precio}</span>
@@ -156,16 +217,237 @@ export default function ProductsDetail() {
 
                   <div className="product-details-footer">
                     <div className="product-cat">
-                    <span>{t('products.category')}</span>
+                      <span>{t('products.category')}</span>
                       <a href="!#">{product.cat_name}</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="col-md-12">
+                <div className="product-details-tab">
+                  <ul className="nav nav-pills justify-content-center" role="tablist">
+                    <li className="nav-item">
+                      <a className="nav-link active" id="product-desc-link" data-toggle="tab" href="#product-desc-tab" role="tab" aria-controls="product-desc-tab" aria-selected="true">{t('products.Description')}</a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" id="product-info-link" data-toggle="tab" href="#product-info-tab" role="tab" aria-controls="product-info-tab" aria-selected="false">{t('products.Aditgional_info')}</a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" id="product-shipping-link" data-toggle="tab" href="#product-shipping-tab" role="tab" aria-controls="product-shipping-tab" aria-selected="false">{t('products.Shipping_returns_info')}</a>
+                    </li>
+                    <li className="nav-item">
+                      <a className="nav-link" id="product-review-link" data-toggle="tab" href="#product-review-tab" role="tab" aria-controls="product-review-tab" aria-selected="false">{t('products.reviews')}</a>
+                    </li>
+                  </ul>
+                  <div className="tab-content">
+                    <div
+                      className={`tab-pane fade ${activeTab === 'product-desc-tab' ? 'show active' : ''}`}
+                      id="product-desc-tab"
+                      role="tabpanel"
+                      aria-labelledby="product-desc-link"
+                    >
+                      <div className="product-desc-content">
+                        <h3>{t('products.Description')}</h3>
+                        <p>{product.observacion}</p>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`tab-pane fade ${activeTab === 'product-info-tab' ? 'show active' : ''}`}
+                      id="product-info-tab"
+                      role="tabpanel"
+                      aria-labelledby="product-info-link"
+                    >
+                      <div className="product-desc-content">
+                        <h3>{t('products.Aditgional_info')}</h3>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <ul>
+                              <li><strong>{t('product_details.Weight_prod')}</strong> {product.peso || "N/A"}</li>
+                              <li><strong>{t('product_details.Height_prod')}</strong> {product.alto || "N/A"}</li>
+                              <li><strong>{t('product_details.Width_prod')}</strong> {product.ancho || "N/A"}</li>
+                              <li><strong>{t('product_details.Length_prod')}</strong> {product.largo || "N/A"}</li>
+                              <li><strong>{t('product_details.Size_prod')}</strong> {product.talla || "N/A"}</li>
+                            </ul>
+                          </div>
+                          <div className="col-md-6">
+                            <ul>
+                              <li><strong>{t('product_details.Dimensions_prod')}</strong> {product.dimensiones || "N/A"}</li>
+                              <li><strong>{t('product_details.Release_Date_prod')}</strong> {product.fecha_lanzamiento || "N/A"}</li>
+                              <li><strong>{t('product_details.Manufacturer_prod')}</strong> {product.fabricante || "N/A"}</li>
+                              <li><strong>{t('product_details.Year_prod')}</strong> {product.anio_fabricacion || "N/A"}</li>
+                              <li><strong>{t('product_details.Warranty_prod')}</strong> {product.garantia || "N/A"}</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`tab-pane fade ${activeTab === 'product-shipping-tab' ? 'show active' : ''}`}
+                      id="product-shipping-tab"
+                      role="tabpanel"
+                      aria-labelledby="product-shipping-link"
+                    >
+                      <div className="product-desc-content">
+                        <h3>{t('products.Shipping_returns_info')}</h3>
+                        <p>{t('shipping.shipping_intro')}</p>
+                        <h4>{t('shipping.return_policy_title')}</h4>
+                        <p>{t('shipping.return_policy_intro')}</p>
+                        <ul>
+                          <li>{t('shipping.return_condition_1')}</li>
+                          <li>{t('shipping.return_condition_2')}</li>
+                          <li>{t('shipping.return_condition_3')}</li>
+                        </ul>
+                        <h4>{t('shipping.terms_conditions_title')}</h4>
+                        <p>{t('shipping.terms_conditions_intro')}</p>
+                        <p>{t('shipping.contact_for_more_info')}</p>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`tab-pane fade ${activeTab === 'product-review-tab' ? 'show active' : ''}`}
+                      id="product-review-tab"
+                      role="tabpanel"
+                      aria-labelledby="product-review-link"
+                    >
+                      <div className="reviews">
+                        <div className="touch-container row justify-content-center">
+                          <div className="col-md-9 col-lg-7">
+                            <div className="text-center">
+                              <h2 className="title mb-1">Reviews</h2>
+                              <p className="mb-3">Share your experience with the product.</p>
+                            </div>
+
+                            <form onSubmit={handleAddReview} className="contact-form mb-2">
+                              <div className="row">
+                                <div className="col-sm-12">
+                                  <label>Calificación</label>
+                                  <RatingStars initialRating={rating} onRatingChange={setRating} />
+                                </div>
+                                
+                                {!isLoggedIn && (
+                                  <>
+                                  <div className="col-sm-12">
+                                  <label className="sr-only">Name</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    placeholder="email"
+                                    required
+                                    value={newReview.email}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                  </>
+                                )}
+                                <div className="col-sm-12">
+                                  <label className="sr-only">Name</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="name"
+                                    placeholder="Your name"
+                                    required
+                                    value={newReview.name}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                <div className="col-sm-12">
+                                  <label className="sr-only">Title</label>
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="title"
+                                    placeholder="Review title"
+                                    required
+                                    value={newReview.title}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                <div className="col-sm-12">
+                                  <label className="sr-only">Review</label>
+                                  <textarea
+                                    className="form-control"
+                                    name="content"
+                                    rows="4"
+                                    required
+                                    value={newReview.content}
+                                    onChange={handleInputChange}
+                                    placeholder="Write your review here"
+                                  ></textarea>
+                                </div>
+                                <div className="col-sm-12">
+                                  <label className="sr-only">Rating</label>
+                                  <input
+                                    type="number"
+                                    className="form-control"
+                                    name="rating"
+                                    placeholder="Rating (0-100)"
+                                    required
+                                    value={newReview.rating}
+                                    onChange={handleInputChange}
+                                    max="100"
+                                    min="0"
+                                  />
+                                </div>
+                              </div>
+                              <div className="text-center mt-3">
+                                <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
+                                  Submit Review
+                                </button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+
+                        <div className="reviews mt-5">
+                          <h3>Reviews ({reviews.length})</h3>
+                          {reviews.map((review) => (
+                            <div key={review.id} className="review">
+                              <div className="row no-gutters">
+                                <div className="col-auto">
+                                  <h4>
+                                    <a href="#">{review.name}</a>
+                                  </h4>
+                                  {/* Mostrar las estrellas con el porcentaje */}
+                                  <div className="ratings-container">
+                                    <div className="ratings">
+                                      <div
+                                        className="ratings-val"
+                                        style={{ width: `${review.rating}%` }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                  <span className="review-date">{review.date}</span>
+                                </div>
+                                <div className="col">
+                                  <h4>{review.title}</h4>
+                                  <div className="review-content">
+                                    <p>{review.content}</p>
+                                  </div>
+                                  <div className="review-action">
+                                    <a href="#">
+                                      <i className="icon-thumbs-up"></i>Helpful ({review.helpful})
+                                    </a>
+                                    <a href="#">
+                                      <i className="icon-thumbs-down"></i>Unhelpful ({review.unhelpful})
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Resto del código (tabs y detalles adicionales) */}
         </div>
       </div>
     </main>
