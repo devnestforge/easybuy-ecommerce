@@ -78,11 +78,24 @@ const reviewsMapper = (data) => {
   return prodMapper;
 }
 
+const imgProdMapper = (data) => {
+  let prodMapper = [];
+  for (var i = 0; i < data.length; i++) {
+    prodMapper[i] = {
+      id: data[i].id ?? '',
+      url_imagen: data[i].url_imagen ?? ''
+    }
+    prodMapper.push(prodMapper[i]);
+  }
+  return prodMapper;
+}
+
 const productsMapper = {
   productMapper,
   categoriMapper,
   productIdMapper,
-  reviewsMapper
+  reviewsMapper,
+  imgProdMapper
 }
 
 export default productsMapper;

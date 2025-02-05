@@ -27,6 +27,25 @@ export default function ProductsDetail() {
   const token = localStorage.getItem('authToken')
   const isLoggedIn = !!token
   const { enqueueSnackbar } = useSnackbar()
+  const [isVisible, setIsVisible] = useState(true)
+  const [mainImage, setMainImage] = useState('')
+  const [images, setImages] = useState([])
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+
+  const handleScroll = () => {
+    if (window.scrollY > 30) {
+      setIsVisible(true)
+    } else {
+      setIsVisible(false)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
 
   useEffect(() => {
     setLoad(true)
@@ -35,28 +54,7 @@ export default function ProductsDetail() {
     getProductsDetail(decryptedId)
   }, [id])
 
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      user: "Samanta J.",
-      rating: (5 / 5) * 100,
-      date: "6 days ago",
-      title: "Good, perfect size",
-      content: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus cum dolores assumenda asperiores facilis porro reprehenderit animi culpa atque blanditiis commodi perspiciatis doloremque, possimus, explicabo, autem fugit beatae quae voluptas!",
-      helpful: 2,
-      unhelpful: 0,
-    },
-    {
-      id: 2,
-      user: "John Doe",
-      rating: (1 / 5) * 100,
-      date: "5 days ago",
-      title: "Very good",
-      content: "Sed, molestias, tempore? Ex dolor esse iure hic veniam laborum blanditiis laudantium iste amet. Cum non voluptate eos enim, ab cumque nam, modi, quas iure illum repellendus, blanditiis perspiciatis beatae!",
-      helpful: 0,
-      unhelpful: 0,
-    }
-  ])
+  const [reviews, setReviews] = useState([])
 
   const [newReview, setNewReview] = useState({
     name: '',
@@ -143,12 +141,20 @@ export default function ProductsDetail() {
     }
   }
 
+  const handleImageClick = (image, index) => {
+    setMainImage(global.IMGProd + image.url_imagen)
+    setSelectedImageIndex(index)
+
+  }
+
   const getProductsDetail = async (productId) => {
     try {
       const productDetails = await productsLogic.getProductsLogic(productId, '')
       if (productDetails.success && productDetails.data.length > 0) {
+        setMainImage(global.IMGProd + productDetails.data[0].url_imagen)
         setProduct(productDetails.data[0])
         setReviews(productDetails.review)
+        setImages(productDetails.prodImgs)
       } else {
         setProduct(null)
       }
@@ -189,18 +195,12 @@ export default function ProductsDetail() {
 
   const getAverageRating = () => {
     if (reviews.length === 0) return 0;
-  
-    // Asegurar que los valores sean numéricos
-    const totalRating = reviews.reduce((sum, review) => sum + Number(review.rating), 0);
-    const averageRating = totalRating / reviews.length; // Calcula el promedio correctamente
-  
-  
-    return averageRating; 
-  };
-  
-  const averageRatingPercentage = getAverageRating()
+    const totalRating = reviews.reduce((sum, review) => sum + Number(review.rating), 0)
+    const averageRating = totalRating / reviews.length
+    return averageRating;
+  }
 
-  console.log(averageRatingPercentage)
+  const averageRatingPercentage = getAverageRating()
 
   const isDiscountAvailable =
     product.valor_descuento &&
@@ -218,6 +218,7 @@ export default function ProductsDetail() {
         <div className="container">
           <div className="product-details-top">
             <div className="row">
+
               {/* Panel Izquierdo: Imagen */}
               <div className="col-md-6">
                 <div className="product-gallery product-gallery-vertical">
@@ -227,26 +228,39 @@ export default function ProductsDetail() {
                       {product.url_imagen ? (
                         <img
                           id="product-zoom"
-                          src={`${global.IMGProd}${product.url_imagen}`}
-                          alt={product.prod_name}
+                          src={mainImage}
+                          alt="product image"
                           className="img-fluid"
                         />
                       ) : (
                         <div>No image available</div>
                       )}
                     </figure>
+                    <div id="product-zoom-gallery" className="product-image-gallery">
+                      {images.map((img, index) => (
+                        <a
+                          key={`${index}-${img.url_imagen}`}
+                          id={`${index}-${img.url_imagen}`}
+                          className={`product-gallery-item ${index === selectedImageIndex ? 'active' : ''}`}
+                          href="#"
+                          onClick={(e) => {
+                            e.preventDefault(); // Prevent page reload
+                            handleImageClick(img, index); // Pasa la imagen completa y el índice
+                          }}
+                          data-zoom-image={`${global.IMGProd}${img.url_imagen}`}
+                        >
+                          <img src={`${global.IMGProd}${img.url_imagen}`} alt={`product image ${index + 1}`} />
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* Panel Derecho: Detalles */}
               <div className="col-md-6 mx-auto">
                 <div className="product-details panel p-4 shadow-sm rounded bg-white">
-
-                  {/* Nombre del Producto */}
                   <h1 className="product-title text-center mb-3">{product.prod_name}</h1>
                   <div className="ratings-container d-flex justify-content-center align-items-center border-bottom pb-2 mb-3">
-
                     Calificación promedio:
                     <div className="ratings">
                       <div
@@ -256,7 +270,6 @@ export default function ProductsDetail() {
                     </div>
                     <a className="ratings-text" href="#product-review-link" id="review-link">Reviews ({reviews.length})</a>
                   </div>
-                  {/* Precio */}
                   <div className="product-price d-flex justify-content-center align-items-center border-bottom pb-2 mb-3">
                     {isDiscountAvailable ? (
                       <>Precio -
@@ -502,6 +515,54 @@ export default function ProductsDetail() {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={`sticky-bar ${isVisible ? 'visible' : 'hidden'}`}>
+        <div className="container">
+          <div className="row">
+            <div className="col-6">
+              <figure className="product-media">
+                <a href="product.html">
+                  <img src={`${global.IMGProd}${product.url_imagen}`} alt="Product image" />
+                </a>
+              </figure>
+              <h4 className="product-title">
+                {product.prod_name}
+              </h4>
+            </div>
+
+            <div className="col-6 justify-content-end">
+              <div className="product-price">
+                {isDiscountAvailable ? (
+                  <>
+                    <span className="new-price text-success fw-bold fs-4">${product.precio_descuento}</span>
+                    <span className="old-price text-muted text-decoration-line-through ms-3">Antes: ${product.prod_precio}</span>
+                  </>
+                ) : (
+                  <><span className="fs-4">${product.prod_precio}</span></>
+                )}
+              </div>
+              <div className="product-details-quantity">
+                <input
+                  type="number"
+                  id="sticky-cart-qty"
+                  className="form-control"
+                  value="1"
+                  min="1"
+                  max="10"
+                  step="1"
+                  data-decimals="0"
+                  required
+                />
+              </div>
+
+              <div className="product-details-action">
+                <button className="btn-primary w-100 fw-bold py-2" onClick={handleAddToCart}>
+                  {t('products.add_to_cart')}
+                </button>
               </div>
             </div>
           </div>

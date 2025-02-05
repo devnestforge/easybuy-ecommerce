@@ -23,7 +23,9 @@ const getProductsService = async (idProduct, search) => {
                 idProduct === 0 ?
                     generalMappers.successMapper(productsMapper.productMapper(response.data.data), 1)
                     :
-                    generalMappers.successProdDetailMapper(productsMapper.productMapper(response.data.data), 1, productsMapper.reviewsMapper(response.data.prodcutReview))
+                    generalMappers.successProdDetailMapper(productsMapper.productMapper(response.data.data), 1,
+                        productsMapper.reviewsMapper(response.data.prodcutReview),
+                        productsMapper.imgProdMapper(response.data.prodcutImg))
                 :
                 generalMappers.responseMapper(response, 1)
         } else {

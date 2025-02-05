@@ -36,7 +36,7 @@ const successMapper = async (data, rowsTotal) => {
     return responseMapper
 }
 
-const successProdDetailMapper = async (data, rowsTotal, review) => {
+const successProdDetailMapper = async (data, rowsTotal, review, prodImgs) => {
     let responseMapper = []
     responseMapper = {
         code: '200',
@@ -45,7 +45,8 @@ const successProdDetailMapper = async (data, rowsTotal, review) => {
         message: global.SUCCESS_MESSAGE_GET,
         variant: global.VARIANT_SUCCESS,
         data: data,
-        review: review
+        review: review,
+        prodImgs: prodImgs
     }
     return responseMapper
 }
