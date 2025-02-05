@@ -143,7 +143,15 @@
     "reviews": "Reseñas",
     "Description_desc": "Información del producto",
     "Aditgional_info": "Información adicional",
-    "Shipping_returns_info": "Envíos y devoluciones"
+    "Shipping_returns_info": "Envíos y devoluciones",
+    "Review": "Reseña",
+    "Tittle": "Agrega tu experiencia con el producto.",
+    "Name": "Nombre",
+    "Email": "Correo",
+    "Review_tittle": "Título de reseña",
+    "Review_text": "Escribe tu reseña",
+    "rate": "Calificación",
+    "send_comment": "Enviar comentario"
   },
   "shipping": {
     "shipping_intro": "Ofrecemos opciones de envío rápidas y seguras para que puedas recibir tus productos lo antes posible. Antes de realizar tu compra, te recomendamos revisar cuidadosamente las especificaciones del producto para asegurarte de que cumpla con tus expectativas.",

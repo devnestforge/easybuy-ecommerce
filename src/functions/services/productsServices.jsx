@@ -2,6 +2,10 @@ import requestOptions from './requestOptions'
 import generalMappers from '../mappers/generalMapper'
 import productsMapper from '../mappers/productsMapper'
 import { logError } from '../../logs/ErrorLoger'
+import base64 from 'react-native-base64'
+import secutiryMapper from '../mappers/secutiryMapper'
+import auditoryServices from '../services/auditoryServices'
+let responseMapper = []
 
 const getProductsService = async (idProduct, search) => {
     try {
@@ -15,11 +19,11 @@ const getProductsService = async (idProduct, search) => {
         const response = await resp.json()
         let respAnswer = []
         if (!response.error) {
-            respAnswer = response.data.length > 0 ?
+            respAnswer = response.data.data.length > 0 ?
                 idProduct === 0 ?
-                    generalMappers.successMapper(productsMapper.productMapper(response.data), 1)
+                    generalMappers.successMapper(productsMapper.productMapper(response.data.data), 1)
                     :
-                    generalMappers.successMapper(productsMapper.productMapper(response.data), 1)
+                    generalMappers.successProdDetailMapper(productsMapper.productMapper(response.data.data), 1, productsMapper.reviewsMapper(response.data.prodcutReview))
                 :
                 generalMappers.responseMapper(response, 1)
         } else {
@@ -110,12 +114,39 @@ const getProductsSearchService = async (page, perPage, search) => {
     }
 }
 
+const saveProductReviewService = async (token, data) => {
+    try {
+        const secretKey = global.SECRETKEY
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('POST', credentials, data)
+        const resp = await fetch(global.SENDREVIEW, options)
+        const dataResp = await resp.json()
+        responseMapper = generalMappers.responseMapper(dataResp, 1)
+    } catch (e) {
+        const data = {
+            "section_error": "productsServices.jsx front",
+            "detail_error": "saveProductReviewService user",
+            "mensaje_error": e.message,
+            "user_transac": 0,
+            "module_transac": "Front saveProductReviewService.jsx saveProductReviewService user",
+            "operation_date": new Date(),
+            "operation_user": 0,
+            "operation_ip": localStorage.getItem('ip'),
+            "env": 2
+        }
+
+        auditoryServices.catchErrorService(data)
+    }
+    return responseMapper
+}
+
 const productsServices = {
     getPromotionService,
     getRecomendedService,
     getProductsService,
     getCategoriesService,
-    getProductsSearchService
+    getProductsSearchService,
+    saveProductReviewService
 }
 
 export default productsServices

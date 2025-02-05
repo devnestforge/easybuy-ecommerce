@@ -62,11 +62,27 @@ const categoriMapper = (data) => {
   return prodMapper;
 }
 
+const reviewsMapper = (data) => {
+  let prodMapper = [];
+  for (var i = 0; i < data.length; i++) {
+    prodMapper[i] = {
+      id: data[i].id ?? '',
+      user: data[i].name ?? '',
+      rating: data[i].rate_porcentaje ?? '',
+      date: data[i].creation_date ?? '',
+      title: data[i].tittle_review ?? '',
+      content: data[i].review || ''
+    }
+    prodMapper.push(prodMapper[i]);
+  }
+  return prodMapper;
+}
 
 const productsMapper = {
   productMapper,
   categoriMapper,
-  productIdMapper
+  productIdMapper,
+  reviewsMapper
 }
 
 export default productsMapper;

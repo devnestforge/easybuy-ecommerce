@@ -36,6 +36,20 @@ const successMapper = async (data, rowsTotal) => {
     return responseMapper
 }
 
+const successProdDetailMapper = async (data, rowsTotal, review) => {
+    let responseMapper = []
+    responseMapper = {
+        code: '200',
+        success: true,
+        totalRows: rowsTotal,
+        message: global.SUCCESS_MESSAGE_GET,
+        variant: global.VARIANT_SUCCESS,
+        data: data,
+        review: review
+    }
+    return responseMapper
+}
+
 const loginRegisterMapper = async (data, rowsTotal) => {
     let responseMapper = []
     responseMapper = {
@@ -83,7 +97,8 @@ const generalMappers = {
     errorMapper,
     loginRegisterMapper,
     shippingsMapper,
-    discountMapper
+    discountMapper,
+    successProdDetailMapper
 }
 
 export default generalMappers

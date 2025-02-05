@@ -25,12 +25,27 @@ const getProductsSearchLogic = async (page, perPage, search) => {
     return dataResp
 }
 
+const saveProductReviewLogic = async (token, name, title, contenta, rating, email, productId) => {
+    let dataSave = {
+        name: name,
+        creation_ip: localStorage.getItem('ip'),
+        title: title,
+        content: contenta,
+        rating: rating,
+        email: email,
+        product_id: productId
+    }
+    const dataResp = await productsServices.saveProductReviewService(token, dataSave)
+    return dataResp
+}
+
 const productsLogic = {
     getPromotionsLogic,
     getRecomendedLogic,
     getProductsLogic,
     getCategoriesLogic,
-    getProductsSearchLogic
+    getProductsSearchLogic,
+    saveProductReviewLogic
 }
 
 export default productsLogic

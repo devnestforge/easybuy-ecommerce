@@ -28,6 +28,7 @@ global.GETDISCOUTNCODE = global.URLBACKENDSECURITY + '/ecomerce/getDiscountCode'
 global.GETPAYMETHOD = global.URLBACKENDSECURITY + '/ecomerce/getPayMethod'
 global.GETREGIONS = global.URLBACKENDSECURITY + '/ecomerce/getRegions'
 global.SENDCONTACT = global.URLBACKENDSECURITY + '/ecomerce/sentContact'
+global.SENDREVIEW = global.URLBACKENDSECURITY + '/ecomerce/sentReview'
 
 // PRODUCTS
 global.PRODUCTS = global.URLBACKENDSECURITY  + "/ecomerce/getProducts"

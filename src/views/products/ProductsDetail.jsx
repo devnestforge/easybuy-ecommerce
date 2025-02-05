@@ -4,12 +4,13 @@ import CryptoJS from 'crypto-js'
 import productsLogic from '../../functions/logic/productsLogic'
 import Spiner from '../../components/modals/Spiner'
 import ErrorPage from '../../components/error'
-import { useCart } from '../../functions/context/CartProvider' // Importa el hook de CartContext
+import { useCart } from '../../functions/context/CartProvider'
 import t from '../../translations/i18n'
 import RatingStars from '../../components/RatingStars'
+import { useSnackbar } from 'notistack'
 
 const decryptId = (encryptedId) => {
-  const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '==' // Decodifica la id
+  const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '=='
   const bytes = CryptoJS.AES.decrypt(base64, 'secret-key')
   return bytes.toString(CryptoJS.enc.Utf8)
 }
@@ -19,16 +20,18 @@ export default function ProductsDetail() {
   const [product, setProduct] = useState(null)
   const [load, setLoad] = useState(false)
   const [quantity, setQuantity] = useState(1)
+  const [productId, setProductId] = useState(1)
   const { addToCart } = useCart()
   const [activeTab, setActiveTab] = useState('product-desc-tab')
   const [rating, setRating] = useState(0)
-  const [reviewText, setReviewText] = useState('')
   const token = localStorage.getItem('authToken')
   const isLoggedIn = !!token
+  const { enqueueSnackbar } = useSnackbar()
 
   useEffect(() => {
     setLoad(true)
     const decryptedId = decryptId(id)
+    setProductId(decryptedId)
     getProductsDetail(decryptedId)
   }, [id])
 
@@ -62,36 +65,90 @@ export default function ProductsDetail() {
     rating: 0,
     cedula: '',
     email: '',
-  });
+  })
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setNewReview((prevReview) => ({
       ...prevReview,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
-  const handleAddReview = (e) => {
-    console.log(`Calificación: ${rating} estrellas`);
-    console.log(`Reseña: ${reviewText}`);
-    e.preventDefault();
-    const newReviewData = {
-      ...newReview,
-      id: reviews.length + 1,
-      date: 'Just now',
-      helpful: 0,
-      unhelpful: 0,
-    };
-    setReviews((prevReviews) => [...prevReviews, newReviewData]);
-    setNewReview({ name: '', title: '', content: '', rating: 0 });
-  };
+  const handleAddReview = async (e) => {
+    setLoad(true)
+    e.preventDefault()
+    if (!newReview.title.trim() || !newReview.content.trim()) {
+      enqueueSnackbar("Por favor, completa todos los campos antes de enviar la reseña.", {
+        variant: 'warning',
+        anchorOrigin: {
+          vertical: global.SNACKBARVER,
+          horizontal: global.SNACKBARHOR
+        }
+      })
+      return
+    }
+
+    if (!isLoggedIn) {
+      if (!newReview.name.trim() || !newReview.email.trim()) {
+        enqueueSnackbar("Por favor, completa todos los campos antes de enviar la reseña", {
+          variant: 'warning',
+          anchorOrigin: {
+            vertical: global.SNACKBARVER,
+            horizontal: global.SNACKBARHOR
+          }
+        })
+        return
+      }
+    }
+
+    if (isLoggedIn) {
+      if (rating === 0) {
+        enqueueSnackbar("Por favor, selecciona una calificación.", {
+          variant: 'warning',
+          anchorOrigin: {
+            vertical: global.SNACKBARVER,
+            horizontal: global.SNACKBARHOR
+          }
+        })
+        return
+      }
+    }
+
+    const resp = await productsLogic.saveProductReviewLogic(token, newReview.name, newReview.title, newReview.content, rating, newReview.email, productId)
+    enqueueSnackbar(resp.data.message, {
+      variant: resp.data.variant,
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
+    })
+
+    if (resp.success) {
+
+      const newReviewData = {
+        ...newReview,
+        rating,
+        id: reviews.length + 1,
+        date: "Just now",
+        helpful: 0,
+        unhelpful: 0,
+      }
+
+      setReviews((prevReviews) => [...prevReviews, newReviewData])
+
+      setNewReview({ name: "", title: "", content: "" })
+      setRating(0)
+      setLoad(false)
+    }
+  }
 
   const getProductsDetail = async (productId) => {
     try {
       const productDetails = await productsLogic.getProductsLogic(productId, '')
       if (productDetails.success && productDetails.data.length > 0) {
         setProduct(productDetails.data[0])
+        setReviews(productDetails.review)
       } else {
         setProduct(null)
       }
@@ -107,9 +164,6 @@ export default function ProductsDetail() {
   }
 
   const handleAddToCart = () => {
-    //const iva = product.iva_precio // * ProductionQuantityLimitsSharp
-
-    //const total = product.prod_precio * quantity + iva
     addToCart({
       id: product.id,
       empresa_id: product.empresa_id,
@@ -196,8 +250,8 @@ export default function ProductsDetail() {
                         type="number"
                         id="qty"
                         className="form-control"
-                        value={quantity} // Valor ligado al estado
-                        onChange={handleQuantityChange} // Controlador para actualizar el estado
+                        value={quantity}
+                        onChange={handleQuantityChange}
                         min="1"
                         max="10"
                         step="1"
@@ -209,7 +263,7 @@ export default function ProductsDetail() {
                   <div className="product-details-action">
                     <button
                       className="btn-product btn-cart"
-                      onClick={handleAddToCart} // Agrega el producto al carrito al hacer clic
+                      onClick={handleAddToCart}
                     >
                       <span>{t('products.add_to_cart')}</span>
                     </button>
@@ -313,97 +367,8 @@ export default function ProductsDetail() {
                       aria-labelledby="product-review-link"
                     >
                       <div className="reviews">
-                        <div className="touch-container row justify-content-center">
-                          <div className="col-md-9 col-lg-7">
-                            <div className="text-center">
-                              <h2 className="title mb-1">Reviews</h2>
-                              <p className="mb-3">Share your experience with the product.</p>
-                            </div>
 
-                            <form onSubmit={handleAddReview} className="contact-form mb-2">
-                              <div className="row">
-                                <div className="col-sm-12">
-                                  <label>Calificación</label>
-                                  <RatingStars initialRating={rating} onRatingChange={setRating} />
-                                </div>
-                                
-                                {!isLoggedIn && (
-                                  <>
-                                  <div className="col-sm-12">
-                                  <label className="sr-only">Name</label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    name="name"
-                                    placeholder="email"
-                                    required
-                                    value={newReview.email}
-                                    onChange={handleInputChange}
-                                  />
-                                </div>
-                                  </>
-                                )}
-                                <div className="col-sm-12">
-                                  <label className="sr-only">Name</label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    name="name"
-                                    placeholder="Your name"
-                                    required
-                                    value={newReview.name}
-                                    onChange={handleInputChange}
-                                  />
-                                </div>
-                                <div className="col-sm-12">
-                                  <label className="sr-only">Title</label>
-                                  <input
-                                    type="text"
-                                    className="form-control"
-                                    name="title"
-                                    placeholder="Review title"
-                                    required
-                                    value={newReview.title}
-                                    onChange={handleInputChange}
-                                  />
-                                </div>
-                                <div className="col-sm-12">
-                                  <label className="sr-only">Review</label>
-                                  <textarea
-                                    className="form-control"
-                                    name="content"
-                                    rows="4"
-                                    required
-                                    value={newReview.content}
-                                    onChange={handleInputChange}
-                                    placeholder="Write your review here"
-                                  ></textarea>
-                                </div>
-                                <div className="col-sm-12">
-                                  <label className="sr-only">Rating</label>
-                                  <input
-                                    type="number"
-                                    className="form-control"
-                                    name="rating"
-                                    placeholder="Rating (0-100)"
-                                    required
-                                    value={newReview.rating}
-                                    onChange={handleInputChange}
-                                    max="100"
-                                    min="0"
-                                  />
-                                </div>
-                              </div>
-                              <div className="text-center mt-3">
-                                <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
-                                  Submit Review
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-
-                        <div className="reviews mt-5">
+                        <div className="reviews mt-1">
                           <h3>Reviews ({reviews.length})</h3>
                           {reviews.map((review) => (
                             <div key={review.id} className="review">
@@ -412,7 +377,6 @@ export default function ProductsDetail() {
                                   <h4>
                                     <a href="#">{review.name}</a>
                                   </h4>
-                                  {/* Mostrar las estrellas con el porcentaje */}
                                   <div className="ratings-container">
                                     <div className="ratings">
                                       <div
@@ -424,22 +388,90 @@ export default function ProductsDetail() {
                                   <span className="review-date">{review.date}</span>
                                 </div>
                                 <div className="col">
+                                  <h4>
+                                    <a href="#">{review.user}</a>
+                                  </h4>
                                   <h4>{review.title}</h4>
                                   <div className="review-content">
                                     <p>{review.content}</p>
-                                  </div>
-                                  <div className="review-action">
-                                    <a href="#">
-                                      <i className="icon-thumbs-up"></i>Helpful ({review.helpful})
-                                    </a>
-                                    <a href="#">
-                                      <i className="icon-thumbs-down"></i>Unhelpful ({review.unhelpful})
-                                    </a>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           ))}
+                        </div>
+
+                        <div className="touch-container row justify-content-center">
+                          <div className="col-md-9 col-lg-7 mt-2">
+                            <div className="text-center">
+                              <h2 className="title mb-1">{t('products.Review')}</h2>
+                              <p className="mb-3">{t('products.Tittle')}</p>
+                            </div>
+                            <form onSubmit={handleAddReview} className="contact-form mb-2">
+                              <div className="row">
+                                {!isLoggedIn && (
+                                  <>
+                                    <div className="col-sm-12">
+                                      <input
+                                        type="email"
+                                        className="form-control"
+                                        name="email"
+                                        placeholder={t('products.Email')}
+                                        required
+                                        value={newReview.email}
+                                        onChange={handleInputChange}
+                                      />
+                                    </div>
+
+                                    <div className="col-sm-12">
+                                      <input
+                                        type="text"
+                                        className="form-control"
+                                        name="name"
+                                        placeholder={t('products.Name')}
+                                        required
+                                        value={newReview.name}
+                                        onChange={handleInputChange}
+                                      />
+                                    </div>
+                                  </>
+                                )}
+                                <div className="col-sm-12">
+                                  <input
+                                    type="text"
+                                    className="form-control"
+                                    name="title"
+                                    placeholder={t('products.Review_tittle')}
+                                    required
+                                    value={newReview.title}
+                                    onChange={handleInputChange}
+                                  />
+                                </div>
+                                <div className="col-sm-12">
+                                  <textarea
+                                    className="form-control"
+                                    name="content"
+                                    rows="4"
+                                    required
+                                    value={newReview.content}
+                                    onChange={handleInputChange}
+                                    placeholder={t('products.Review_text')}
+                                  ></textarea>
+                                </div>
+                                {isLoggedIn && (
+                                  <div className="col-sm-12">
+                                    <label>{t('products.rate')}</label>
+                                    <RatingStars initialRating={rating} onRatingChange={setRating} />
+                                  </div>
+                                )}
+                              </div>
+                              <div className="text-center mt-1">
+                                <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
+                                  {t('products.send_comment')}
+                                </button>
+                              </div>
+                            </form>
+                          </div>
                         </div>
                       </div>
                     </div>
