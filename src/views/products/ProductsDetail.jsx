@@ -187,6 +187,21 @@ export default function ProductsDetail() {
     setQuantity(value)
   }
 
+  const getAverageRating = () => {
+    if (reviews.length === 0) return 0;
+  
+    // Asegurar que los valores sean numéricos
+    const totalRating = reviews.reduce((sum, review) => sum + Number(review.rating), 0);
+    const averageRating = totalRating / reviews.length; // Calcula el promedio correctamente
+  
+  
+    return averageRating; 
+  };
+  
+  const averageRatingPercentage = getAverageRating()
+
+  console.log(averageRatingPercentage)
+
   const isDiscountAvailable =
     product.valor_descuento &&
     product.tarifa_descuento &&
@@ -203,9 +218,10 @@ export default function ProductsDetail() {
         <div className="container">
           <div className="product-details-top">
             <div className="row">
+              {/* Panel Izquierdo: Imagen */}
               <div className="col-md-6">
                 <div className="product-gallery product-gallery-vertical">
-                  <div className="row">
+                  <div className="row position-relative">
                     <span className="product-label label-circle label-sale">Oferta</span>
                     <figure className="product-main-image">
                       {product.url_imagen ? (
@@ -213,6 +229,7 @@ export default function ProductsDetail() {
                           id="product-zoom"
                           src={`${global.IMGProd}${product.url_imagen}`}
                           alt={product.prod_name}
+                          className="img-fluid"
                         />
                       ) : (
                         <div>No image available</div>
@@ -222,58 +239,66 @@ export default function ProductsDetail() {
                 </div>
               </div>
 
-              <div className="col-md-6">
-                <div className="product-details">
-                  <h1 className="product-title">{product.prod_name}</h1>
+              {/* Panel Derecho: Detalles */}
+              <div className="col-md-6 mx-auto">
+                <div className="product-details panel p-4 shadow-sm rounded bg-white">
 
-                  <div className="product-price">
+                  {/* Nombre del Producto */}
+                  <h1 className="product-title text-center mb-3">{product.prod_name}</h1>
+                  <div className="ratings-container d-flex justify-content-center align-items-center border-bottom pb-2 mb-3">
+
+                    Calificación promedio:
+                    <div className="ratings">
+                      <div
+                        className="ratings-val"
+                        style={{ width: `${averageRatingPercentage}%` }}
+                      ></div>
+                    </div>
+                    <a className="ratings-text" href="#product-review-link" id="review-link">Reviews ({reviews.length})</a>
+                  </div>
+                  {/* Precio */}
+                  <div className="product-price d-flex justify-content-center align-items-center border-bottom pb-2 mb-3">
                     {isDiscountAvailable ? (
-                      <>
-
-                        <span className="new-price">${product.precio_descuento}</span>
-                        <span className="old-price">antes ${product.prod_precio}</span>
-
+                      <>Precio -
+                        <span className="new-price text-success fw-bold fs-4">${product.precio_descuento}</span>
+                        <span className="old-price text-muted text-decoration-line-through ms-3">Antes: ${product.prod_precio}</span>
                       </>
                     ) : (
-                      <span>${product.prod_precio}</span>
+                      <>Precio - <span className="fs-4">${product.prod_precio}</span></>
                     )}
                   </div>
 
-                  <div className="product-content">
-                    <p>{product.prod_descripcion}</p>
+                  {/* Descripción */}
+                  <div className="product-content text-center mb-4">
+                    <p className="text-muted">{product.prod_descripcion}</p>
                   </div>
 
-                  <div className="details-filter-row details-row-size">
-                    <label htmlFor="qty">{t('products.Qty')}:</label>
-                    <div className="product-details-quantity">
-                      <input
-                        type="number"
-                        id="qty"
-                        className="form-control"
-                        value={quantity}
-                        onChange={handleQuantityChange}
-                        min="1"
-                        max="10"
-                        step="1"
-                        required
-                      />
-                    </div>
+                  {/* Cantidad y Botón */}
+                  <div className="details-filter-row details-row-size d-flex justify-content-center align-items-center mb-4">
+                    <label htmlFor="qty" className="fw-bold me-2">{t('products.Qty')}:</label>
+                    <input
+                      type="number"
+                      id="qty"
+                      className="form-control w-25 text-center"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      min="1"
+                      max="10"
+                      step="1"
+                      required
+                    />
                   </div>
 
-                  <div className="product-details-action">
-                    <button
-                      className="btn-product btn-cart"
-                      onClick={handleAddToCart}
-                    >
-                      <span>{t('products.add_to_cart')}</span>
+                  <div className="product-details-action text-center mb-4">
+                    <button className="btn btn-primary w-100 fw-bold py-2" onClick={handleAddToCart}>
+                      {t('products.add_to_cart')}
                     </button>
                   </div>
 
-                  <div className="product-details-footer">
-                    <div className="product-cat">
-                      <span>{t('products.category')}</span>
-                      <a href="!#">{product.cat_name}</a>
-                    </div>
+                  {/* Categoría */}
+                  <div className="product-details-footer text-center border-top pt-3">
+                    <span className="fw-bold">{t('products.category')}:</span>
+                    <a href="!#" className="text-primary ms-2">{product.cat_name}</a>
                   </div>
                 </div>
               </div>
