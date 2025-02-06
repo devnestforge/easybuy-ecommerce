@@ -90,12 +90,25 @@ const imgProdMapper = (data) => {
   return prodMapper;
 }
 
+const vidProdMapper = (data) => {
+  let prodMapper = [];
+  for (var i = 0; i < data.length; i++) {
+    prodMapper[i] = {
+      id: data[i].id ?? '',
+      url_video: data[i].url_video ?? ''
+    }
+    prodMapper.push(prodMapper[i]);
+  }
+  return prodMapper;
+}
+
 const productsMapper = {
   productMapper,
   categoriMapper,
   productIdMapper,
   reviewsMapper,
-  imgProdMapper
+  imgProdMapper,
+  vidProdMapper
 }
 
 export default productsMapper;

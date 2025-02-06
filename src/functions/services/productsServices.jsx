@@ -3,7 +3,6 @@ import generalMappers from '../mappers/generalMapper'
 import productsMapper from '../mappers/productsMapper'
 import { logError } from '../../logs/ErrorLoger'
 import base64 from 'react-native-base64'
-import secutiryMapper from '../mappers/secutiryMapper'
 import auditoryServices from '../services/auditoryServices'
 let responseMapper = []
 
@@ -25,7 +24,8 @@ const getProductsService = async (idProduct, search) => {
                     :
                     generalMappers.successProdDetailMapper(productsMapper.productMapper(response.data.data), 1,
                         productsMapper.reviewsMapper(response.data.prodcutReview),
-                        productsMapper.imgProdMapper(response.data.prodcutImg))
+                        productsMapper.imgProdMapper(response.data.prodcutImg),
+                        productsMapper.vidProdMapper(response.data.prodcutVideo))
                 :
                 generalMappers.responseMapper(response, 1)
         } else {

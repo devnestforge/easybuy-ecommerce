@@ -28,9 +28,10 @@ export default function ProductsDetail() {
   const isLoggedIn = !!token
   const { enqueueSnackbar } = useSnackbar()
   const [isVisible, setIsVisible] = useState(true)
-  const [mainImage, setMainImage] = useState('')
-  const [images, setImages] = useState([])
+  //const [mainMedia, setMainImage] = useState('')
+  const [mainMedia, setMainMedia] = useState([])
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [imagesVideos, setImagesVideos] = useState([])
 
   const handleScroll = () => {
     if (window.scrollY > 30) {
@@ -142,20 +143,23 @@ export default function ProductsDetail() {
     }
   }
 
-  const handleImageClick = (image, index) => {
-    setMainImage(global.IMGProd + image.url_imagen)
-    setSelectedImageIndex(index)
-
+  const handleMediaClick = (media, index) => {
+    if (media.hasOwnProperty("url_video")) {
+      setMainMedia({ type: "video", url: `${global.IMGProd}${media.url_video}` });
+    } else {
+      setMainMedia({ type: "image", url: `${global.IMGProd}${media.url_imagen}` });
+    }
+    setSelectedImageIndex(index);
   }
 
   const getProductsDetail = async (productId) => {
     try {
       const productDetails = await productsLogic.getProductsLogic(productId, '')
       if (productDetails.success && productDetails.data.length > 0) {
-        setMainImage(global.IMGProd + productDetails.data[0].url_imagen)
+        setMainMedia({ type: "image", url: global.IMGProd + productDetails.data[0].url_imagen })
         setProduct(productDetails.data[0])
         setReviews(productDetails.review)
-        setImages(productDetails.prodImgs)
+        setImagesVideos(productDetails)
       } else {
         setProduct(null)
       }
@@ -226,33 +230,45 @@ export default function ProductsDetail() {
                   <div className="row position-relative">
                     <span className="product-label label-circle label-sale">Oferta</span>
                     <figure className="product-main-image">
-                      {product.url_imagen ? (
-                        <img
-                          id="product-zoom"
-                          src={mainImage}
-                          alt="product"
-                          className="img-fluid"
-                        />
+                      {mainMedia ? (
+                        mainMedia.type === "image" ? (
+                          <img id="product-zoom" src={mainMedia.url} alt="product" className="img-fluid" />
+                        ) : (
+                          <video id="product-zoom" controls className="img-fluid">
+                            <source src={mainMedia.url} type="video/mp4" />
+                            Tu navegador no soporta la reproducción de videos.
+                          </video>
+                        )
                       ) : (
-                        <div>No image available</div>
+                        <div>No media available</div>
                       )}
                     </figure>
                     <div id="product-zoom-gallery" className="product-image-gallery">
-                      {images.map((img, index) => (
-                        <a
-                          key={`${index}-${img.url_imagen}`}
-                          id={`${index}-${img.url_imagen}`}
-                          className={`product-gallery-item ${index === selectedImageIndex ? 'active' : ''}`}
-                          href="!#"
-                          onClick={(e) => {
-                            e.preventDefault(); // Prevent page reload
-                            handleImageClick(img, index); // Pasa la imagen completa y el índice
-                          }}
-                          data-zoom-image={`${global.IMGProd}${img.url_imagen}`}
-                        >
-                          <img src={`${global.IMGProd}${img.url_imagen}`} alt={`product ${index + 1}`} />
-                        </a>
-                      ))}
+                      {[...(imagesVideos.prodImgs || []), ...(imagesVideos.prodVid || [])].map((media, index) => {
+                        const isVideo = media.hasOwnProperty("url_video");
+                        return (
+                          <a
+                            key={`${index}-${isVideo ? media.url_video : media.url_imagen}`}
+                            id={`${index}-${isVideo ? media.url_video : media.url_imagen}`}
+                            className={`product-gallery-item ${index === selectedImageIndex ? "active" : ""}`}
+                            href="!#"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleMediaClick(media, index);
+                            }}
+                            data-zoom-image={isVideo ? "" : `${global.IMGProd}${media.url_imagen}`}
+                          >
+                            {isVideo ? (
+                              <video width="100" height="100" controls>
+                                <source src={`${global.IMGProd}${media.url_video}`} type="video/mp4" />
+                                Tu navegador no soporta la reproducción de videos.
+                              </video>
+                            ) : (
+                              <img src={`${global.IMGProd}${media.url_imagen}`} alt={`product ${index + 1}`} />
+                            )}
+                          </a>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
