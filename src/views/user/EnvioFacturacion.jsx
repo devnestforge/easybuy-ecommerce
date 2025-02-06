@@ -113,7 +113,7 @@ export default function EnvioFacturacion() {
                 </div>
             </nav>
             <div className="page-content">
-                <div className="container">
+                <div className="container summary">
                     <div className="col-md-12">
                     <button className="custom-btn" onClick={() => handleModalShow({})}>Agregar Dirección</button>
                         <div className={`tab-pane fade ${activeTab === 'tab-9' ? 'show active' : ''}`} id="tab-9" role="tabpanel" aria-labelledby="tab-9-tab">
@@ -129,8 +129,8 @@ export default function EnvioFacturacion() {
                                                 <p><strong>Nombre:</strong> {address.nombres}</p>
                                                 <p><strong>Teléfono:</strong> {address.telefono_contacto}</p>
                                                 <p><strong>Dirección:</strong> {address.direccion}</p>
-                                                <p><strong>Ciudad:</strong> {address.ciudad}</p>
-                                                <p><strong>Provincia:</strong> {address.provincia}</p>
+                                                <p><strong>Ciudad:</strong> {address.canton_name}</p>
+                                                <p><strong>Provincia:</strong> {address.provincia_name}</p>
                                                 <p><strong>Código Postal:</strong> {address.codigo_postal}</p>
                                                 <label>
                                                     <input

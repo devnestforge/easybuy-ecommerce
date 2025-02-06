@@ -38,7 +38,7 @@ export default function OrderRastreo() {
     return (
         <main className="rastreo-main">
             <Spiner opt={load} />
-            <div className="rastreo-container">
+            <div className="rastreo-container summary">
                 <h2 className="rastreo-title">Rastreo de Orden #{order}</h2>
 
                 {noOrderFound ? (

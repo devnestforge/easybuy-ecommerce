@@ -15,7 +15,7 @@ export default function RastrearPedido() {
         <>
             <br />
             <div className="page-content">
-                <div className="container">
+                <div className="container summary">
                     <div className="row justify-content-center">
                         <div className="col-md-9 col-lg-7">
 

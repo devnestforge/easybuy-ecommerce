@@ -47,7 +47,7 @@ export default function Contact() {
         <>
             <Spiner opt={spiner} />
             <div className="page-content">
-                <div className="container">
+                <div className="container summary">
                     <br />
                     <div className="touch-container row justify-content-center">
                         <div className="col-md-9 col-lg-7">

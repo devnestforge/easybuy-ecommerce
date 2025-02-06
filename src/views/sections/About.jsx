@@ -6,7 +6,7 @@ export default function About() {
         <>
             <br />
             <div className="page-content pb-0">
-                <div className="container">
+                <div className="container summary">
                     <div className="row">
                         <div className="col-lg-6 mb-3 mb-lg-0">
                             <h2 className="title">Nuestra Visión</h2>

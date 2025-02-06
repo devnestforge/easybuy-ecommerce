@@ -298,7 +298,7 @@ export default function ShoppingCart() {
             <br />
             <div className="page-content">
                 <div className="cart">
-                    <div className="container">
+                    <div className="container summary">
                         <div className="row">
                             <div className='col-lg-9'>
 

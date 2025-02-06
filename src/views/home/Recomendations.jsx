@@ -131,8 +131,8 @@ export default function Recommendations({ t, data }) {
                                                     <a href="product.html">{item.prod_name}</a>
                                                 </h3>
                                                 <div className="product-price">
-                                                    <span className="new-price">${item.precio_descuento}</span>
-                                                    <span className="old-price">Antes ${item.prod_precio}</span>
+                                                    <span className="new-price"> ${item.precio_descuento} </span>
+                                                    <span className="old-price"> Antes ${item.prod_precio}</span>
                                                 </div>
                                             </div>
                                         </div>

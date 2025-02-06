@@ -16,7 +16,7 @@ export default function MetodosDePago() {
     return (
         <>
             <div className="page-content">
-                <div className="container">
+                <div className="container summary">
                     <div className="row justify-content-center">
                         <div className="col-md-12">
                             <br />

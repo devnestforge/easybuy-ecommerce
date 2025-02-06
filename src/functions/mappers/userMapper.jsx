@@ -11,6 +11,8 @@ const userAddressMapper = (data) => {
       referencia: data[i].referencia ?? '',
       provincia: data[i].provincia ?? '',
       ciudad: data[i].ciudad ?? '',
+      provincia_name: data[i].provincia_name ?? '',
+      canton_name: data[i].canton_name ?? '',
       codigo_postal: data[i].codigo_postal ?? '',
       telefono_contacto: data[i].telefono_contacto ?? '',
       es_principal: data[i].es_principal ?? ''

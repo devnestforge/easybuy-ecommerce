@@ -137,7 +137,7 @@ export default function PerfilUsuario() {
                 <div className="col-md-12">
                     <div className="row justify-content-center">
                         <div className="col-md-8">
-                            <div className="card">
+                            <div className="card summary">
                                 {/* Pestañas */}
                                 <div className="card-header text-center">
                                     <ul className="nav nav-tabs">

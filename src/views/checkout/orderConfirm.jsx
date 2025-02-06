@@ -31,7 +31,7 @@ export default function OrderConfirm() {
             <br />
             <div className="container">
                 <div className="page-content pb-0">
-                    <div className="container">
+                    <div className="container summary">
                         <div className="row justify-content-center">
                             <div className="col-lg-8 text-center">
                                 <h2 className="title mb-2">Gracias por tu compra</h2>

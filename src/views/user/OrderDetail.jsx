@@ -34,6 +34,7 @@ export default function OrderDtail() {
         const address = await userLogic.getAddressLogic(0, "")
         if (address.success && address.data.length > 0) {
             const mainAddress = address.data.find(addr => addr.es_principal === "t")
+            console.log(mainAddress)
             setDefaultAddress(mainAddress || null)
         }
     }
@@ -68,7 +69,7 @@ export default function OrderDtail() {
     const getViewCartByCode = async () => {
         const viewcartDetail = await userLogic.getWiewcartByCodeLogic(order)
         console.log(viewcartDetail.data.checkout_det)
-        const storedCartItems = localStorage.getItem("cartItems")
+        //const storedCartItems = localStorage.getItem("cartItems")
         if (viewcartDetail.data.checkout_det) {
             const parsedCartItems = viewcartDetail.data.checkout_det
             setCartItems(parsedCartItems)
@@ -125,7 +126,7 @@ export default function OrderDtail() {
             <main className="main">
                 <div className="page-content">
                     <div className="checkout">
-                        <div className="container">
+                        <div className="container summary">
                             <div className="row gx-4 gy-4">
                                 {/* Panel Izquierdo */}
                                 <div className="col-12 col-md-8">
@@ -224,7 +225,7 @@ export default function OrderDtail() {
                                                     <strong>{defaultAddress.nombres} {defaultAddress.apellidos}</strong>
                                                 </p>
                                                 <p>{defaultAddress.direccion}, {defaultAddress.codigo_postal || "Sin código postal"}</p>
-                                                <p>Provincia {defaultAddress.provincia}, Ciudad {defaultAddress.ciudad}</p>
+                                                <p>Provincia {defaultAddress.provincia_name}, Ciudad {defaultAddress.canton_name}</p>
                                                 <p>{defaultAddress.telefono_contacto || "Sin teléfono de contacto"}</p>
                                                 <p>{defaultAddress.referencia || "Sin teléfono de contacto"}</p>
                                                 <p>Esta es tu dirección de envío por defecto</p>

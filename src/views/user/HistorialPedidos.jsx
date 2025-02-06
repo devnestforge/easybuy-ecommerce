@@ -5,23 +5,26 @@ import userLogic from '../../functions/logic/userLogic'
 export default function HistorialPedidos() {
     const [spiner, setSpiner] = useState(false)
     const [orders, setOrders] = useState([])
+    const [totalPaginas, setTotalPaginas] = useState([])
 
     useEffect(() => {
-        setSpiner(true)
+
         const token = localStorage.getItem('authToken')
         const isLoggedIn = !!token
         if (!isLoggedIn) {
             window.location.href = global.HOME
         }
         getHistoryOrders()
-        setSpiner(false)
     }, [])
 
     const getHistoryOrders = async () => {
+        setSpiner(true)
         const orderResp = await userLogic.getHistoryOrdersLogic()
         if (orderResp.success && orderResp.data.data.length > 0) {
+            console.log(orderResp)
             setOrders(orderResp.data.data)
         }
+        setSpiner(false)
     }
 
     const pedidosPorPagina = 5
@@ -30,6 +33,10 @@ export default function HistorialPedidos() {
     const indiceUltimoPedido = paginaActual * pedidosPorPagina
     const indicePrimerPedido = indiceUltimoPedido - pedidosPorPagina
     const pedidosPaginados = orders.slice(indicePrimerPedido, indiceUltimoPedido)
+
+    useEffect(() => {
+        setTotalPaginas(Math.ceil(orders.length / pedidosPorPagina));
+    }, [orders.length])
 
     const cambiarPagina = (pagina) => {
         setPaginaActual(pagina)
@@ -44,28 +51,22 @@ export default function HistorialPedidos() {
     return (
         <div className="container">
             <Spiner opt={spiner} />
-            <div className="page-content mt-2">
+            <div className="page-content mt-2 summary">
                 <h4 className="text-center mb-4">Historial de Pedidos</h4>
                 {pedidosPaginados.length === 0 ? (
                     <p className="text-center">No tienes pedidos en tu historial.</p>
                 ) : (
                     pedidosPaginados.map((pedido) => (
-                        <div className="card mb-4 shadow-sm" key={pedido.id}>
+                        <div className="card mb-4 shadow-sm summary" key={pedido.id}
+                            onClick={() => toggleAcordeon(pedido.id)} style={{
+                                cursor: 'pointer',
+                                color: '#1C1B22',
+                            }} >
                             <div
                                 className="card-header d-flex justify-content-between align-items-center"
                                 onClick={() => toggleAcordeon(pedido.id)}
-                                style={{
-                                    cursor: 'pointer',
-                                    backgroundColor: '#0086E6',
-                                    color: '#1C1B22',
-                                    padding: '10px 15px',
-                                    borderRadius: '5px',
-                                    marginBottom: '10px',
-                                    fontSize: '16px',
-                                }}
                             >
                                 <p style={{
-                                    cursor: 'pointer',
                                     color: '#1C1B22',
                                 }} className="mb-0">Pedido #{pedido.numero_orden}</p>
                                 <span
@@ -100,7 +101,18 @@ export default function HistorialPedidos() {
                                         </div>
                                         <div className="col-md-6">
                                             <h6><strong>Dirección de Envío:</strong></h6>
-                                            <p>{pedido.direccionEnvio}</p>
+                                            {pedido.address ? (
+                                                <>
+                                                    <p><strong>Nombre:</strong> {pedido.address.nombres} {pedido.address.apellidos}</p>
+                                                    <p><strong>Dirección:</strong> {pedido.address.direccion} / <strong>Calle:</strong> {pedido.address.calle}</p>
+                                                    <p><strong>Referencia:</strong> {pedido.address.referencia}</p>
+                                                    <p><strong>Provincia:</strong> {pedido.address.provincia_name} / <strong>Ciudad:</strong> {pedido.address.canton_name}</p>
+                                                    <p><strong>Código Postal:</strong> {pedido.address.codigo_postal}</p>
+                                                    <p><strong>Teléfono:</strong> {pedido.address.telefono_contacto}</p>
+                                                </>
+                                            ) : (
+                                                <p>No hay dirección de envío disponible.</p>
+                                            )}
                                         </div>
                                     </div>
                                     <hr />
@@ -147,26 +159,53 @@ export default function HistorialPedidos() {
                     ))
                 )}
                 <nav aria-label="Page navigation">
-                    <ul className="pagination justify-content-center">
+                    <ul className="pagination justify-content-center align-items-center">
                         <li className="page-item">
                             <button
-                                className="page-link"
+                                style={{
+                                    backgroundColor: '#007bff',
+                                    color: '#ffffff',
+                                    borderRadius: '20px',
+                                    padding: '8px 15px',
+                                    border: 'none',
+                                    marginRight: '5px'
+                                }}
+                                className="page-link shadow"
                                 onClick={() => cambiarPagina(paginaActual - 1)}
                                 disabled={paginaActual === 1}
                             >
-                                Anterior
+                                ⬅ Anterior
                             </button>
                         </li>
                         <li className="page-item">
-                            <span className="page-link">Página {paginaActual}</span>
+                            <span
+                                className="page-link"
+                                style={{
+                                    backgroundColor: '#f8f9fa',
+                                    color: '#333',
+                                    padding: '8px 15px',
+                                    fontWeight: 'bold',
+                                    border: '1px solid #dee2e6'
+                                }}
+                            >
+                                Página {paginaActual} de {totalPaginas}
+                            </span>
                         </li>
                         <li className="page-item">
                             <button
-                                className="page-link"
+                                style={{
+                                    backgroundColor: '#007bff',
+                                    color: '#ffffff',
+                                    borderRadius: '20px',
+                                    padding: '8px 15px',
+                                    border: 'none',
+                                    marginLeft: '5px'
+                                }}
+                                className="page-link shadow"
                                 onClick={() => cambiarPagina(paginaActual + 1)}
-                                disabled={pedidosPaginados.length < pedidosPorPagina}
+                                disabled={paginaActual === totalPaginas}
                             >
-                                Siguiente
+                                Siguiente ➡
                             </button>
                         </li>
                     </ul>

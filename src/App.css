@@ -389,3 +389,14 @@
   object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
 }
 
+.product-cat a {
+  color: #000000 !important;
+}
+
+.new-price {
+  color: #0056b3 !important;
+}
+
+.old-price {
+  color: crimson !important;
+}

@@ -41,6 +41,7 @@ export default function ProductsDetail() {
   }
 
   useEffect(() => {
+    setActiveTab('product-desc-tab')
     window.addEventListener('scroll', handleScroll)
     return () => {
       window.removeEventListener('scroll', handleScroll)
@@ -217,10 +218,10 @@ export default function ProductsDetail() {
       <div className="page-content">
         <div className="container">
           <div className="product-details-top">
-            <div className="row">
+            <div className="row summary">
 
               {/* Panel Izquierdo: Imagen */}
-              <div className="col-md-6">
+              <div className="col-md-8">
                 <div className="product-gallery product-gallery-vertical">
                   <div className="row position-relative">
                     <span className="product-label label-circle label-sale">Oferta</span>
@@ -229,7 +230,7 @@ export default function ProductsDetail() {
                         <img
                           id="product-zoom"
                           src={mainImage}
-                          alt="product image"
+                          alt="product"
                           className="img-fluid"
                         />
                       ) : (
@@ -242,14 +243,14 @@ export default function ProductsDetail() {
                           key={`${index}-${img.url_imagen}`}
                           id={`${index}-${img.url_imagen}`}
                           className={`product-gallery-item ${index === selectedImageIndex ? 'active' : ''}`}
-                          href="#"
+                          href="!#"
                           onClick={(e) => {
                             e.preventDefault(); // Prevent page reload
                             handleImageClick(img, index); // Pasa la imagen completa y el índice
                           }}
                           data-zoom-image={`${global.IMGProd}${img.url_imagen}`}
                         >
-                          <img src={`${global.IMGProd}${img.url_imagen}`} alt={`product image ${index + 1}`} />
+                          <img src={`${global.IMGProd}${img.url_imagen}`} alt={`product ${index + 1}`} />
                         </a>
                       ))}
                     </div>
@@ -257,7 +258,7 @@ export default function ProductsDetail() {
                 </div>
               </div>
 
-              <div className="col-md-6 mx-auto">
+              <div className="col-md-4 mx-auto">
                 <div className="product-details panel p-4 shadow-sm rounded bg-white">
                   <h1 className="product-title text-center mb-3">{product.prod_name}</h1>
                   <div className="ratings-container d-flex justify-content-center align-items-center border-bottom pb-2 mb-3">
@@ -413,7 +414,7 @@ export default function ProductsDetail() {
                               <div className="row no-gutters">
                                 <div className="col-auto">
                                   <h4>
-                                    <a href="#">{review.name}</a>
+                                    <a href="!#">{review.name}</a>
                                   </h4>
                                   <div className="ratings-container">
                                     <div className="ratings">
@@ -427,7 +428,7 @@ export default function ProductsDetail() {
                                 </div>
                                 <div className="col">
                                   <h4>
-                                    <a href="#">{review.user}</a>
+                                    <a href="!#">{review.user}</a>
                                   </h4>
                                   <h4>{review.title}</h4>
                                   <div className="review-content">
@@ -526,7 +527,7 @@ export default function ProductsDetail() {
             <div className="col-6">
               <figure className="product-media">
                 <a href="product.html">
-                  <img src={`${global.IMGProd}${product.url_imagen}`} alt="Product image" />
+                  <img src={`${global.IMGProd}${product.url_imagen}`} alt="Product" />
                 </a>
               </figure>
               <h4 className="product-title">

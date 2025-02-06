@@ -96,7 +96,7 @@ const NavBar = () => {
                                                     <a className="dropdown-item" href={global.HISTORY}>{t('auth.user_history')}</a>
                                                     <div className="dropdown-divider"></div>
                                                     <a className="dropdown-item" href="!#" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
-                                                        {t('user_logout')}
+                                                        {t('auth.user_logout')}
                                                     </a>
                                                 </div>
                                             </li>

@@ -216,7 +216,7 @@ export default function Checkout() {
             <main className="main">
                 <div className="page-content">
                     <div className="checkout">
-                        <div className="container">
+                        <div className="container summary">
                             {/* Tabs Navigation */}
                             <div className="checkout-tabs mb-1">
                                 <ul className="nav nav-tabs">
@@ -253,7 +253,7 @@ export default function Checkout() {
                                                         <strong>{defaultAddress.nombres} {defaultAddress.apellidos}</strong>
                                                     </p>
                                                     <p>{defaultAddress.direccion}, {defaultAddress.codigo_postal || "Sin código postal"}</p>
-                                                    <p>Provincia {defaultAddress.provincia}, Ciudad {defaultAddress.ciudad}</p>
+                                                    <p>Provincia {defaultAddress.provincia_name}, Ciudad {defaultAddress.canton_name}</p>
                                                     <p>{defaultAddress.telefono_contacto || "Sin teléfono de contacto"}</p>
                                                     <p>{defaultAddress.referencia || "Sin teléfono de contacto"}</p>
                                                     <p>Esta es tu dirección de envío por defecto</p>
