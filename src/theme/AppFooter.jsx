@@ -3,7 +3,7 @@ import t from '../translations/i18n'
 
 const AppFooter = () => {
   const currentYear = new Date().getFullYear();
-  const copyrightText = `Copyright © ${currentYear} ${t('page_name')}. Todos los derechos reservados.`;
+  const copyrightText = `Copyright © ${currentYear} ${t('branding.page_name')}. Todos los derechos reservados.`;
 
   return (
     <>

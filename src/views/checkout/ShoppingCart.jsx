@@ -485,20 +485,23 @@ export default function ShoppingCart() {
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <button
-                                        className="btn btn-outline-primary-2 btn-order btn-block"
-                                        disabled={!isLoggedIn} // Deshabilitado si no hay sesión
-                                        onClick={() => {
-                                            if (isLoggedIn) {
-                                                window.location.href = global.CHECKOUT
-                                            }
-                                        }}
-                                    >
-                                        Continuar con el pago
-                                    </button>
+                                    {isLoggedIn && (
+                                        <button
+                                            className="btn btn-outline-primary-2 btn-order btn-block"
+                                            disabled={!isLoggedIn} // Deshabilitado si no hay sesión
+                                            onClick={() => {
+                                                if (isLoggedIn) {
+                                                    window.location.href = global.CHECKOUT
+                                                }
+                                            }}
+                                        >
+                                            Continuar con el pago
+
+                                        </button>
+                                    )}
                                     {!isLoggedIn && (
                                         <p className="text-danger text-center mt-2">
-                                            Por favor, inicia sesión para proceder con el checkout.
+                                            Por favor, inicia sesión para proceder con el pago.
                                         </p>
                                     )}
                                 </div>
