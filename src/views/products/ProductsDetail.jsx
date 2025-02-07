@@ -50,7 +50,6 @@ export default function ProductsDetail() {
   }, [])
 
   useEffect(() => {
-    setLoad(true)
     const decryptedId = decryptId(id)
     setProductId(decryptedId)
     getProductsDetail(decryptedId)
@@ -154,6 +153,8 @@ export default function ProductsDetail() {
 
   const getProductsDetail = async (productId) => {
     try {
+
+      setLoad(true)
       const productDetails = await productsLogic.getProductsLogic(productId, '')
       if (productDetails.success && productDetails.data.length > 0) {
         setMainMedia({ type: "image", url: global.IMGProd + productDetails.data[0].url_imagen })
@@ -168,6 +169,7 @@ export default function ProductsDetail() {
     } finally {
       setLoad(false)
     }
+    setLoad(false)
   }
 
   if (!product) {

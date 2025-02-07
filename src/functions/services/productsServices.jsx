@@ -92,18 +92,18 @@ const getCategoriesService = async () => {
     }
 }
 
-
-const getProductsSearchService = async (page, perPage, search) => {
+const getProductsSearchService = async (page, perPage, search, filtersData, priceRange) => {
     try {
         const token = `Bearer ${localStorage.getItem('token')}`
         const options = requestOptions.headers('GET', token, '')
-        let filters = '/' + page + '/' + perPage + '/' + search
+        const filtersJson = encodeURIComponent(JSON.stringify(filtersData));
+        let filters = '/' + page + '/' + perPage + '/' + search + '/' + filtersJson + '/' + priceRange
         const resp = await fetch(global.PRODUCTSSEARCH + filters, options)
         const response = await resp.json()
         let respAnswer = []
         if (!response.error) {
-            respAnswer = response.data.length > 0 ?
-                generalMappers.successMapper(productsMapper.productMapper(response.data), 1)
+            respAnswer = response.data.data.length > 0 ?
+                generalMappers.successMapper(productsMapper.productSearchMapper(response.data), 1)
                 :
                 generalMappers.responseMapper(response, 1)
         } else {
@@ -142,13 +142,32 @@ const saveProductReviewService = async (token, data) => {
     return responseMapper
 }
 
+const getFiltersService = async () => {
+    try {
+        const options = requestOptions.headers('GET', '', '')
+        const resp = await fetch(global.GETFILTERS, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = generalMappers.successMapper(response.data.data)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
 const productsServices = {
     getPromotionService,
     getRecomendedService,
     getProductsService,
     getCategoriesService,
     getProductsSearchService,
-    saveProductReviewService
+    saveProductReviewService,
+    getFiltersService
 }
 
 export default productsServices

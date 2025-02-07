@@ -20,8 +20,8 @@ const getCategoriesLogic = async () => {
     return dataResp
 }
 
-const getProductsSearchLogic = async (page, perPage, search) => {
-    const dataResp = await productsServices.getProductsSearchService(page, perPage, search)
+const getProductsSearchLogic = async (page, perPage, search, filters, priceRange) => {
+    const dataResp = await productsServices.getProductsSearchService(page, perPage, search, filters, priceRange)
     return dataResp
 }
 
@@ -39,13 +39,19 @@ const saveProductReviewLogic = async (token, name, title, contenta, rating, emai
     return dataResp
 }
 
+const getFiltersLogic = async () => {
+    const dataResp = await productsServices.getFiltersService()
+    return dataResp
+}
+
 const productsLogic = {
     getPromotionsLogic,
     getRecomendedLogic,
     getProductsLogic,
     getCategoriesLogic,
     getProductsSearchLogic,
-    saveProductReviewLogic
+    saveProductReviewLogic,
+    getFiltersLogic
 }
 
 export default productsLogic

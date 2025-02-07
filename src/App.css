@@ -374,19 +374,19 @@
 }
 
 .sticky-bar.hidden {
-  opacity: 0; /* Ocultado cuando no es visible */
-  pointer-events: none; /* Desactiva la interacción cuando está oculto */
+  opacity: 0;
+  pointer-events: none;
 }
 
 .product-image-gallery a {
-  display: block;  /* Hace que el enlace ocupe todo el espacio disponible */
+  display: block;
   width: 100%;
 }
 
 .product-image-gallery img {
   width: 100%;      /* La imagen ocupa el 100% del ancho del enlace */
-  height: 100%;     /* La imagen ocupa el 100% de la altura del enlace */
-  object-fit: cover; /* Asegura que la imagen cubra el área sin distorsionarse */
+  height: 100%;
+  object-fit: cover;
 }
 
 .product-cat a {
@@ -399,4 +399,10 @@
 
 .old-price {
   color: crimson !important;
+}
+
+.custom-product-image {
+  width: 100%;
+  height: 250px; /* Ajusta este valor según el tamaño deseado */
+  object-fit: cover; /* Asegura que las imágenes cubran el contenedor sin distorsionarse */
 }

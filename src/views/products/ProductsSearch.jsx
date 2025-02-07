@@ -1,409 +1,246 @@
-import React, { useState, useEffect } from 'react';
-import CryptoJS from 'crypto-js';
-import { Pagination, Checkbox, FormControlLabel, Slider } from '@mui/material';
+import React, { useState, useEffect } from 'react'
+import CryptoJS from 'crypto-js'
+import { Pagination } from '@mui/material'
 import Spiner from '../../components/modals/Spiner'
-import productsLogic from '../../functions/logic/productsLogic';
+import productsLogic from '../../functions/logic/productsLogic'
+import { useCart } from '../../functions/context/CartProvider'
+import t from '../../translations/i18n'
+import Modal from 'react-modal'
 
-const products = [
-  {
-    id: 1,
-    label: 'New',
-    img: 'assets/images/products/product-4.jpg',
-    title: 'Brown paperbag waist pencil skirt',
-    price: '$60.00',
-    category: 'Women',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-4-thumb.jpg',
-    thumb2: 'assets/images/products/product-4-2-thumb.jpg',
-    thumb3: 'assets/images/products/product-4-3-thumb.jpg'
-  },
-  {
-    id: 2,
-    label: '',
-    img: 'assets/images/products/product-5.jpg',
-    title: 'Dark yellow lace cut out swing dress',
-    price: '$84.00',
-    category: 'Dresses',
-    rating: 0,
-    reviews: 0,
-    thumb: 'assets/images/products/product-5-thumb.jpg',
-    thumb2: 'assets/images/products/product-5-2-thumb.jpg',
-  },
-  {
-    id: 3,
-    label: 'Out of Stock',
-    img: 'assets/images/products/product-6.jpg',
-    title: 'Khaki utility boiler jumpsuit',
-    price: '$120.00',
-    category: 'Jackets',
-    rating: 80,
-    reviews: 6,
-  },
-  {
-    id: 4,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 5,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 6,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 8,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 1,
-    label: 'New',
-    img: 'assets/images/products/product-4.jpg',
-    title: 'Brown paperbag waist pencil skirt',
-    price: '$60.00',
-    category: 'Women',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-4-thumb.jpg',
-    thumb2: 'assets/images/products/product-4-2-thumb.jpg',
-    thumb3: 'assets/images/products/product-4-3-thumb.jpg'
-  },
-  {
-    id: 2,
-    label: '',
-    img: 'assets/images/products/product-5.jpg',
-    title: 'Dark yellow lace cut out swing dress',
-    price: '$84.00',
-    category: 'Dresses',
-    rating: 0,
-    reviews: 0,
-    thumb: 'assets/images/products/product-5-thumb.jpg',
-    thumb2: 'assets/images/products/product-5-2-thumb.jpg',
-  },
-  {
-    id: 3,
-    label: 'Out of Stock',
-    img: 'assets/images/products/product-6.jpg',
-    title: 'Khaki utility boiler jumpsuit',
-    price: '$120.00',
-    category: 'Jackets',
-    rating: 80,
-    reviews: 6,
-  },
-  {
-    id: 4,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 5,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 6,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-  {
-    id: 8,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  },
-
-  {
-    id: 7,
-    label: '',
-    img: 'assets/images/products/product-7.jpg',
-    title: 'Blue utility pinafore denim dress',
-    price: '$76.00',
-    category: 'Jeans',
-    rating: 20,
-    reviews: 2,
-    thumb: 'assets/images/products/product-7-thumb.jpg',
-  }
-]
-
-export default function ProductsSearch({ t, data }) {
-  const [selectedPriceRange, setSelectedPriceRange] = useState([0, 200]);
-  const [selectedColors, setSelectedColors] = useState([]);
-  const [selectedSizes, setSelectedSizes] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(8);
+export default function ProductsSearch() {
+  const [currentPage, setCurrentPage] = useState(1)
+  const [products, setProducts] = useState([])
+  const [totalPages, setTotalPages] = useState(1)
   const [load, setLoad] = useState(false)
+  const [category, setCategory] = useState(0)
+  const [brand, setBrand] = useState(0)
+  const [priceRange, setPriceRange] = useState([0, 1000])
+  const { addToCart } = useCart()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentProduct, setCurrentProduct] = useState(null)
+  const [tempPriceRange, setTempPriceRange] = useState([0, 1000])
+  const [catalogoFilter, setCatalogo] = useState([])
+  const [marcaFilter, setMarca] = useState([])
+  const [filters, setFilters] = useState({
+    category: [],
+    brand: [],
+  })
+  const [searchTerm, setSearchTerm] = useState('no')
 
   useEffect(() => {
-    setLoad(true)
-    getProducts()
-    setLoad(false)
+    getFilters()
   }, [])
 
-  const getProducts = async () => {
+  useEffect(() => {
+    getProducts()
+  }, [currentPage, filters])
+
+  const handlePriceChange = (e) => {
+    setTempPriceRange([+e.target.value, priceRange[1]])
+  }
+
+  const handlePriceEnd = () => {
+    setPriceRange(tempPriceRange)
+    getProducts()
+  }
+
+  const handleSearchChange = (e) => {
+    e.preventDefault()
+    setSearchTerm(e.target.value)
+  }
+
+  const getFilters = async () => {
     try {
-      const product = await productsLogic.getProductsSearchLogic(1, 10, 'no')
-      if (product.success && product.data.length > 0) {
-        //setProduct(productDetails.data[0])
+      setLoad(true)
+      const response = await productsLogic.getFiltersLogic()
+      if (response.success) {
+        setCatalogo(response.data.categorias)
+        setMarca(response.data.marcas)
       } else {
-        //setProduct(null)
+
       }
     } catch (error) {
-      console.error('Error fetching product details:', error)
+
     } finally {
       setLoad(false)
     }
   }
 
-  // Control de filtros
-  const handlePriceChange = (event, newValue) => {
-    setSelectedPriceRange(newValue);
-    setCurrentPage(1);
-  };
+  const getProducts = async () => {
+    try {
+      setLoad(true)
+      const response = await productsLogic.getProductsSearchLogic(
+        currentPage,
+        8,
+        searchTerm,
+        filters,
+        priceRange
+      )
+      if (response.success && response.data.length > 0) {
+        setProducts(response.data)
+        setTotalPages(Math.ceil(response.data[0].total / 8))
+      } else {
+        setProducts([])
+        setTotalPages(1)
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error)
+      setProducts([])
+      setTotalPages(1)
+    } finally {
+      setLoad(false)
+    }
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setCurrentProduct(null)
+  }
+
+  const paginate = (event, pageNumber) => {
+    setCurrentPage(pageNumber)
+  }
+
+  const handleAddToCart = (item) => {
+    setLoad(true)
+    const quantity = 1 // Puedes manejar esto dinámicamente si lo necesitas
+    const iva = item.iva_precio * quantity // Cálculo del IVA
+    const total = item.prod_precio * quantity + iva
+
+    addToCart({
+      id: item.id,
+      empresa_id: item.empresa_id,
+      name: item.prod_name,
+      price: item.prod_precio,
+      iva,
+      total,
+      tarifa: item.tarifa,
+      valor_descuento: item.valor_descuento,
+      tarifa_descuento: item.tarifa_descuento,
+      precio_descuento: item.precio_descuento,
+      total_descuento: item.total_descuento,
+      iva_descuento: item.iva_descuento,
+      quantity,
+      imageUrl: item.url_imagen,
+    })
+    setLoad(false)
+  }
+
+  const handleQuickViewClick = (e, product) => {
+    e.preventDefault()
+    openModal(product)
+  }
+
+  const openModal = (product) => {
+    setCurrentProduct(product)
+    setIsModalOpen(true)
+  }
+
+  const handleFilterChange = (filterType, value) => {
+    setFilters((prevFilters) => {
+      let updatedFilter
+
+      if (filterType === "category" || filterType === "brand") {
+        updatedFilter = prevFilters[filterType].includes(value)
+          ? prevFilters[filterType].filter((item) => item !== value)
+          : [...prevFilters[filterType], value]
+      } else if (filterType === "price") {
+        updatedFilter = value
+      }
+
+      return { ...prevFilters, [filterType]: updatedFilter }
+    })
+
+    setTimeout(() => getProducts(), 0)
+  }
 
   const encryptId = (id) => {
-    const encrypted = CryptoJS.AES.encrypt(id.toString(), 'secret-key').toString();
-    return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  };
-
-  const handleColorChange = (color) => {
-    setSelectedColors((prevColors) =>
-      prevColors.includes(color)
-        ? prevColors.filter((c) => c !== color) // Si ya está seleccionado, eliminarlo
-        : [...prevColors, color] // Si no está seleccionado, agregarlo
-    );
-    setCurrentPage(1); // Resetear a la primera página cuando cambia el filtro de color
-  };
-
-  const handleSizeChange = (size) => {
-    setSelectedSizes((prevSizes) =>
-      prevSizes.includes(size)
-        ? prevSizes.filter((s) => s !== size) // Si ya está seleccionado, eliminarlo
-        : [...prevSizes, size] // Si no está seleccionado, agregarlo
-    );
-    setCurrentPage(1); // Resetear a la primera página cuando cambia el filtro de tamaño
-  };
-
-  // Manejo de selección/deselección de categorías
-  const handleCategoryChange = (category) => {
-    setSelectedCategories((prevCategories) =>
-      prevCategories.includes(category)
-        ? prevCategories.filter((c) => c !== category) // Si ya está seleccionado, eliminarlo
-        : [...prevCategories, category] // Si no está seleccionado, agregarlo
-    );
-    setCurrentPage(1); // Resetear a la primera página cuando cambia el filtro de categoría
-  };
-
-  // Filtros
-  const priceFilter = (price) => {
-    return price >= selectedPriceRange[0] && price <= selectedPriceRange[1];
-  };
-
-  const colorFilter = (product) => {
-    if (selectedColors.length === 0) return true;
-    return selectedColors.includes(product.color);
-  };
-
-  const sizeFilter = (product) => {
-    if (selectedSizes.length === 0) return true;
-    return selectedSizes.includes(product.size);
-  };
-
-  const categoryFilter = (product) => {
-    if (selectedCategories.length === 0) return true;
-    return selectedCategories.includes(product.category);
-  };
-
-  // Filtrar productos según los filtros seleccionados
-  const filteredProducts = products.filter(
-    (product) =>
-      priceFilter(product.price.replace('$', '')) &&
-      colorFilter(product) &&
-      sizeFilter(product) &&
-      categoryFilter(product)
-  );
-
-  // Paginación
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  // Manejo de página
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const encrypted = CryptoJS.AES.encrypt(id.toString(), 'secret-key').toString()
+    return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+  }
 
   return (
     <main className="main">
       <Spiner opt={load} />
       <div className="page-content">
-        <div className="container">
-          <div className="row">
+
+        <div className="col-lg-12">
+          <div className="row summary">
             <div className="col-lg-9">
-              {/* Lista de Productos */}
               <div className="products mb-3">
                 <div className="row justify-content-center">
-                  {currentProducts.map((product) => (
-                    <div className="col-6 col-md-4 col-lg-4 col-xl-3" key={product.id}>
-                      <div className="product product-7 text-center">
-                        <figure className="product-media">
-                          {product.label && (
-                            <span
-                              className={`product-label ${product.label === 'Out of Stock' ? 'label-out' : 'label-new'
-                                }`}
-                            >
-                              {product.label}
-                            </span>
-                          )}
-                          <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`}>
-                            <img src={product.img} alt="Product" className="product-image" />
-                          </a>
-                        </figure>
-
-                        <div className="product-body">
-                          <div className="product-cat">
-                            <a href="!#">{product.category}</a>
-                          </div>
-                          <h3 className="product-title">
-                            <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`}>{product.title}</a>
-                          </h3>
-                          <div className="product-price">
-                            {product.label === 'Out of Stock' ? (
-                              <span className="out-price">{product.price}</span>
-                            ) : (
-                              <span>{product.price}</span>
+                  {products.length > 0 ? (
+                    products.map((product) => (
+                      <div className="col-6 col-md-3 col-lg-3" key={product.id}>
+                        <div className="product product-7 text-center custom-product-card">
+                          <figure className="product-media">
+                            {product.label && (
+                              <span
+                                className={`product-label ${product.label === 'Out of Stock' ? 'label-out' : 'label-new'
+                                  }`}
+                              >
+                                {product.prod_name}
+                              </span>
                             )}
+                            <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`}>
+                              <img
+                                src={`${global.IMGProd}${product.url_imagen}`}
+                                alt="Product"
+                                className="custom-product-image"
+                              />
+                            </a>
+                            <div className="product-action-vertical">
+                              <a
+                                href="!#"
+                                className="btn-product-icon btn-quickview"
+                                title="Quick view"
+                                onClick={(e) => handleQuickViewClick(e, product)}
+                              >
+                                <span>{t('products.quick_view')}</span>
+                              </a>
+                            </div>
+                            <div className="product-action">
+                              <a
+                                href="!#"
+                                onClick={(e) => {
+                                  e.preventDefault()
+                                  handleAddToCart(product)
+                                }}
+                                className="btn-product btn-cart"
+                                title={t('products.add_to_cart')}
+                              >
+                                <span>{t('products.add_to_cart')}</span>
+                              </a>
+                            </div>
+                          </figure>
+                          <div className="product-body">
+                            <div className="product-cat">
+                              <a href="#">{product.cat_name}</a>
+                            </div>
+                            <h3 className="product-title">
+                              <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`}>
+                                {product.prod_name}
+                              </a>
+                            </h3>
+                            <div className="product-price">
+                              {product.label === 'Out of Stock' ? (
+                                <span className="out-price">{product.prod_precio}</span>
+                              ) : (
+                                <span>{product.prod_precio}</span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-center">No hay productos disponibles.</p>
+                  )}
                 </div>
               </div>
 
-              {/* MUI Pagination */}
               <Pagination
-                count={Math.ceil(filteredProducts.length / productsPerPage)}
+                count={totalPages || 1}
                 color="primary"
                 siblingCount={1}
                 boundaryCount={1}
@@ -411,39 +248,81 @@ export default function ProductsSearch({ t, data }) {
                 shape="rounded"
                 size="large"
                 page={currentPage}
-                onChange={(e, page) => paginate(page)}
+                onChange={paginate}
                 className="pagination justify-content-center"
               />
             </div>
-
             <aside className="col-lg-3 order-lg-first">
               <div className="sidebar sidebar-shop">
+                {/* Filtros de productos */}
                 <div className="widget widget-clean">
-                  <label>Filters:</label>
-                  <a href="!#" className="sidebar-filter-clear">Clean All</a>
+                  <label>Filtros:</label>
+                  <a href="#" className="sidebar-filter-clear" onClick={() => {
+                    setCategory('')
+                    setBrand('')
+                    setPriceRange([0, 1000])
+                  }}>Limpiar filtros</a>
                 </div>
+                <div className="widget widget-collapsible">
+                  <h3 className="widget-title">
+                    <a
+                      data-toggle="collapse"
+                      href="#widget-search"
+                      role="button"
+                      aria-expanded="true"
+                      aria-controls="widget-search"
+                    >
+                      Buscar
+                    </a>
+                  </h3>
+                  <div className="collapse show" id="widget-search">
+                    <div className="col-lg-12">
+                      <form className="contact-form mb-2 d-flex">
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            className="form-control text-right"
+                            name="title"
+                            placeholder="Buscar por nombre"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            required
+                          />
+                          <button type="submit" className="btn-search input-group-text">
+                            <i className="icon-search"></i>
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+
+                </div>
+
 
                 {/* Filtro de Categoría */}
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
                     <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
-                      Category
+                      Categoría
                     </a>
                   </h3>
                   <div className="collapse show" id="widget-1">
                     <div className="widget-body">
                       <div className="filter-items filter-items-count">
-                        {['Women', 'Dresses', 'Jackets', 'Jeans'].map((category) => (
-                          <div className="filter-item" key={category}>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  checked={selectedCategories.includes(category)} // Cambiado a múltiples categorías
-                                  onChange={() => handleCategoryChange(category)} // Lógica para seleccionar/deseleccionar
-                                />
-                              }
-                              label={category}
-                            />
+                        {catalogoFilter.map(({ id, nombre, count, nemonico_cat }) => (
+                          <div className="filter-item" key={id}>
+                            <div className="custom-control custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className="custom-control-input"
+                                id={nemonico_cat}
+
+                                onChange={() => handleFilterChange("category", nemonico_cat)}
+                              />
+                              <label className="custom-control-label" htmlFor={nemonico_cat}>
+                                {nombre}
+                              </label>
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -451,74 +330,134 @@ export default function ProductsSearch({ t, data }) {
                   </div>
                 </div>
 
-                {/* Filtro de Precio */}
-                <div className="widget widget-collapsible">
-                  <h3 className="widget-title">
-                    <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
-                      Price Range
-                    </a>
-                  </h3>
-                  <div className="collapse show" id="widget-2">
-                    <div className="widget-body">
-                      <Slider
-                        value={selectedPriceRange}
-                        onChange={handlePriceChange}
-                        valueLabelDisplay="auto"
-                        valueLabelFormat={(value) => `$${value}`}
-                        min={0}
-                        max={200}
-                        step={10}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Filtro de Colores */}
-                <div className="widget widget-collapsible">
-                  <h3 className="widget-title">
-                    <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true" aria-controls="widget-3">
-                      Colors
-                    </a>
-                  </h3>
-                  <div className="collapse show" id="widget-3">
-                    <div className="widget-body">
-                      {['Red', 'Blue', 'Black'].map((color) => (
-                        <div className="filter-item" key={color}>
-                          <FormControlLabel
-                            control={<Checkbox checked={selectedColors.includes(color)} onChange={() => handleColorChange(color)} />}
-                            label={color}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Filtro de Tamaños */}
+                {/* Filtro de Marca */}
                 <div className="widget widget-collapsible">
                   <h3 className="widget-title">
                     <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
-                      Sizes
+                      Marca
                     </a>
                   </h3>
                   <div className="collapse show" id="widget-4">
                     <div className="widget-body">
-                      {['S', 'M', 'L', 'XL'].map((size) => (
-                        <div className="filter-item" key={size}>
-                          <FormControlLabel
-                            control={<Checkbox checked={selectedSizes.includes(size)} onChange={() => handleSizeChange(size)} />}
-                            label={size}
-                          />
-                        </div>
-                      ))}
+                      <div className="filter-items">
+                        {marcaFilter.map(({ id, nombre, nemonico_marca }) => (
+                          <div className="filter-item" key={id}>
+                            <div className="custom-control custom-checkbox">
+                              <input
+                                type="checkbox"
+                                className="custom-control-input"
+                                id={nemonico_marca}
+                                onChange={() => handleFilterChange("brand", nemonico_marca)}
+                              />
+                              <label className="custom-control-label" htmlFor={nemonico_marca}>
+                                {nombre}
+                              </label>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Filtro de Precio 
+                <div className="widget widget-collapsible">
+                  <h3 className="widget-title">
+                    <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
+                      Price
+                    </a>
+                  </h3>
+                  <div className="collapse show" id="widget-5">
+                    <div className="widget-body">
+                      <div className="filter-items">
+                        <label>
+                          <input
+                            type="range"
+                            min="0"
+                            max="1000"
+                            step="10"
+                            value={tempPriceRange[0]}
+                            onChange={handlePriceChange}
+                            onMouseUp={handlePriceEnd}
+                            onTouchEnd={handlePriceEnd}
+                          />
+                          ${tempPriceRange[0]} - ${priceRange[1]}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>*/}
+
               </div>
             </aside>
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        contentLabel="Quick View Modal"
+        className="quick-view-modal"
+        overlayClassName="quick-view-overlay"
+      >
+        <button className="close-modal" onClick={closeModal}>X</button>
+        {currentProduct && (
+          <div className="container quickView-container">
+            <div className="quickView-content">
+              <div className="row">
+                {/* Left side: Product Info */}
+                <div className="col-lg-7 col-md-6">
+                  <div className="product-left-modal">
+                    <img
+                      src={`${global.IMGProd}${currentProduct.url_imagen}`}
+                      alt={currentProduct.prod_name}
+                      className="product-image-products"
+                    />
+                  </div>
+                </div>
+
+                {/* Right side: Product Details */}
+                <div className="col-lg-5 col-md-6">
+                  <h2 className="product-title-modal">{currentProduct.prod_name}</h2>
+                  <h3 className="product-price-modal">${currentProduct.prod_precio}</h3>
+
+                  <div className="product-txt-modal">
+                    {currentProduct.prod_desc || 'No description available.'}
+                  </div>
+
+                  {/* Quantity input */}
+                  <label htmlFor="qty">{t('products.Qty')}</label>
+                  <div className="product-details-quantity">
+                    <input
+                      type="number"
+                      id="qty"
+                      className="form-control qty-input"
+                      value="1"
+                      min="1"
+                      max="10"
+                      step="1"
+                      required
+                    />
+                  </div>
+
+                  {/* Actions: Add to Wishlist, Add to Cart */}
+                  <div className="product-details-action">
+                    <a href="!#"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        handleAddToCart(currentProduct)
+                      }}
+                      className="btn-product btn-cart">
+                      <span>{t('products.add_to_cart')}</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </Modal>
     </main>
-  );
+  )
 }
