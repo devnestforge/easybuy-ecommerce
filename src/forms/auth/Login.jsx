@@ -109,7 +109,7 @@ const LoginRegister = () => {
 
             response = await secutiryLogic.registerLogic(data, t)
             if (response.success) {
-                //navigate('/select-modulo', { replace: true })
+                window.location.href = "/home";
             } else {
             }
             enqueueSnackbar(response.message, {
@@ -233,7 +233,7 @@ const LoginRegister = () => {
                                         <div className="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
                                             <form action="!#">
                                                 <div className="form-group">
-                                                    <label htmlFor="register-email">{t('email_input')} *</label>
+                                                    <label htmlFor="register-email">{t('auth.email_input')} *</label>
                                                     <input
                                                         type="email"
                                                         className="form-control"
@@ -273,7 +273,7 @@ const LoginRegister = () => {
                                                         type="submit"
                                                         onClick={(e) => handleRegister(e)}
                                                         className="btn btn-outline-primary-2">
-                                                        <span>{t('register_label')}</span>
+                                                        <span>{t('auth.register_label')}</span>
                                                         <i className="icon-long-arrow-right"></i>
                                                     </button>
                                                     <br />
@@ -286,7 +286,7 @@ const LoginRegister = () => {
                                                             id="register-policy"
                                                             checked={policy}
                                                         />
-                                                        <label className="custom-control-label" htmlFor="register-policy">{t('auth.acepto_politicas_label')} *</label>
+                                                        <label className="custom-control-label" htmlFor="register-policy">{t('auth.privacy_policy_check')} *</label>
                                                     </div>
                                                     <br />
                                                     <br />
