@@ -14,6 +14,8 @@ export default function Recommendations({ t, data }) {
     const { addToCart } = useCart()
     const [load, setLoad] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
 
     const handleAddToCart = async (item) => {
         setLoad(true)
@@ -38,18 +40,23 @@ export default function Recommendations({ t, data }) {
         };
         // Crear el array con el item
         const updatedCartItems = [updatedCartItem];
-        const response = await userLogic.saveViewCartLogic(updatedCartItems)
-        setLoad(false)
-        enqueueSnackbar(response.data.message, {
-            variant: response.variant,
-            anchorOrigin: {
-                vertical: 'top',
-                horizontal: 'right'
+        if (isLoggedIn) {
+            const response = await userLogic.saveViewCartLogic(updatedCartItems)
+            setLoad(false)
+            enqueueSnackbar(response.data.message, {
+                variant: response.variant,
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right'
+                }
+            })
+            if (response.success) {
+                addToCart(updatedCartItem)
             }
-        })
-        if(response.success) {
+        } else {
             addToCart(updatedCartItem)
         }
+        setLoad(false)
 
     }
 

@@ -18,6 +18,8 @@ export default function ProductsSearch() {
   const [brand, setBrand] = useState(0)
   const [priceRange, setPriceRange] = useState([0, 1000])
   const { addToCart } = useCart()
+  const token = localStorage.getItem('authToken')
+  const isLoggedIn = !!token
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentProduct, setCurrentProduct] = useState(null)
   const [tempPriceRange, setTempPriceRange] = useState([0, 1000])
@@ -104,7 +106,7 @@ export default function ProductsSearch() {
     setCurrentPage(pageNumber)
   }
 
-  const handleAddToCart = async(item) => {
+  const handleAddToCart = async (item) => {
     setLoad(true)
     const quantity = 1 // Puedes manejar esto dinámicamente si lo necesitas
     const iva = item.iva_precio * quantity // Cálculo del IVA
@@ -126,16 +128,20 @@ export default function ProductsSearch() {
       imageUrl: item.url_imagen,
     };
     const updatedCartItems = [updatedCartItem];
-    const response = await userLogic.saveViewCartLogic(updatedCartItems)
-    setLoad(false)
-    enqueueSnackbar(response.data.message, {
-      variant: response.variant,
-      anchorOrigin: {
-        vertical: 'top',
-        horizontal: 'right'
+    if (isLoggedIn) {
+      const response = await userLogic.saveViewCartLogic(updatedCartItems)
+      setLoad(false)
+      enqueueSnackbar(response.data.message, {
+        variant: response.variant,
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        }
+      })
+      if (response.success) {
+        addToCart(updatedCartItem)
       }
-    })
-    if (response.success) {
+    } else {
       addToCart(updatedCartItem)
     }
     setLoad(false)

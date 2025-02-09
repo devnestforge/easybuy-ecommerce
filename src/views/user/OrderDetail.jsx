@@ -12,6 +12,7 @@ export default function OrderDtail() {
     const [discountAmount, setDiscountAmount] = useState(0)
     const [shippings, setShippings] = useState([])
     const [selectedShipping, setSelectedShipping] = useState("")
+    const [shipCheckout, setShipCheckout] = useState("")
     const [ship, setEnvio] = useState(0)
     const order = searchParams.get('orden');
     //const [shippingCost, setShippingCost] = useState(0)
@@ -34,7 +35,6 @@ export default function OrderDtail() {
         const address = await userLogic.getAddressLogic(0, "")
         if (address.success && address.data.length > 0) {
             const mainAddress = address.data.find(addr => addr.es_principal === "t")
-            console.log(mainAddress)
             setDefaultAddress(mainAddress || null)
         }
     }
@@ -51,13 +51,7 @@ export default function OrderDtail() {
         const shipping = await generalLogic.getShippingMethods()
         if (shipping.success && shipping.data.length > 0) {
             setShippings(shipping.data)
-            const storedShippingCost = localStorage.getItem('shippingCost')
-            let defaultShippingCost = ""
-            if (storedShippingCost) {
-                defaultShippingCost = storedShippingCost
-            } else {
-                defaultShippingCost = "TIPENV0001"
-            }
+            let defaultShippingCost = shipCheckout
             const defaultShipping = shipping.data.find(
                 (method) => method.nemonicoTiposEnvio === defaultShippingCost
             )
@@ -72,6 +66,8 @@ export default function OrderDtail() {
         //const storedCartItems = localStorage.getItem("cartItems")
         if (viewcartDetail.data.checkout_det) {
             const parsedCartItems = viewcartDetail.data.checkout_det
+            setShipCheckout(viewcartDetail.data.checkout[0]["envio_id"])
+            console.log(viewcartDetail.data.checkout[0]["envio_id"])
             setCartItems(parsedCartItems)
             //const total = parsedCartItems.reduce((acc, item) => acc + item.quantity, 0)
             //setTotalProducts(total)

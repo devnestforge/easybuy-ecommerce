@@ -197,18 +197,23 @@ export default function ProductsDetail() {
     };
 
     const updatedCartItems = [updatedCartItem];
-    const response = await userLogic.saveViewCartLogic(updatedCartItems)
-    setLoad(false)
-    enqueueSnackbar(response.data.message, {
-      variant: response.variant,
-      anchorOrigin: {
-        vertical: 'top',
-        horizontal: 'right'
+    if (isLoggedIn) {
+      const response = await userLogic.saveViewCartLogic(updatedCartItems)
+      setLoad(false)
+      enqueueSnackbar(response.data.message, {
+        variant: response.variant,
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right'
+        }
+      })
+      if (response.success) {
+        addToCart(updatedCartItem)
       }
-    })
-    if (response.success) {
+    } else {
       addToCart(updatedCartItem)
     }
+    setLoad(false)
 
     /*addToCart({
       id: product.id,
