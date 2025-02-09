@@ -6,6 +6,8 @@ import productsLogic from '../../functions/logic/productsLogic'
 import { useCart } from '../../functions/context/CartProvider'
 import t from '../../translations/i18n'
 import Modal from 'react-modal'
+import { useSnackbar } from 'notistack'
+import userLogic from '../../functions/logic/userLogic'
 
 export default function ProductsSearch() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -21,6 +23,7 @@ export default function ProductsSearch() {
   const [tempPriceRange, setTempPriceRange] = useState([0, 1000])
   const [catalogoFilter, setCatalogo] = useState([])
   const [marcaFilter, setMarca] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
   const [filters, setFilters] = useState({
     category: [],
     brand: [],
@@ -101,13 +104,12 @@ export default function ProductsSearch() {
     setCurrentPage(pageNumber)
   }
 
-  const handleAddToCart = (item) => {
+  const handleAddToCart = async(item) => {
     setLoad(true)
     const quantity = 1 // Puedes manejar esto dinámicamente si lo necesitas
     const iva = item.iva_precio * quantity // Cálculo del IVA
     const total = item.prod_precio * quantity + iva
-
-    addToCart({
+    const updatedCartItem = {
       id: item.id,
       empresa_id: item.empresa_id,
       name: item.prod_name,
@@ -122,7 +124,20 @@ export default function ProductsSearch() {
       iva_descuento: item.iva_descuento,
       quantity,
       imageUrl: item.url_imagen,
+    };
+    const updatedCartItems = [updatedCartItem];
+    const response = await userLogic.saveViewCartLogic(updatedCartItems)
+    setLoad(false)
+    enqueueSnackbar(response.data.message, {
+      variant: response.variant,
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
     })
+    if (response.success) {
+      addToCart(updatedCartItem)
+    }
     setLoad(false)
   }
 

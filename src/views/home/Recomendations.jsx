@@ -3,7 +3,8 @@ import Modal from 'react-modal'
 import CryptoJS from 'crypto-js'
 import { useCart } from '../../functions/context/CartProvider'
 import Spiner from '../../components/modals/Spiner'
-
+import userLogic from '../../functions/logic/userLogic'
+import { useSnackbar } from 'notistack'
 
 Modal.setAppElement('#root')
 
@@ -11,15 +12,15 @@ export default function Recommendations({ t, data }) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [currentProduct, setCurrentProduct] = useState(null)
     const { addToCart } = useCart()
-    const [load, setLoad] = useState(false);
+    const [load, setLoad] = useState(false)
+    const { enqueueSnackbar } = useSnackbar()
 
-    const handleAddToCart = (item) => {
+    const handleAddToCart = async (item) => {
         setLoad(true)
         const quantity = 1 // Puedes manejar esto dinámicamente si lo necesitas
         const iva = item.iva_precio * quantity // Cálculo del IVA
         const total = item.prod_precio * quantity + iva
-
-        addToCart({
+        const updatedCartItem = {
             id: item.id,
             empresa_id: item.empresa_id,
             name: item.prod_name,
@@ -34,8 +35,22 @@ export default function Recommendations({ t, data }) {
             iva_descuento: item.iva_descuento,
             quantity,
             imageUrl: item.url_imagen,
-        })
+        };
+        // Crear el array con el item
+        const updatedCartItems = [updatedCartItem];
+        const response = await userLogic.saveViewCartLogic(updatedCartItems)
         setLoad(false)
+        enqueueSnackbar(response.data.message, {
+            variant: response.variant,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        })
+        if(response.success) {
+            addToCart(updatedCartItem)
+        }
+
     }
 
     const openModal = (product) => {

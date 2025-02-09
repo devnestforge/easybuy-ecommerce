@@ -78,7 +78,7 @@ export const CartProvider = ({ children }) => {
 
       localStorage.setItem('cartItems', JSON.stringify(updatedCartItems))
 
-      userLogic.saveViewCartLogic(updatedCartItems)
+      //userLogic.saveViewCartLogic(updatedCartItems)
 
       return updatedCartItems
     })

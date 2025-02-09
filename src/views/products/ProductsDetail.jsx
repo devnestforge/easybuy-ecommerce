@@ -8,6 +8,7 @@ import { useCart } from '../../functions/context/CartProvider'
 import t from '../../translations/i18n'
 import RatingStars from '../../components/RatingStars'
 import { useSnackbar } from 'notistack'
+import userLogic from '../../functions/logic/userLogic'
 
 const decryptId = (encryptedId) => {
   const base64 = encryptedId.replace(/-/g, '+').replace(/_/g, '/') + '=='
@@ -176,8 +177,9 @@ export default function ProductsDetail() {
     return <ErrorPage />
   }
 
-  const handleAddToCart = () => {
-    addToCart({
+  const handleAddToCart = async () => {
+    setLoad(true)
+    const updatedCartItem = {
       id: product.id,
       empresa_id: product.empresa_id,
       name: product.prod_name,
@@ -192,7 +194,38 @@ export default function ProductsDetail() {
       iva_descuento: product.iva_descuento,
       quantity,
       imageUrl: product.url_imagen,
+    };
+
+    const updatedCartItems = [updatedCartItem];
+    const response = await userLogic.saveViewCartLogic(updatedCartItems)
+    setLoad(false)
+    enqueueSnackbar(response.data.message, {
+      variant: response.variant,
+      anchorOrigin: {
+        vertical: 'top',
+        horizontal: 'right'
+      }
     })
+    if (response.success) {
+      addToCart(updatedCartItem)
+    }
+
+    /*addToCart({
+      id: product.id,
+      empresa_id: product.empresa_id,
+      name: product.prod_name,
+      price: product.prod_precio,
+      iva: product.iva_precio,
+      total: product.total_precio,
+      tarifa: product.tarifa,
+      valor_descuento: product.valor_descuento,
+      tarifa_descuento: product.tarifa_descuento,
+      precio_descuento: product.precio_descuento,
+      total_descuento: product.total_descuento,
+      iva_descuento: product.iva_descuento,
+      quantity,
+      imageUrl: product.url_imagen,
+    })*/
   }
 
   const handleQuantityChange = (e) => {

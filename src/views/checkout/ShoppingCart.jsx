@@ -85,7 +85,7 @@ export default function ShoppingCart() {
         setLoad(false)
     }
 
-    const handleQuantityChange = (index, newQuantity) => {
+    const handleQuantityChange = async (index, newQuantity) => {
         setLoad(true)
         const updatedCartItems = [...cartItems]
         updatedCartItems[index].quantity = newQuantity
@@ -99,9 +99,20 @@ export default function ShoppingCart() {
         updatedCartItems[index].iva = parseFloat(iva)
         updatedCartItems[index].total = parseFloat(total)
 
-        setCartItems(updatedCartItems)
-        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems))
-        userLogic.saveViewCartLogic(updatedCartItems)
+        const response = await userLogic.saveViewCartLogic(updatedCartItems)
+        setLoad(false)
+        enqueueSnackbar(response.data.message, {
+            variant: response.variant,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        })
+        if (response.success) {
+            setCartItems(updatedCartItems)
+            localStorage.setItem('cartItems', JSON.stringify(updatedCartItems))
+            //userLogic.saveViewCartLogic(updatedCartItems)
+        }
         setLoad(false)
     }
 
