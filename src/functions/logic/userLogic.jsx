@@ -159,6 +159,16 @@ const saveProfileLogic = async (dataSave) => {
     return dataResp;
 }
 
+const saveComprobantePagoLogic = async (selectedFile, fechaPago, order) => {
+    let dataResp = []
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (isLoggedIn) {
+        dataResp = await userServices.saveComprobantePagoService(selectedFile, fechaPago, order, token);
+    }
+    return dataResp;
+}
+
 const userLogic = {
     saveViewCartLogic,
     saveAddressLogic,
@@ -170,7 +180,8 @@ const userLogic = {
     getWiewcartByCodeLogic,
     getHistoryOrdersLogic,
     getUserProfileInfoLogic,
-    saveProfileLogic
+    saveProfileLogic,
+    saveComprobantePagoLogic
 }
 
 export default userLogic

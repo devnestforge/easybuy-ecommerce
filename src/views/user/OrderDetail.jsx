@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react"
 import Spiner from '../../components/modals/Spiner'
 import userLogic from '../../functions/logic/userLogic'
 import generalLogic from "../../functions/logic/generalLogic"
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom'
+import { useSnackbar } from 'notistack'
 
 export default function OrderDtail() {
     const [searchParams] = useSearchParams();
@@ -11,10 +12,14 @@ export default function OrderDtail() {
     const [cartItems, setCartItems] = useState([])
     const [discountAmount, setDiscountAmount] = useState(0)
     const [shippings, setShippings] = useState([])
+    const [checkoutPago, setCheckoutpago] = useState([])
     const [selectedShipping, setSelectedShipping] = useState("")
-    const [shipCheckout, setShipCheckout] = useState("")
     const [ship, setEnvio] = useState(0)
     const order = searchParams.get('orden');
+    const [comprobanteUrl, setComprobanteUrl] = useState(checkoutPago?.archivo_adjunto || '')
+    const baseUrl = global.IMGProd
+    const { enqueueSnackbar } = useSnackbar()
+    const [fechaPago, setFechaPago] = useState('')
     //const [shippingCost, setShippingCost] = useState(0)
 
     useEffect(() => {
@@ -26,7 +31,6 @@ export default function OrderDtail() {
         }
         getAddress()
         getViewCartByCode()
-        getShippingMethods()
         getPayMethod()
         setSpiner(false)
     }, [])
@@ -47,34 +51,42 @@ export default function OrderDtail() {
         }
     }
 
-    const getShippingMethods = async () => {
+    const getViewCartByCode = async () => {
+        const viewcartDetail = await userLogic.getWiewcartByCodeLogic(order)
+
+        if (viewcartDetail.data.checkout_det) {
+            const parsedCartItems = viewcartDetail.data.checkout_det
+            const envio = viewcartDetail?.data?.checkout?.[0]?.["envio"];
+            setEnvio(envio ? parseInt(envio, 10) || 0 : 0);
+            setCartItems(parsedCartItems)
+            setCheckoutpago(viewcartDetail.data.checkoutPago[0])
+            setComprobanteUrl(viewcartDetail.data.checkoutPago[0].archivo_adjunto)
+            if (viewcartDetail?.data?.checkoutPago?.[0]?.fecha_pago) {
+                const split = viewcartDetail.data.checkoutPago[0].fecha_pago.split(" ")
+                setFechaPago(split[0])
+            } else {
+                setFechaPago("")
+            }
+
+            getShippingMethods(viewcartDetail.data.checkout[0]["envio_id"])
+
+        }
+        const storedDiscountAmount = localStorage.getItem("discountAmount")
+        if (storedDiscountAmount) {
+            setDiscountAmount(parseFloat(storedDiscountAmount))
+        }
+    }
+
+    const getShippingMethods = async (envioDef) => {
         const shipping = await generalLogic.getShippingMethods()
         if (shipping.success && shipping.data.length > 0) {
             setShippings(shipping.data)
-            let defaultShippingCost = shipCheckout
+            let defaultShippingCost = envioDef
             const defaultShipping = shipping.data.find(
                 (method) => method.nemonicoTiposEnvio === defaultShippingCost
             )
             setSelectedShipping(defaultShipping || null)
             setEnvio(parseFloat(defaultShipping?.costo || 0))
-        }
-    }
-
-    const getViewCartByCode = async () => {
-        const viewcartDetail = await userLogic.getWiewcartByCodeLogic(order)
-        console.log(viewcartDetail.data.checkout_det)
-        //const storedCartItems = localStorage.getItem("cartItems")
-        if (viewcartDetail.data.checkout_det) {
-            const parsedCartItems = viewcartDetail.data.checkout_det
-            setShipCheckout(viewcartDetail.data.checkout[0]["envio_id"])
-            console.log(viewcartDetail.data.checkout[0]["envio_id"])
-            setCartItems(parsedCartItems)
-            //const total = parsedCartItems.reduce((acc, item) => acc + item.quantity, 0)
-            //setTotalProducts(total)
-        }
-        const storedDiscountAmount = localStorage.getItem("discountAmount")
-        if (storedDiscountAmount) {
-            setDiscountAmount(parseFloat(storedDiscountAmount))
         }
     }
 
@@ -115,6 +127,134 @@ export default function OrderDtail() {
     const envio = ship
     const totalIvaFinal = totalIva
     const totalGeneral = subtotalIva15 + subtotalIva0 + totalIvaFinal + envio - discountAmount
+
+    const handleFileChange = async (event) => {
+        setSpiner(true)
+        if (!fechaPago) {
+            enqueueSnackbar('Selecciona una fecha de pago', {
+                variant: 'warning',
+                anchorOrigin: {
+                    vertical: 'top',
+                    horizontal: 'right'
+                }
+            })
+        } else {
+            const selectedFile = event.target.files[0]
+            console.log(selectedFile)
+            if (!selectedFile) return
+
+            try {
+                const response = await userLogic.saveComprobantePagoLogic(selectedFile, fechaPago, order)
+                enqueueSnackbar(response.message, {
+                    variant: response.variant,
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right'
+                    }
+                })
+                if (!response.error) {
+                    setComprobanteUrl(response.data.data.url)
+                }
+            } catch (error) {
+                enqueueSnackbar('Hubo un error al enviar el comprobante de pago.', {
+                    variant: 'danger',
+                    anchorOrigin: {
+                        vertical: 'top',
+                        horizontal: 'right'
+                    }
+                })
+            }
+        }
+        setSpiner(false)
+    }
+
+    const renderPaymentSection = () => {
+        console.log(checkoutPago)
+        if (checkoutPago && checkoutPago.nemonico_pago === 'METPA0004') {
+            return (
+                <div>
+                    <h3 className="summary-title">
+                        Método de Pago
+                    </h3>
+                    <div className="card-body">
+                        {comprobanteUrl ? (
+                            <>
+                                <div className="row">
+                                    {/* Sección para subir el comprobante */}
+                                    <div className="col-md-6">
+                                        <label>Comprobante(Transferencia)</label>
+                                        <input type="file" accept="image/*" className="form-control" onChange={handleFileChange} />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <label htmlFor="fechaNacimiento">Fecha de pago</label>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="fechaNacimiento"
+                                            name="fechaNacimiento"
+                                            value={fechaPago}
+                                            onChange={e => {
+                                                setFechaPago(e.target.value);
+                                                localStorage.setItem('fechaNaci', e.target.value);
+                                            }}
+                                            required
+                                        />
+                                    </div>
+
+                                    {/* Sección para mostrar la imagen y botón de descarga */}
+                                    <div className="col-md-6 text-center mt-3">
+                                        <p><strong>Comprobante de pago:</strong></p>
+                                        <a href={baseUrl + comprobanteUrl} target="_blank" rel="noopener noreferrer">
+                                            <img src={baseUrl + comprobanteUrl} alt="Comprobante de pago" className="img-fluid rounded border" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                        </a>
+                                        <br />
+                                        <a target='_blank' rel="noreferrer" href={baseUrl + comprobanteUrl} download className="btn btn-primary mt-2">Descargar Comprobante</a>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <label>Comprobante de pago (Transferencia)</label>
+                                        <input type="file" accept="image/*" className="form-control" onChange={handleFileChange} />
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <label htmlFor="fechaNacimiento">Fecha de pago</label>
+                                        <input
+                                            type="date"
+                                            className="form-control"
+                                            id="fechaNacimiento"
+                                            name="fechaNacimiento"
+                                            value={fechaPago}
+                                            onChange={e => {
+                                                setFechaPago(e.target.value);
+                                                localStorage.setItem('fechaNaci', e.target.value);
+                                            }}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
+            )
+        } else if (checkoutPago && checkoutPago.nemonico_pago === 'METPA0001') {
+            return (
+                <div className="card mt-3">
+                    <div className="card-header">
+                        <h5>Método de Pago</h5>
+                    </div>
+                    <div className="card-body">
+                        <p><strong>Efectivo</strong></p>
+                    </div>
+                </div>
+            )
+        }
+    }
 
     return (
         <>
@@ -171,6 +311,9 @@ export default function OrderDtail() {
                                         </ul>
                                         <hr className="linea" />
                                     </div>
+                                    <div className="summary">
+                                        {renderPaymentSection()}
+                                    </div>
                                 </div>
 
                                 {/* Panel Derecho */}
@@ -194,7 +337,7 @@ export default function OrderDtail() {
                                             <p>
                                                 <span>
                                                     Envío:{" "}
-                                                    {selectedShipping ? selectedShipping.nombre : "No seleccionado"}
+                                                    {checkoutPago.envio}
                                                 </span>
                                                 <span>${ship.toFixed(2)}</span>
                                             </p>
@@ -233,10 +376,11 @@ export default function OrderDtail() {
                                         <hr class="linea" />
                                     </div>
 
-                                    <div className="summary mb-1">
-                                        {selectedShipping && shippings.some(shipping => shipping.id === selectedShipping.id) && (
-                                            <>
-                                                <h3 className="summary-title">Métodos de  y pago</h3>
+
+                                    {selectedShipping && shippings.some(shipping => shipping.id === selectedShipping.id) && (
+                                        <>
+                                            <div className="summary mb-1">
+                                                <h3 className="summary-title">Método de envío</h3>
                                                 <div className="shipping-methods">
                                                     {shippings.map((shipping) => (
                                                         selectedShipping.id === shipping.id && (
@@ -269,10 +413,9 @@ export default function OrderDtail() {
                                                         )
                                                     ))}
                                                 </div>
-                                            </>
-                                        )}
-                                    </div>
-
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
 
                             </div>

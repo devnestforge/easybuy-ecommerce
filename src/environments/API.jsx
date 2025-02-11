@@ -49,6 +49,8 @@ global.PRODUCTSSEARCH = global.URLBACKENDSECURITY  + "/ecomerce/getProductsSearc
 global.GETUSERPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/getUserProfile"
 global.SAVEPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/saveProfile"
 
+global.COMPROBANTE = global.URLBACKENDSECURITY + "/ecomerce/saveComprobantes";
+
 // URL FRONT END
 
 // SECUTIRY
