@@ -169,6 +169,41 @@ const saveComprobantePagoLogic = async (selectedFile, fechaPago, order) => {
     return dataResp;
 }
 
+const updatePasswordLogic = async (userData) => {
+    let dataResp = []
+    const token = localStorage.getItem('authToken')
+    const isLoggedIn = !!token
+    if (userData.passwordOld === "" || userData.password === "" || userData.confirmPassword === "") {
+        return {
+            "message": 'Tiene que llenar todos los campos!',
+            "error": true,
+            "variant": 'warning',
+        }
+    }
+    if (userData.password !== userData.confirmPassword) {
+        return {
+            "message": 'Las contraseñas no coinciden!',
+            "error": true,
+            "variant": 'warning',
+        }
+    }
+    if (!isLoggedIn) {
+        return {
+            "message": 'Debe iniciar sesión',
+            "error": true,
+            "variant": 'warning',
+        }
+    }
+    let dataSave = {
+        passwordOld: userData.passwordOld,
+        password: userData.password,
+        confirmPassword: userData.confirmPassword,
+        creation_ip: localStorage.getItem('ip')
+    }
+    dataResp = await userServices.updatePasswordService(dataSave, token);
+    return dataResp;
+}
+
 const userLogic = {
     saveViewCartLogic,
     saveAddressLogic,
@@ -181,7 +216,8 @@ const userLogic = {
     getHistoryOrdersLogic,
     getUserProfileInfoLogic,
     saveProfileLogic,
-    saveComprobantePagoLogic
+    saveComprobantePagoLogic,
+    updatePasswordLogic
 }
 
 export default userLogic

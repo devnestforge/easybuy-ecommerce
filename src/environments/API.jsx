@@ -48,6 +48,7 @@ global.GETHISTORYORDERS = global.URLBACKENDSECURITY  + "/ecomerce/getHistoryOrde
 global.PRODUCTSSEARCH = global.URLBACKENDSECURITY  + "/ecomerce/getProductsSearch"
 global.GETUSERPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/getUserProfile"
 global.SAVEPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/saveProfile"
+global.EDITPASSWORD = global.URLBACKENDSECURITY  + "/ecomerce/editPassword"
 
 global.COMPROBANTE = global.URLBACKENDSECURITY + "/ecomerce/saveComprobantes";
 

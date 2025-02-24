@@ -274,6 +274,32 @@ const saveComprobantePagoService = async (selectedFile, fechaPago, order, token)
     }
 }
 
+const updatePasswordService = async (dataSave, token) => {
+    try {
+        const secretKey = global.SECRETKEY
+        const credentials = base64.encode(token + ':' + secretKey)
+        const options = requestOptions.headers('POST', credentials, dataSave)
+        const resp = await fetch(global.EDITPASSWORD, options)
+        const dataResp = await resp.json()
+        responseMapper = secutiryMapper.userDataMapper(dataResp)
+    } catch (e) {
+        const data = {
+            "section_error": "userServices.jsx front",
+            "detail_error": "saveAddressService user",
+            "mensaje_error": e.message,
+            "user_transac": 0,
+            "module_transac": "Front userServices.jsx saveAddressService user",
+            "operation_date": new Date(),
+            "operation_user": 0,
+            "operation_ip": localStorage.getItem('ip'),
+            "env": 2
+        }
+
+        auditoryServices.catchErrorService(data)
+    }
+    return responseMapper
+}
+
 const userServices = {
     saveViewCartService,
     saveAddressService,
@@ -284,7 +310,8 @@ const userServices = {
     getHistoryOrdersServices,
     getUserProfileInfoServices,
     saveProfileService,
-    saveComprobantePagoService
+    saveComprobantePagoService,
+    updatePasswordService
 }
 
 export default userServices

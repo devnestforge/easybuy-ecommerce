@@ -54,34 +54,43 @@ export default function PerfilUsuario() {
     }, [provincia, cities])
 
     useEffect(() => {
-        setSpiner(true)
-        const token = localStorage.getItem('authToken')
-        const isLoggedIn = !!token
-        if (!isLoggedIn) {
-            window.location.href = global.HOME
-        } else {
-            getUserProfileInfo(token)
+        setSpiner(true);
+        const token = localStorage.getItem('authToken');
+        const isLoggedIn = !!token;
+
+        if (isLoggedIn) {
+            getUserProfileInfo(token);
         }
-        setSpiner(false)
-    }, [])
+
+        setSpiner(false);
+    }, []);
 
     const getUserProfileInfo = async (token) => {
-        const userInfo = await userLogic.getUserProfileInfoLogic(token)
-        console.log(userInfo)
-        if (userInfo.success && userInfo.data.data.length > 0) {
-            setIdentificacion(userInfo.data.data[0].identification)
-            setNombres(userInfo.data.data[0].nombres)
-            setApellidos(userInfo.data.data[0].apellidos)
-            setDireccion(userInfo.data.data[0].direction)
-            setCellPhone(userInfo.data.data[0].phone)
-            setGender(userInfo.data.data[0].gender)
-            setProvincia(userInfo.data.data[0].provincia_id)
-            setCiudad(userInfo.data.data[0].parroquia_id.toString())
-            setEmail(userInfo.data.data[0].email)
-            const fechaFormateada = userInfo.data.data[0].fecha_nacimiento.split(' ')[0]
-            setFechaNaci(fechaFormateada)
+        try {
+            const userInfo = await userLogic.getUserProfileInfoLogic(token);
+            if (userInfo?.success && Array.isArray(userInfo?.data?.data) && userInfo.data.data.length > 0) {
+                const userData = userInfo.data.data[0];
+
+                setIdentificacion(userData.identification || '');
+                setNombres(userData.nombres || '');
+                setApellidos(userData.apellidos || '');
+                setDireccion(userData.direction || '');
+                setCellPhone(userData.phone || '');
+                setGender(userData.gender || '');
+                setProvincia(userData.provincia_id || '');
+                setCiudad(userData.parroquia_id ? userData.parroquia_id.toString() : '');
+                setEmail(userData.email || '');
+
+                if (userData.fecha_nacimiento) {
+                    const fechaFormateada = userData.fecha_nacimiento.split(' ')[0];
+                    setFechaNaci(fechaFormateada);
+                }
+            }
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
         }
-    }
+    };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target
@@ -118,15 +127,24 @@ export default function PerfilUsuario() {
         setSpiner(false)
     }
 
-    const handleSubmitPass = (e) => {
+    const handleSubmitPass = async (e) => {
         e.preventDefault()
         setSpiner(true)
-        if (userData.password === userData.confirmPassword) {
-            alert('Contraseña cambiada con éxito!')
-        } else {
-            alert('Las contraseñas no coinciden')
-        }
+        const response = await userLogic.updatePasswordLogic(userData)
+        enqueueSnackbar(response.message, {
+            variant: response.variant,
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'right'
+            }
+        })
         setSpiner(false)
+        if (response.success) {
+            setTimeout(function () {
+                localStorage.clear()
+                window.location.href = "/home"
+            }, global.DELAY)
+        }
     }
 
     return (
@@ -168,7 +186,7 @@ export default function PerfilUsuario() {
 
                                 {/* Contenido de las Pestañas */}
                                 <div className="card-body">
-                                    <br/>
+                                    <br />
                                     {activeTab === 'info' && (
                                         <form onSubmit={handleSubmitProfile} className="contact-form mb-2">
                                             <div className="row">
@@ -359,14 +377,14 @@ export default function PerfilUsuario() {
 
                                     {activeTab === 'password' && (
                                         <form onSubmit={handleSubmitPass}>
-                                             <div className="form-group">
+                                            <div className="form-group">
                                                 <label htmlFor="password">Contraseña actual</label>
                                                 <input
                                                     type="password"
                                                     className="form-control"
                                                     id="passwordOld"
                                                     name="passwordOld"
-                                                    value={userData.password}
+                                                    value={userData.passwordOld}
                                                     onChange={handleInputChange}
                                                     placeholder="Contraseña actual *"
                                                     required

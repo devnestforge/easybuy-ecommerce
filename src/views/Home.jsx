@@ -48,7 +48,7 @@ export default function Home() {
 
             <Spiner opt={load} />
             
-            {cat && (<Popular t={t} data={catInfo} />)}
+             {/*cat && (<Popular t={t} data={catInfo} />)*/}
 
             {prod && (<Recomendations t={t} data={prodInfo} />)}
 
