@@ -49,6 +49,7 @@ global.PRODUCTSSEARCH = global.URLBACKENDSECURITY  + "/ecomerce/getProductsSearc
 global.GETUSERPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/getUserProfile"
 global.SAVEPROFILE = global.URLBACKENDSECURITY  + "/ecomerce/saveProfile"
 global.EDITPASSWORD = global.URLBACKENDSECURITY  + "/ecomerce/editPassword"
+global.PRODUCTS_SEARCH_TYPE = global.URLBACKENDSECURITY  + "/ecomerce/getProductsByType"
 
 global.COMPROBANTE = global.URLBACKENDSECURITY + "/ecomerce/saveComprobantes";
 
@@ -87,3 +88,8 @@ global.HISTORY = '/historial-pedidos'
 global.ROUTE_HOME = "*"
 global.ROUTE_ANY = "/*"
 global.URLPROD = "http://localhost/"
+
+global.PEROD_BY_PAGE = 12
+
+global.OFER_TYPE = 'ofers'
+global.DEAL_TYPE = 'deals'

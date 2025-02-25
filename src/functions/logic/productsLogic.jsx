@@ -5,6 +5,11 @@ const getProductsLogic = async (idProduct, search) => {
     return dataResp
 }
 
+const getProductsByTypeLogic = async (idProduct, page, perPage, search, filters, type) => {
+    const dataResp = await productsServices.getProductsByTypeService(idProduct, page, perPage, search, filters, type)
+    return dataResp
+}
+
 const getPromotionsLogic = async () => {
     const dataResp = await productsServices.getPromotionService()
     return dataResp
@@ -51,7 +56,8 @@ const productsLogic = {
     getCategoriesLogic,
     getProductsSearchLogic,
     saveProductReviewLogic,
-    getFiltersLogic
+    getFiltersLogic,
+    getProductsByTypeLogic
 }
 
 export default productsLogic

@@ -2,56 +2,45 @@ import React, { useEffect, useState } from 'react'
 import '../scss/_products.scss'
 import t from '../translations/i18n'
 import generalLogic from '../functions/logic/generalLogic'
-import productsLogic from '../functions/logic/productsLogic'
-import Recomendations from './home/Recomendations'
-import Popular from './home/Popular'
+import Outlet from './home/Outlet'
+import Offers from './home/Offers'
+import Promotions from './home/Promotions'
+import TodayDeal from './home/TodayDeal'
 import Spiner from '../components/modals/Spiner'
-
 
 export default function Home() {
 
-    const [cat, setCategories] = useState(false)
     const [load, setLoad] = useState(false)
-    const [catInfo, setCatInfo] = useState([])
-    const [prod, setProd] = useState(true)
-    const [prodInfo, setProdInfo] = useState([])
 
     useEffect(() => {
-        setLoad(true)
         getIp()
-        getProducts()
-        setLoad(false)
     }, [])
 
     const getIp = async () => {
+        setLoad(true)
         const ip = await generalLogic.getIpClient()
         localStorage.setItem('ip', ip["ipString"])
-    }
-
-    const getProducts = async () => {
-        const categories = await productsLogic.getCategoriesLogic()
-        if (categories.success && categories.data.length > 0) {
-            setCategories(true)
-            setCatInfo(categories.data)
-        }
-
-        const prodcuts = await productsLogic.getProductsLogic(0, '')
-        if (prodcuts.success && prodcuts.data.length > 0) {
-            setProd(true)
-            setProdInfo(prodcuts.data)
-        }
+        setLoad(false)
     }
 
     return (
         <>
-            <br/>
+            <br />
 
             <Spiner opt={load} />
-            
-             {/*cat && (<Popular t={t} data={catInfo} />)*/}
 
-            {prod && (<Recomendations t={t} data={prodInfo} />)}
+            {/*cat && (<Popular t={t} data={catInfo} />)*/}
+            <div className="container-fluid">
+                {
+                    <>
+                        <Promotions t={t} />
+                        <Offers t={t} />
+                        <TodayDeal t={t} />
+                        <Outlet t={t} />
+                    </>
 
+                }
+            </div>
             {/*
                 promotions && ( <Promotions data={promoInfo} /> )
         
@@ -73,7 +62,7 @@ export default function Home() {
 
             <Details />
             */}
-            
+
         </>
     )
 }

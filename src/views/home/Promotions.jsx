@@ -1,72 +1,71 @@
+import React, { useEffect, useState } from 'react'
+import Spiner from '../../components/modals/Spiner'
+import productsLogic from '../../functions/logic/productsLogic'
+import CryptoJS from 'crypto-js'
 
-import React from 'react';
+export default function Promotions({ t }) {
+    const [load, setLoad] = useState(false)
+    const [prodInfo, setProdInfo] = useState([])
 
-export default function Promotions(props) {
+    useEffect(() => {
+        getProducts()
+    }, [])
+
+    const getProducts = async () => {
+        setLoad(true)
+        const prodcuts = await productsLogic.getProductsByTypeLogic(0, 1, global.PEROD_BY_PAGE, 'no', '', global.DEAL_TYPE)
+        if (prodcuts.success && prodcuts.data.length > 0) {
+            setProdInfo(prodcuts.data)
+        } else {
+            setProdInfo([])
+        }
+        setLoad(false)
+    }
+
+    const encryptId = (id) => {
+        const encrypted = CryptoJS.AES.encrypt(id.toString(), 'secret-key').toString()
+        return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '')
+    }
 
     return (
         <>
-            <div className="intro-slider-container mb-5">
-                <div className="intro-slider owl-carousel owl-theme owl-nav-inside owl-light" data-toggle="owl"
-                    data-owl-options='{
-        "dots": true,
-        "nav": false, 
-        "responsive": {
-            "1200": {
-                "nav": true,
-                "dots": false
-            }
-        }
-    }'>
-                    <div className="intro-slide" style={{ backgroundImage: 'url(./assets/images/demos/demo-4/slider/slide-2.png)' }}>
-                        <div className="container intro-content">
-                            <div className="row justify-content-end">
-                                <div className="col-auto col-sm-7 col-md-6 col-lg-5">
-                                    <h3 className="intro-subtitle text-third">Deals and Promotions</h3>
-                                    <h1 className="intro-title">Beats by</h1>
-                                    <h1 className="intro-title">Dre Studio 3</h1>
-
-                                    <div className="intro-price">
-                                        <sup className="intro-old-price">$349,95</sup>
-                                        <span className="text-third">
-                                            $279<sup>.99</sup>
-                                        </span>
-                                    </div>
-
-                                    <a href="category.html" className="btn btn-primary btn-round">
-                                        <span>Shop More</span>
-                                        <i className="icon-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="intro-slide" style={{ backgroundImage: 'url(assets/images/demos/demo-4/slider/slide-1.png)' }}>
-                        <div className="container intro-content">
-                            <div className="row justify-content-end">
-                                <div className="col-auto col-sm-7 col-md-6 col-lg-5">
-                                    <h3 className="intro-subtitle text-primary">New Arrival</h3>
-                                    <h1 className="intro-title">Apple iPad Pro <br />12.9 Inch, 64GB </h1>
-
-                                    <div className="intro-price">
-                                        <sup>Today:</sup>
-                                        <span className="text-primary">
-                                            $999<sup>.99</sup>
-                                        </span>
-                                    </div>
-
-                                    <a href="category.html" className="btn btn-primary btn-round">
-                                        <span>Shop More</span>
-                                        <i className="icon-long-arrow-right"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
+            <div className="mb-2"></div>
+            <div className="container-fluid">
+                <div className="heading heading-flex mb-3">
+                    <div className="heading-left">
+                        <h2 className="title">{t('products.promotions')}</h2>
                     </div>
                 </div>
-
-                <span className="slider-loader"></span>
+                {load ? <Spiner /> : (
+                    <div className="row justify-content-center">
+                        {prodInfo.slice(0, 3).map((product, index) => (
+                            <div className="col-md-6 col-lg-4" key={product.id}>
+                                <a href="!#" className="product-card-deals-link">
+                                    <div className="product-card-deals">
+                                        <div className="product-card-text-deals">
+                                            <h4 className="product-category-deals">{product.cat_name}</h4>
+                                            <h3 className="product-title-deals">
+                                                <strong>{product.prod_name}</strong>
+                                                <div className="product-title">
+                                                    <span className="new-price">${product.precio_descuento}</span>
+                                                    Antes <span className="old-price">${product.prod_precio}</span>
+                                                </div>
+                                                Ahorra ${ (product.prod_precio - product.precio_descuento).toFixed(2) }
+                                            </h3>
+                                            <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`} className="product-link-deals">comprar ahora<i className="icon-long-arrow-right"></i></a>
+                                        </div>
+                                        <div className="product-card-image-deals">
+                                            <img src={`${global.IMGProd}${product.url_imagen}`} alt={product.prod_name} className="product-image-deals" />
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
+
+            <div className="mb-3"></div>
         </>
     )
 }

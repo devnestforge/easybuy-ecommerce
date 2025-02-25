@@ -7,7 +7,7 @@ import ProductsGrid from '../../components/ProductsGrid'
 
 Modal.setAppElement('#root')
 
-export default function Recommendations({ t }) {
+export default function Offers({ t }) {
 
     const [load, setLoad] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
@@ -44,7 +44,7 @@ export default function Recommendations({ t }) {
     return (
         <>
             <Spiner opt={load} />
-            <div className="container for-you">
+            <div className="container-fluid for-you">
                 <div className="heading heading-flex mb-3">
                     <div className="heading-left">
                         <h2 className="title">{t('products.products')}</h2>
@@ -57,6 +57,7 @@ export default function Recommendations({ t }) {
                 </div>
                 <ProductsGrid data={prodInfo} totalPages={totalPages} paginate={paginate} currentPage={currentPage} />
             </div>
+            <div className="mb-2"></div>
         </>
     )
 }

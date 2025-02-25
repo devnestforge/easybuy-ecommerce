@@ -160,6 +160,30 @@ const getFiltersService = async () => {
     }
 }
 
+const getProductsByTypeService = async (idProduct, page, perPage, search, filtersData, type) => {
+    try {
+        const token = `Bearer ${localStorage.getItem('token')}`
+        const options = requestOptions.headers('GET', token, '')
+        const filtersJson = encodeURIComponent(JSON.stringify(filtersData));
+        let filters = '/' + idProduct + '/' + page + '/' + perPage + '/' + search + '/' + filtersJson + '/' + type
+        const resp = await fetch(global.PRODUCTS_SEARCH_TYPE + filters, options)
+        const response = await resp.json()
+        let respAnswer = []
+        if (!response.error) {
+            respAnswer = response.data.data.length > 0 ?
+                generalMappers.successMapper(productsMapper.productSearchMapper(response.data), 1)
+                :
+                generalMappers.responseMapper(response, 1)
+        } else {
+            respAnswer = generalMappers.errorMapper(response)
+        }
+        return respAnswer
+    } catch (error) {
+        await logError(error.message, 'getPromotionService', 'productsServices.jsx')
+        return { error: global.MESSAGE_ERROR_CATCH }
+    }
+}
+
 const productsServices = {
     getPromotionService,
     getRecomendedService,
@@ -167,7 +191,8 @@ const productsServices = {
     getCategoriesService,
     getProductsSearchService,
     saveProductReviewService,
-    getFiltersService
+    getFiltersService,
+    getProductsByTypeService
 }
 
 export default productsServices

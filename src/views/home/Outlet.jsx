@@ -4,11 +4,8 @@ export default function Outlet() {
 
     return (
         <>
-
-
             <div className="page-header text-center" style={{ backgroundImage: "url('assets/images/page-header-bg.jpg')" }}>
-                <div className="container-fluid">
-
+                <div className="container">
                     <div className="heading text-center mb-3">
                         <h2 className="title">Deals & Outlet</h2>
                         <div className="title-desc">Todays deal and more</div>

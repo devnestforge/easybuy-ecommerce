@@ -200,7 +200,7 @@ export default function ProductsDetail() {
     if (isLoggedIn) {
       const response = await userLogic.saveViewCartLogic(updatedCartItems)
       setLoad(false)
-      enqueueSnackbar(response.data.message, {
+      enqueueSnackbar(response.data.message ?? response.message , {
         variant: response.variant,
         anchorOrigin: {
           vertical: 'top',
@@ -581,7 +581,7 @@ export default function ProductsDetail() {
         <div className="container">
           <div className="row">
             <div className="col-6">
-              <figure className="product-media">
+              <figure className="product-media6">
                 <a href="product.html">
                   <img src={`${global.IMGProd}${product.url_imagen}`} alt="Product" />
                 </a>
