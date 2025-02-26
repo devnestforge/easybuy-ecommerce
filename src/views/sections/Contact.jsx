@@ -167,9 +167,9 @@ export default function Contact() {
                             <div className="contact-box text-center">
                                 <h3>{t('social.social_icons')}</h3>
                                 <div className="social-icons social-icons-color justify-content-center">
-                                    <a href={t('social.social_face_url')} without rel="noreferrer" className="social-icon social-facebook" title="Facebook" target="_blank"><i className={t('social.social_face')}></i></a>
-                                    <a href={t('social.social_x_url')} without rel="noreferrer" className="social-icon social-twitter" title="Twitter" target="_blank"><i className={t('social.social_x')}></i></a>
-                                    <a href={t('social.social_ins_url')} without rel="noreferrer" className="social-icon social-instagram" title="Instagram" target="_blank"><i className={t('social.social_ins')}></i></a>
+                                    <a href={t('social.social_face_url')} rel="noreferrer" className="social-icon social-facebook" title="Facebook" target="_blank"><i className={t('social.social_face')}></i></a>
+                                    <a href={t('social.social_x_url')} rel="noreferrer" className="social-icon social-twitter" title="Twitter" target="_blank"><i className={t('social.social_x')}></i></a>
+                                    <a href={t('social.social_ins_url')} rel="noreferrer" className="social-icon social-instagram" title="Instagram" target="_blank"><i className={t('social.social_ins')}></i></a>
                                 </div>
                             </div>
                         </div>

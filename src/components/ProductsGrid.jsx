@@ -90,7 +90,7 @@ export default function ProductsGrid({ data = [{}], totalPages, paginate, curren
             <div className="products">
                 <div className="products-grid">
                     {data.length > 0 ? (
-                        data.map((product) => {
+                        data.map((product, index) => {
                             const isDiscountAvailable =
                                 product.valor_descuento &&
                                 product.tarifa_descuento &&
@@ -100,7 +100,7 @@ export default function ProductsGrid({ data = [{}], totalPages, paginate, curren
                                 Number(product.precio_descuento) > 0
 
                             return (
-                                <div key={product.id} className="product-card">
+                                <div key={`${product.id}-${index}`} className="product-card">
                                     <div className="product">
                                         <figure className="product-media-grid">
                                             {isDiscountAvailable === true && <span className="product-label">Oferta</span>}

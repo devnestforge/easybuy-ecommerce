@@ -1,13 +1,10 @@
-import React from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@material-ui/core'
-import '../../scss/_Spinner.scss'
+import React, { useRef } from 'react';
+import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
+import '../../scss/_Spinner.scss';
 
 const Spiner = (props) => {
+  const dialogRef = useRef(null);
+
   return (
     <Dialog
       open={props.opt}
@@ -15,6 +12,7 @@ const Spiner = (props) => {
       aria-describedby="alert-dialog-description"
       fullWidth
       maxWidth="xs"
+      ref={dialogRef} // Usamos el ref directamente
       style={{
         display: 'flex',
         justifyContent: 'center',
@@ -22,18 +20,15 @@ const Spiner = (props) => {
       }}
     >
       <DialogContent style={{ textAlign: 'center' }}>
-        <DialogContentText
-          id="alert-dialog-description"
-          className="spinner-container"
-        >
+        <div className="spinner-container">
           <div className="loader"></div>
-        </DialogContentText>
+        </div>
       </DialogContent>
       <DialogTitle className="text-center">
         <b>Cargando...</b>
       </DialogTitle>
     </Dialog>
-  )
-}
+  );
+};
 
-export default Spiner
+export default Spiner;

@@ -27,7 +27,6 @@ const LoginRegister = () => {
 
     useEffect(() => {
         // Validate password each time it changes
-        console.log(t('auth.login_label'));
         const validatePassword = (pwd) => {
             const minLength = pwd.length >= 8
             const upperCase = /[A-Z]/.test(pwd)

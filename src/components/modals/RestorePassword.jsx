@@ -67,7 +67,7 @@ const RestorePassword = () => {
                                                     <input
                                                         type="text"
                                                         className="form-control"
-                                                        id="singin-email"
+                                                        id="singin-email-pass"
                                                         value={email}
                                                         maxLength={50}
                                                         onChange={(e) => setEmail(e.target.value)}

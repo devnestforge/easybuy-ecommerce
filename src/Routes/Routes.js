@@ -25,34 +25,34 @@ import OrderRastreo from '../views/user/OrderRastreo'
 
 const routes = [
 
-  { path: global.HOME, exact: true, name: 'Home', element: Home },
+  { path: global.HOME, name: 'Home', element: Home },
 
   // SECTIONS
-  { path: global.ABOUT, exact: true, name: 'About', element: About },
-  { path: global.CONTACT, exact: true, name: 'Contact', element: Contact },
-  { path: global.PRODUCTSEARCH, exact: true, name: 'ProductsSearch', element: ProductsSearch },
-  { path: `${global.PRODUCTDETAIL}/:id`, exact: true, name: 'ProductsDetail', element: ProductsDetail },
-  { path: global.VIEWCART, exact: true, name: 'ShoppingCart', element: ShoppingCart },
-  { path: global.CHECKOUT, exact: true, name: 'Checkout', element: Checkout },
-  { path: global.RESETPASSWORD, exact: true, name: 'ResetPasword', element: ResetPasword },
-  { path: global.ORDERCONFIRM, exact: true, name: 'OrderConfirm', element: OrderConfirm },
-  { path: global.ORDERCRASTREO, exact: true, name: 'orderRastreo', element: OrderRastreo },
-  { path: global.ORDERDETAIL, exact: true, name: 'orderDetail', element: OrderDetail },
+  { path: global.ABOUT, name: 'About', element: About },
+  { path: global.CONTACT, name: 'Contact', element: Contact },
+  { path: global.PRODUCTSEARCH, name: 'ProductsSearch', element: ProductsSearch },
+  { path: `${global.PRODUCTDETAIL}/:id`, name: 'ProductsDetail', element: ProductsDetail },
+  { path: global.VIEWCART, name: 'ShoppingCart', element: ShoppingCart },
+  { path: global.CHECKOUT, name: 'Checkout', element: Checkout },
+  { path: global.RESETPASSWORD, name: 'ResetPasword', element: ResetPasword },
+  { path: global.ORDERCONFIRM, name: 'OrderConfirm', element: OrderConfirm },
+  { path: global.ORDERCRASTREO, name: 'orderRastreo', element: OrderRastreo },
+  { path: global.ORDERDETAIL, name: 'orderDetail', element: OrderDetail },
 
 
-  { path: global.DEVOLUCION, exact: true, name: 'Devolucion', element: Devolucion },
-  { path: global.ENVIO, exact: true, name: 'Envio', element: Envio },
-  { path: global.GRANTIA, exact: true, name: 'Garantia', element: Garantia },
-  { path: global.METODOPAGO, exact: true, name: 'MetodosDePago', element: MetodosDePago },
-  { path: global.POLITICA, exact: true, name: 'PoliticaDePrivacidad', element: PoliticaDePrivacidad },
-  { path: global.TERMINOS, exact: true, name: 'TerminosDeUso', element: TerminosDeUso },
-  { path: global.RASTREAPEDIDOS, exact: true, name: 'RastrearPedido', element: RastrearPedido },
-  { path: global.AYUDA, exact: true, name: 'Ayuda', element: Ayuda },
+  { path: global.DEVOLUCION, name: 'Devolucion', element: Devolucion },
+  { path: global.ENVIO, name: 'Envio', element: Envio },
+  { path: global.GRANTIA, name: 'Garantia', element: Garantia },
+  { path: global.METODOPAGO, name: 'MetodosDePago', element: MetodosDePago },
+  { path: global.POLITICA, name: 'PoliticaDePrivacidad', element: PoliticaDePrivacidad },
+  { path: global.TERMINOS, name: 'TerminosDeUso', element: TerminosDeUso },
+  { path: global.RASTREAPEDIDOS, name: 'RastrearPedido', element: RastrearPedido },
+  { path: global.AYUDA, name: 'Ayuda', element: Ayuda },
 
   // USER PAGE
-  { path: global.USERPERFIL, exact: true, name: 'PerfilUser', element: PerfilUser },
-  { path: global.ENVIOFACT, exact: true, name: 'EnvioFacturacion', element: EnvioFacturacion },
-  { path: global.HISTORY, exact: true, name: 'HistorialPedidos', element: HistorialPedidos },
+  { path: global.USERPERFIL, name: 'PerfilUser', element: PerfilUser },
+  { path: global.ENVIOFACT, name: 'EnvioFacturacion', element: EnvioFacturacion },
+  { path: global.HISTORY, name: 'HistorialPedidos', element: HistorialPedidos },
 
 ]
 

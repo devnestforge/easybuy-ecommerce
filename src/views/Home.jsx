@@ -26,42 +26,20 @@ export default function Home() {
     return (
         <>
             <br />
-
             <Spiner opt={load} />
 
             {/*cat && (<Popular t={t} data={catInfo} />)*/}
             <div className="container-fluid">
                 {
                     <>
-                        <Promotions t={t} />
+                         <Promotions t={t} />
                         <Offers t={t} />
                         <TodayDeal t={t} />
+                        {/*<Outlet t={t} />*/}
                     </>
 
                 }
             </div>
-            {/*
-                promotions && ( <Promotions data={promoInfo} /> )
-        
-            <Arrivals />
-
-            <div className="mb-6"></div>
-
-            <Outlet />
-
-            <Trendings />
-
-            <div className="mb-5"></div>
-
-            <div className="mb-4"></div>
-
-            <div className="container-fluid">
-                <hr className="mb-0" />
-            </div>
-
-            <Details />
-            */}
-
         </>
     )
 }

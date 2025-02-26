@@ -9,17 +9,13 @@ import { CartProvider } from './functions/context/CartProvider'
 
 function App() {
   return (
-    <>
-      {
-        <CartProvider>
-          <Router>
-            <Routes>
-              <Route path={global.ROUTE_HOME} name="Home" element={<Master />} />
-            </Routes>
-          </Router>
-        </CartProvider>
-      }
-    </>
+    <CartProvider>
+      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Routes>
+          <Route path={global.ROUTE_HOME} name="Home" element={<Master />} />
+        </Routes>
+      </Router>
+    </CartProvider>
   )
 }
 

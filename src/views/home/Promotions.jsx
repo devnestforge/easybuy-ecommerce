@@ -14,7 +14,6 @@ export default function Promotions({ t }) {
     const getProducts = async () => {
         setLoad(true)
         const prodcuts = await productsLogic.getProductsByTypeLogic(0, 1, global.PEROD_BY_PAGE, 'no', '', global.DEAL_TYPE)
-        console.log(prodcuts)
         if (prodcuts.success && prodcuts.data.length > 0) {
             setProdInfo(prodcuts.data)
         } else {
@@ -40,8 +39,8 @@ export default function Promotions({ t }) {
                 {load ? <Spiner /> : (
                     <div className="row justify-content-center">
                         {prodInfo.slice(0, 3).map((product, index) => (
-                            <div className="col-md-6 col-lg-4" key={product.id}>
-                                <a href="!#" className="product-card-deals-link">
+                            <div className="col-md-6 col-lg-4" key={`${product.id}-${index}`}>
+                                <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`} className="product-card-deals-link">
                                     <div className="product-card-deals">
                                         <div className="product-card-text-deals">
                                             <h4 className="product-category-deals">{product.cat_name}</h4>
