@@ -14,9 +14,9 @@ export default function PerfilUsuario() {
     const [apellidos, setApellidos] = useState('')
     const [direccion, setDireccion] = useState('')
     const [cellPhone, setCellPhone] = useState('')
-    const [gender, setGender] = useState(false)
-    const [provincia, setProvincia] = useState([])
-    const [ciudad, setCiudad] = useState()
+    const [gender, setGender] = useState(1)
+    const [provincia, setProvincia] = useState(1)
+    const [ciudad, setCiudad] = useState(1)
     const [email, setEmail] = useState('')
     const [fechaNaci, setFechaNaci] = useState('')
     const [filteredCities, setFilteredCities] = useState([])
@@ -196,7 +196,7 @@ export default function PerfilUsuario() {
                                                         type="text"
                                                         className="form-control"
                                                         id="identificacion"
-                                                        maxlength="13"
+                                                        maxLength="13"
                                                         name="identificacion"
                                                         value={identificacion}
                                                         onChange={e => {

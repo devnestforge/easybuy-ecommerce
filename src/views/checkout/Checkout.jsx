@@ -262,7 +262,7 @@ export default function Checkout() {
                                                 <p>No tienes una dirección principal configurada.</p>
                                             )}
                                             <br />
-                                            <hr class="linea" />
+                                            <hr className="linea" />
                                             <div className="row gx-4 gy-4">
                                                 <div className="col-12 col-md-3">
                                                     <button

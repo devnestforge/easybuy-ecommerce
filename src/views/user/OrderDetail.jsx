@@ -169,7 +169,6 @@ export default function OrderDtail() {
     }
 
     const renderPaymentSection = () => {
-        console.log(checkoutPago)
         if (checkoutPago && checkoutPago.nemonico_pago === 'METPA0004') {
             return (
                 <div>
@@ -373,7 +372,7 @@ export default function OrderDtail() {
                                             <p>No tienes una dirección principal configurada.</p>
                                         )}
                                         <br />
-                                        <hr class="linea" />
+                                        <hr className="linea" />
                                     </div>
 
 

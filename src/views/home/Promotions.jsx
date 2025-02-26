@@ -40,7 +40,7 @@ export default function Promotions({ t }) {
                     <div className="row justify-content-center">
                         {prodInfo.slice(0, 3).map((product, index) => (
                             <div className="col-md-6 col-lg-4" key={`${product.id}-${index}`}>
-                                <a href={`${global.PRODUCTDETAIL}/${encryptId(product.id)}`} className="product-card-deals-link">
+                                <div className="product-card-deals-link">
                                     <div className="product-card-deals">
                                         <div className="product-card-text-deals">
                                             <h4 className="product-category-deals">{product.cat_name}</h4>
@@ -58,7 +58,7 @@ export default function Promotions({ t }) {
                                             <img src={`${global.IMGProd}${product.url_imagen}`} alt={product.prod_name} className="product-image-deals" />
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                             </div>
                         ))}
                     </div>

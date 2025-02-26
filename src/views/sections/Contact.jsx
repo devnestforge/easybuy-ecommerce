@@ -61,7 +61,7 @@ export default function Contact() {
                             <form onSubmit={handleSubmitContac} className="contact-form mb-2">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <label for="cname" className="sr-only">{t('general.Name')}</label>
+                                        <label htmlFor="cname" className="sr-only">{t('general.Name')}</label>
                                         <input
                                             type="text"
                                             className="form-control"
@@ -76,7 +76,7 @@ export default function Contact() {
                                         />
                                     </div>
                                     <div className="col-sm-6">
-                                        <label for="cphone" className="sr-only">{t('general.Phone')}</label>
+                                        <label htmlFor="cphone" className="sr-only">{t('general.Phone')}</label>
                                         <input
                                             type="tel"
                                             className="form-control"
@@ -91,7 +91,7 @@ export default function Contact() {
                                         />
                                     </div>
                                     <div className="col-sm-6">
-                                        <label for="cemail" className="sr-only">{t('general.Email')}</label>
+                                        <label htmlFor="cemail" className="sr-only">{t('general.Email')}</label>
                                         <input
                                             type="email"
                                             className="form-control"
@@ -107,7 +107,7 @@ export default function Contact() {
                                     </div>
                                 </div>
 
-                                <label for="csubject" className="sr-only">{t('general.Subject')}</label>
+                                <label htmlFor="csubject" className="sr-only">{t('general.Subject')}</label>
                                 <input
                                     type="text"
                                     className="form-control"
@@ -121,7 +121,7 @@ export default function Contact() {
                                     }}
                                 />
 
-                                <label for="cmessage" className="sr-only">{t('general.Message')}</label>
+                                <label htmlFor="cmessage" className="sr-only">{t('general.Message')}</label>
                                 <textarea
                                     className="form-control"
                                     cols="30"

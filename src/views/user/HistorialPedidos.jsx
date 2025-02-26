@@ -21,7 +21,6 @@ export default function HistorialPedidos() {
         setSpiner(true)
         const orderResp = await userLogic.getHistoryOrdersLogic()
         if (orderResp.success && orderResp.data.data.length > 0) {
-            console.log(orderResp)
             setOrders(orderResp.data.data)
         }
         setSpiner(false)
