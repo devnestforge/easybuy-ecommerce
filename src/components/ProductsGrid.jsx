@@ -4,7 +4,7 @@ import { Pagination } from '@mui/material'
 import Spiner from '../components/modals/Spiner'
 import { useCart } from '../functions/context/CartProvider'
 import t from '../translations/i18n'
-import Modal from 'react-modal'
+import ReactModal from 'react-modal'
 import { useSnackbar } from 'notistack'
 import userLogic from '../functions/logic/userLogic'
 
@@ -176,7 +176,7 @@ export default function ProductsGrid({ data = [{}], totalPages, paginate, curren
                 onChange={paginate}
                 className="pagination justify-content-center"
             />
-            <Modal
+            <ReactModal
                 isOpen={isModalOpen}
                 onRequestClose={closeModal}
                 contentLabel="Quick View Modal"
@@ -240,7 +240,7 @@ export default function ProductsGrid({ data = [{}], totalPages, paginate, curren
                         </div>
                     </div>
                 )}
-            </Modal>
+            </ReactModal>
         </>
     )
 }

@@ -93,3 +93,4 @@ global.PEROD_BY_PAGE = 12
 
 global.OFER_TYPE = 'ofers'
 global.DEAL_TYPE = 'deals'
+global.SUPER_TYPE = 'super_deals'

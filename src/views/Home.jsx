@@ -36,7 +36,6 @@ export default function Home() {
                         <Promotions t={t} />
                         <Offers t={t} />
                         <TodayDeal t={t} />
-                        <Outlet t={t} />
                     </>
 
                 }

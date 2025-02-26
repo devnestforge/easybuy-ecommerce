@@ -14,6 +14,7 @@ export default function Promotions({ t }) {
     const getProducts = async () => {
         setLoad(true)
         const prodcuts = await productsLogic.getProductsByTypeLogic(0, 1, global.PEROD_BY_PAGE, 'no', '', global.DEAL_TYPE)
+        console.log(prodcuts)
         if (prodcuts.success && prodcuts.data.length > 0) {
             setProdInfo(prodcuts.data)
         } else {

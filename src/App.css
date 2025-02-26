@@ -608,3 +608,10 @@
   object-fit: cover; /* Ajusta la imagen para cubrir el espacio sin distorsionarse */
 }
 
+.product-image-super-deals {
+  width: 100%; /* La imagen ocupa todo el espacio */
+  height: 100%;
+  object-fit: cover;
+  width: 10% !important; /* Ajusta la imagen para cubrir el espacio sin distorsionarse */
+}
+
