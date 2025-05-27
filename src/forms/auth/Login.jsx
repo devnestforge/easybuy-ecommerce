@@ -221,7 +221,7 @@ const LoginRegister = () => {
                                                 <div className="form-footer">
                                                     <button
                                                         onClick={(e) => handleLogin(e)}
-                                                        className="btn btn-outline-primary-2">
+                                                        className="btn btn-primary">
                                                         <span>{t('Ingresar')}</span>
                                                         <i className="icon-long-arrow-right"></i>
                                                     </button>
@@ -271,7 +271,7 @@ const LoginRegister = () => {
                                                     <button
                                                         type="submit"
                                                         onClick={(e) => handleRegister(e)}
-                                                        className="btn btn-outline-primary-2">
+                                                        className="btn btn-primary">
                                                         <span>{t('auth.register_label')}</span>
                                                         <i className="icon-long-arrow-right"></i>
                                                     </button>

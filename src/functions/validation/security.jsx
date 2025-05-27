@@ -17,51 +17,56 @@ const validarContrasena = (contrasena) => {
 const login = (credenciales, t) => {
   if (!credenciales.email && !credenciales.password) {
     data = {
-      message: t('login_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.login_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.email) {
     data = {
-      message: t('email_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.email_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.password) {
     data = {
-      message: t('password_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.password_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!validarCorreo(credenciales.email)) {
     data = {
-      message: t('email_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.email_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else {
     data = {
       message: '',
-      code: t('code_success_message'),
-      labelError: t('code_label_success'),
-      variant: t('code_label_success'),
+      code: t('errors.code_success_message'),
+      labelError: t('errors.code_label_success'),
+      variant: t('errors.code_label_success'),
       data: [],
+      success: false,
       error: false
     }
     resp = generalMappers.responseMapper(data)
@@ -73,71 +78,78 @@ const login = (credenciales, t) => {
 const register = (credenciales, t) => {
   if (!credenciales.email && !credenciales.password) {
     data = {
-      message: t('login_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.login_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.email) {
     data = {
-      message: t('email_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.email_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.password) {
     data = {
-      message: t('password_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.password_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!validarCorreo(credenciales.email)) {
     data = {
-      message: t('email_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.email_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (validarContrasena(credenciales.password)) {
     data = {
-      message: t('strong_password_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.strong_password_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!credenciales.policy) {
     data = {
-      message: t('policy_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.policy_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else {
     data = {
       message: '',
-      code: t('code_success_message'),
-      labelError: t('code_label_success'),
-      variant: t('code_label_success'),
+      code: t('errors.code_success_message'),
+      labelError: t('errors.code_label_success'),
+      variant: t('errors.code_label_success'),
       data: [],
+      success: false,
       error: false
     }
     resp = generalMappers.responseMapper(data)
@@ -149,31 +161,34 @@ const register = (credenciales, t) => {
 const restore = (credenciales, t) => {
   if (!credenciales.email) {
     data = {
-      message: t('login_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.login_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else if (!validarCorreo(credenciales.email)) {
     data = {
-      message: t('email_error_message'),
-      code: t('code_error_message'),
-      labelError: t('code_label_warning'),
-      variant: t('code_label_warning'),
+      message: t('errors.email_error_message'),
+      code: t('errors.code_error_message'),
+      labelError: t('errors.code_label_warning'),
+      variant: t('errors.code_label_warning'),
       data: [],
+      success: false,
       error: true
     }
     resp = generalMappers.loginRegisterMapper(data)
   } else {
     data = {
       message: '',
-      code: t('code_success_message'),
-      labelError: t('code_label_success'),
-      variant: t('code_label_success'),
+      code: t('errors.code_success_message'),
+      labelError: t('errors.code_label_success'),
+      variant: t('errors.code_label_success'),
       data: [],
+      success: false,
       error: false
     }
     resp = generalMappers.responseMapper(data)

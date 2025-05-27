@@ -78,7 +78,7 @@ export default function PerfilUsuario() {
                 setCellPhone(userData.phone || '');
                 setGender(userData.gender || '');
                 setProvincia(userData.provincia_id || '');
-                setCiudad(userData.parroquia_id ? userData.parroquia_id.toString() : '');
+                setCiudad(userData.parroquia_id || '');
                 setEmail(userData.email || '');
 
                 if (userData.fecha_nacimiento) {
@@ -117,7 +117,7 @@ export default function PerfilUsuario() {
         }
 
         const response = await userLogic.saveProfileLogic(data)
-        enqueueSnackbar(response.data.message, {
+        enqueueSnackbar(response.data?.message ?? response.message, {
             variant: response.variant,
             anchorOrigin: {
                 vertical: 'top',
@@ -155,6 +155,11 @@ export default function PerfilUsuario() {
                 <div className="col-md-12">
                     <div className="row justify-content-center">
                         <div className="col-md-8">
+                            {(identificacion === '' || nombres === '' || apellidos === '' || direccion === '' || !email || !cellPhone || !fechaNaci || !gender || !provincia) && (
+                                <div className="alert alert-info text-center mt-3" role="alert">
+                                    Llenar todos los datos para realizar la primera compra
+                                </div>
+                            )}
                             <div className="card summary">
                                 {/* Pestañas */}
                                 <div className="card-header text-center">
@@ -204,7 +209,7 @@ export default function PerfilUsuario() {
                                                             localStorage.setItem('identificacion', e.target.value.replace(/\D/g, ''))
                                                         }}
                                                         placeholder="identificacion *"
-                                                        required
+                                                        
                                                     />
                                                 </div>
                                                 <div className="col-sm-4">
@@ -221,7 +226,7 @@ export default function PerfilUsuario() {
                                                             localStorage.setItem('nombres', e.target.value.replace(/[^a-z\s]/gi, ''))
                                                         }}
                                                         placeholder="Nombre Completo *"
-                                                        required
+                                                        
                                                     />
                                                 </div>
                                                 <div className="col-sm-4">
@@ -238,7 +243,7 @@ export default function PerfilUsuario() {
                                                             localStorage.setItem('apellidos', e.target.value.replace(/[^a-z\s]/gi, ''))
                                                         }}
                                                         placeholder="Apellidos Completos *"
-                                                        required
+                                                        
                                                     />
                                                 </div>
                                                 <div className="col-sm-12">
@@ -255,7 +260,7 @@ export default function PerfilUsuario() {
                                                             localStorage.setItem('direccion', e.target.value)
                                                         }}
                                                         placeholder="Dirección *"
-                                                        required
+                                                        
                                                     />
                                                 </div>
                                                 <div className="col-sm-6">
@@ -286,7 +291,7 @@ export default function PerfilUsuario() {
                                                             localStorage.setItem('telefono', e.target.value.replace(/\D/g, ''))
                                                         }}
                                                         placeholder="Teléfono *"
-                                                        required
+                                                        
                                                     />
                                                 </div>
                                                 <div className="col-sm-6">
@@ -301,7 +306,7 @@ export default function PerfilUsuario() {
                                                             setFechaNaci(e.target.value)
                                                             localStorage.setItem('fechaNaci', e.target.value)
                                                         }}
-                                                        required
+                                                        
                                                     />
                                                 </div>
                                                 <div className="col-sm-6">
@@ -315,7 +320,7 @@ export default function PerfilUsuario() {
                                                             setGender(e.target.value)
                                                             localStorage.setItem('gender', e.target.value)
                                                         }}
-                                                        required
+                                                        
                                                     >
                                                         <option value="">Seleccionar Género</option>
                                                         <option value="1">Masculino</option>
@@ -367,7 +372,7 @@ export default function PerfilUsuario() {
                                                 </div>
                                             </div>
                                             <div className="text-center">
-                                                <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
+                                                <button type="submit" className="btn btn-primary btn-minwidth-sm">
                                                     <span>Actualizar información</span>
                                                     <i className="icon-long-arrow-right"></i>
                                                 </button>
@@ -419,7 +424,7 @@ export default function PerfilUsuario() {
                                             </div>
 
                                             <div className="text-center">
-                                                <button type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
+                                                <button type="submit" className="btn btn-primary btn-minwidth-sm">
                                                     <span>Actualizar contraseña</span>
                                                     <i className="icon-long-arrow-right"></i>
                                                 </button>

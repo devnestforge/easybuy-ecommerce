@@ -14,7 +14,7 @@ export default function ErrorPage() {
           <p>We are sorry, the page you've requested is not available.</p>
           <a
             href="/home"
-            className="btn btn-outline-primary-2 btn-minwidth-lg"
+            className="btn btn btn-primary btn-minwidth-lg"
           >
             <span>BACK TO HOMEPAGE</span>
             <i className="icon-long-arrow-right"></i>

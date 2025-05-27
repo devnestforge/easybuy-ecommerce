@@ -150,10 +150,11 @@ const getUserProfileInfoLogic = async (token) => {
 }
 
 const saveProfileLogic = async (dataSave) => {
-    let dataResp = []
+    const validation = formValidation.FormPerfilValidatiopn(dataSave, 'E')
+    let dataResp = validation
     const token = localStorage.getItem('authToken')
     const isLoggedIn = !!token
-    if (isLoggedIn) {
+    if (!validation.error && isLoggedIn) {
         dataResp = await userServices.saveProfileService(dataSave, token);
     }
     return dataResp;

@@ -32,7 +32,7 @@ export default function Home() {
             <div className="container-fluid">
                 {
                     <>
-                         <Promotions t={t} />
+                        <Promotions t={t} />
                         <Offers t={t} />
                         <TodayDeal t={t} />
                         {/*<Outlet t={t} />*/}

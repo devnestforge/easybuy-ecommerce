@@ -4,9 +4,9 @@ import securityService from '../services/securityService'
 let dataResp = []
 
 const loginLogic = async (dataLogin, t) => {
-    const validation = await securityValidation.login(dataLogin, t)
+    const validation = securityValidation.login(dataLogin, t)
     dataResp = validation
-   
+    console.log(dataResp)
     if (!dataResp.error) {
         dataResp = await securityService.loginService(dataLogin)
     }

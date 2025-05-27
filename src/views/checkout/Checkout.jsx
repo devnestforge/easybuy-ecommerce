@@ -53,23 +53,29 @@ export default function Checkout() {
 
     const getShippingMethods = async () => {
         const shipping = await generalLogic.getShippingMethods()
-        if (shipping.success && shipping.data.length > 0) {
+    
+        if (shipping.success && Array.isArray(shipping.data) && shipping.data.length > 0) {
             setShippings(shipping.data)
-            const storedShippingCost = localStorage.getItem('shippingCost')
-            let defaultShippingCost = ""
-            if (storedShippingCost) {
-                defaultShippingCost = storedShippingCost
-            } else {
-                defaultShippingCost = "TIPENV0001"
-            }
+    
+            const storedShippingCode = localStorage.getItem('shippingCost') || "TIPENV0001"
+    
             const defaultShipping = shipping.data.find(
-                (method) => method.nemonicoTiposEnvio === defaultShippingCost
-            )
-            setSelectedShipping(defaultShipping || null)
-            setEnvio(parseFloat(defaultShipping?.costo || 0))
+                (method) => method.nemonicoTiposEnvio === storedShippingCode
+            ) || shipping.data[0]
+    
+            setSelectedShipping(defaultShipping)
+            setEnvio(parseFloat(defaultShipping.costo))
+            localStorage.setItem('shippingCost', defaultShipping.nemonicoTiposEnvio)
+    
+            const updatedCartItems = localStorage.getItem('cartItems')
+            userLogic.saveViewCartLogic(updatedCartItems)
+        } else {
+            setShippings([])
+            setSelectedShipping(null)
+            setEnvio(0)
         }
-    }
-
+    }    
+    
     const getViewCart = async () => {
         const storedCartItems = localStorage.getItem("cartItems")
         if (storedCartItems) {
@@ -247,34 +253,36 @@ export default function Checkout() {
                                     <div className="col-12 col-md-8">
                                         <div className="summary mb-1">
                                             <h3 className="summary-title">Dirección de Envío</h3>
-                                            {defaultAddress ? (
+                                            {defaultAddress && defaultAddress.id ? (
                                                 <div>
-                                                    <p>
-                                                        <strong>{defaultAddress.nombres} {defaultAddress.apellidos}</strong>
-                                                    </p>
+                                                    <p><strong>{defaultAddress.nombres} {defaultAddress.apellidos}</strong></p>
                                                     <p>{defaultAddress.direccion}, {defaultAddress.codigo_postal || "Sin código postal"}</p>
                                                     <p>Provincia {defaultAddress.provincia_name}, Ciudad {defaultAddress.canton_name}</p>
                                                     <p>{defaultAddress.telefono_contacto || "Sin teléfono de contacto"}</p>
-                                                    <p>{defaultAddress.referencia || "Sin teléfono de contacto"}</p>
+                                                    <p>{defaultAddress.referencia || "Sin referencia"}</p>
                                                     <p>Esta es tu dirección de envío por defecto</p>
                                                 </div>
                                             ) : (
-                                                <p>No tienes una dirección principal configurada.</p>
+                                                <p>No tienes una dirección principal configurada, para continuar con la compra ingresa una</p>
                                             )}
+
                                             <br />
                                             <hr className="linea" />
                                             <div className="row gx-4 gy-4">
-                                                <div className="col-12 col-md-3">
+                                                {defaultAddress && defaultAddress.id && (
+                                                    <div className="col-12 col-md-3">
+                                                        <button
+                                                            className="btn btn-primary mt-1"
+                                                            onClick={() => handleModalShow({ defaultAddress })}
+                                                        >
+                                                            Editar dirección
+                                                        </button>
+                                                    </div>
+                                                )
+                                                }
+                                                < div className="col-12 col-md-6">
                                                     <button
-                                                        className="btn btn-outline-primary mt-1"
-                                                        onClick={() => handleModalShow({ defaultAddress })}
-                                                    >
-                                                        Editar dirección
-                                                    </button>
-                                                </div>
-                                                <div className="col-12 col-md-6">
-                                                    <button
-                                                        className="btn btn-outline-primary mt-1"
+                                                        className="btn btn-info mt-1"
                                                         onClick={() => handleModalShow({})}
                                                     >
                                                         Nueva dirección
@@ -412,14 +420,16 @@ export default function Checkout() {
                                         </div>
                                     </div>
 
-                                    <div className="col-12 col-md-4">
-                                        <button
-                                            className="btn btn-primary w-100"
-                                            onClick={() => goToStep("pago")}
-                                        >
-                                            Continuar a Pago
-                                        </button>
-                                    </div>
+                                    {defaultAddress && defaultAddress.id && (
+                                        <div className="col-12 col-md-4">
+                                            <button
+                                                className="btn btn-primary w-100"
+                                                onClick={() => goToStep("pago")}
+                                            >
+                                                Continuar a Pago
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             )}
 
@@ -545,7 +555,7 @@ export default function Checkout() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </main >
         </>
     )
 }

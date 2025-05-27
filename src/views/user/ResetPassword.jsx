@@ -88,7 +88,7 @@ export default function ResetPasword() {
                                 </div>
                                 
                                 <div className="text-center">
-                                    <button onClick={(e) => { e.preventDefault(); handleChangePassword() }} type="submit" className="btn btn-outline-primary-2 btn-minwidth-sm">
+                                    <button onClick={(e) => { e.preventDefault(); handleChangePassword() }} type="submit" className="btn btn-primary btn-minwidth-sm">
                                         <span>Recuperar contraseña</span>
                                         <i className="icon-long-arrow-right"></i>
                                     </button>

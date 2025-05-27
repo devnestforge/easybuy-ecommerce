@@ -56,14 +56,14 @@ const RestorePassword = () => {
                                 <div className="form-tab">
                                     <ul className="nav nav-pills nav-fill nav-border-anim" role="tablist">
                                         <li className="nav-item">
-                                            <a className="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">{t('restore_pass_label')}</a>
+                                            <a className="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">{t('restore.restore_pass_label')}</a>
                                         </li>
                                     </ul>
                                     <div className="tab-content" id="tab-content-5">
                                         <div className="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
                                             <form action="!#">
                                                 <div className="form-group">
-                                                    <label htmlFor="singin-email">{t('email_input')} *</label>
+                                                    <label htmlFor="singin-email">{t('auth.email_input')} *</label>
                                                     <input
                                                         type="text"
                                                         className="form-control"
@@ -78,8 +78,8 @@ const RestorePassword = () => {
                                                 <div className="form-footer">
                                                     <button
                                                         onClick={(e) => handleRestore(e)}
-                                                        className="btn btn-outline-primary-2">
-                                                        <span>{t('restore_button')}</span>
+                                                        className="btn btn-primary">
+                                                        <span>{t('restore.restore_button')}</span>
                                                         <i className="icon-long-arrow-right"></i>
                                                     </button>
                                                 </div>

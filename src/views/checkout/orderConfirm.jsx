@@ -42,11 +42,11 @@ export default function OrderConfirm() {
                                 <p className="mb-4">
                                     Puedes ver los detalles de tu pedido o seguir comprando haciendo clic en los botones de abajo:
                                 </p>
-                                <a href={global.ORDERDETAIL + '?orden=' + order} target='_Blank' className="btn btn-outline-primary-2 btn-minwidth-sm">
+                                <a href={global.ORDERDETAIL + '?orden=' + order} target='_Blank' className="btn btn-primary btn-minwidth-sm">
                                     <span>Detalle de la orden</span>
                                     <i className="icon-long-arrow-right"></i>
                                 </a>
-                                <a href={global.ORDERCRASTREO + '?orden=' + order} target='_Blank' className="btn btn-outline-primary-2 btn-minwidth-sm ml-2">
+                                <a href={global.ORDERCRASTREO + '?orden=' + order} target='_Blank' className="btn btn-primary btn-minwidth-sm ml-2">
                                     <span>Rastreo</span>
                                     <i className="icon-long-arrow-right"></i>
                                 </a>

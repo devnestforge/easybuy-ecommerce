@@ -15,9 +15,9 @@ const errorMapper = (data, error) => {
     let responseMapper = []
     responseMapper = {
         message: data.message ?? '',
-        success: data.error ?? false,
+        success: data.success ?? false,
         data: [],
-        error: data.error
+        error: data.error ?? false,
     }
 
     return responseMapper
@@ -52,11 +52,11 @@ const successProdDetailMapper = async (data, rowsTotal, review, prodImgs, prodVi
     return responseMapper
 }
 
-const loginRegisterMapper = async (data, rowsTotal) => {
+const loginRegisterMapper = (data, rowsTotal) => {
     let responseMapper = []
     responseMapper = {
         message: data.message ?? '',
-        success: data.error ?? false,
+        success: data.success ?? false,
         data: [],
         variant: data.labelError,
         error: data.error

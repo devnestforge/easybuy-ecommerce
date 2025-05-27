@@ -58,6 +58,49 @@ const FormValidatiopn = (Data, saveType) => {
     return data;
 }
 
+const FormPerfilValidatiopn = (data, saveType) => {
+    let response = {
+        message: '',
+        error: false
+    };
+
+    // Lista de campos requeridos
+    const requiredFields = {
+        identification: "Ingrese la cédula",
+        nombres: "Ingrese los nombres",
+        apellidos: "Ingrese los apellidos",
+        direction: "Ingrese la dirección",
+        phone: "Ingrese el teléfono",
+        gender: "Seleccione género",
+        provincia_id: "Seleccione una provincia",
+        parroquia_id: "Seleccione una ciudad",
+        fecha_nacimiento: "Ingrese la fecha de nacimiento"
+    };
+
+    for (const key in requiredFields) {
+        if (!data[key] || data[key].toString().trim() === "") {
+            response = {
+                message: requiredFields[key],
+                error: true,
+                variant: 'warning'
+            };
+            return response;
+        }
+    }
+
+    // Validar cédula solo si es inserción
+    if (saveType === "I" && !isValidCI(data.identification)) {
+        response = {
+            message: 'Ingrese una cédula válida',
+            error: true,
+            variant: 'warning'
+        };
+        return response;
+    }
+
+    return response;
+}
+
 const isValidEmail = (email) => {
     var validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
     // Using test we can check if the text match the pattern
@@ -137,5 +180,6 @@ const isValidCI = (ci) => {
 export default {
     FormValidatiopn,
     isValidEmail,
-    isValidCI
+    isValidCI,
+    FormPerfilValidatiopn
 }

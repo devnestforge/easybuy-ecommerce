@@ -117,8 +117,8 @@
     "code_error_message": 500,
     "code_success_message": 200,
     "code_label_error": "error",
-    "code_label_warning": "advertencia",
-    "code_label_success": "éxito"
+    "code_label_warning": "warning",
+    "code_label_success": "success"
   },
   "shopping": {
     "cart_easybuy": "Carrito",

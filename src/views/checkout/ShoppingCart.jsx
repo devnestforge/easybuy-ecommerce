@@ -206,6 +206,10 @@ export default function ShoppingCart() {
         ).toFixed(2)
     }
 
+    const x = 1000.00
+    const total = parseFloat(calculateTotal())
+    const excedeLimite = total > x
+
     /*const handleShippingChange2 = (event) => {
         const selectedShipping = event.target.id
         let newShippingCost = 0
@@ -428,7 +432,7 @@ export default function ShoppingCart() {
                                                 />
                                                 <div className="input-group-append">
                                                     <button
-                                                        className="btn btn-outline-primary-2"
+                                                        className="btn btn-primary"
                                                         type="button"
                                                         onClick={handleApplyDiscount}
                                                     >
@@ -501,24 +505,31 @@ export default function ShoppingCart() {
                                         </tbody>
                                     </table>
                                     {isLoggedIn && (
-                                        <button
-                                            className="btn btn-outline-primary-2 btn-order btn-block"
-                                            disabled={!isLoggedIn} // Deshabilitado si no hay sesión
-                                            onClick={() => {
-                                                if (isLoggedIn) {
-                                                    window.location.href = global.CHECKOUT
-                                                }
-                                            }}
-                                        >
-                                            Continuar con el pago
-
-                                        </button>
+                                        <>
+                                            {excedeLimite && (
+                                                <p className="text-danger text-center mb-2">
+                                                    El cupo límite de compra es ${x.toFixed(2)}.
+                                                </p>
+                                            )}
+                                            {!excedeLimite && (
+                                                <button
+                                                    className="btn btn-primary btn-order btn-block"
+                                                    onClick={() => {
+                                                        window.location.href = global.CHECKOUT;
+                                                    }}
+                                                >
+                                                    Continuar con el pago
+                                                </button>
+                                            )}
+                                        </>
                                     )}
+
                                     {!isLoggedIn && (
                                         <p className="text-danger text-center mt-2">
                                             Por favor, inicia sesión para proceder con el pago.
                                         </p>
                                     )}
+
                                 </div>
                             </aside>
                         </div>
